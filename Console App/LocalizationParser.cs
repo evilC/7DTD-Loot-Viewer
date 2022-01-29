@@ -1,16 +1,13 @@
 ﻿using Microsoft.VisualBasic.FileIO;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Unicode;
-using System.Threading.Tasks;
 
 namespace _7DTD_Loot_Parser
 {
+    /// <summary>
+    /// Allows us to use Display Names (As seen in UI) for items or containers
+    /// eg converts "resourceSewingKit" to "Sewing Kit"
+    /// </summary>
     public class LocalizationParser
     {
         public Dictionary<string, string> ParseLocalizationFile()
