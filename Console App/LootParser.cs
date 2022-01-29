@@ -30,19 +30,7 @@ namespace _7DTD_Loot_Parser
                 containerItems.Add(rawContainer.Name, itemsInThisContainer);
                 // The RawContainer will contain a list of entries...
                 // ... An entry can either be an Item, or a Group (Which itself can contain Items or another Group)
-                foreach (var entry in rawContainer.Entries)
-                {
-                    if (entry.Name != null)
-                    {
-                        // Entry is a single Item ... Add item to container
-                        itemsInThisContainer.Add(entry.Name);
-                    }
-                    else if (entry.Group != null)
-                    {
-                        // Entry is a Group (Which could potentially contain other groups)
-                        AddGroupContents(entry.Group, itemsInThisContainer);
-                    }
-                }
+                AddGroupContents(rawContainer.Entries, itemsInThisContainer);
 
                 // Iterate through the list of items in this container...
                 foreach (var item in itemsInThisContainer)
@@ -68,23 +56,21 @@ namespace _7DTD_Loot_Parser
         /// <summary>
         /// Recursive function which can walk down the tree of item groups and return a single list of items from all of the groups
         /// </summary>
-        /// <param name="group">The name of the item group</param>
-        /// <param name="containerItems">The list of items to be added to</param>
-        private void AddGroupContents(string group, HashSet<string> containerItems)
+        /// <param name="entries">The list of items in this group</param>
+        /// <param name="itemsInThisContainer">The list of items to be added to</param>
+        private void AddGroupContents(List<RawItem> entries, HashSet<string> itemsInThisContainer)
         {
-            var entries = _rawGroups[group].Items;
             foreach (var entry in entries)
             {
                 if (entry.Name != null)
                 {
-                    // LootGroup item entry contains a single item
-                    containerItems.Add(entry.Name);
+                    // Entry is a single Item ... Add item to container
+                    itemsInThisContainer.Add(entry.Name);
                 }
                 else if (entry.Group != null)
                 {
-                    // LootGroup item entry contains another group...
-                    // ... Recursively call self and pass existing list
-                    AddGroupContents(entry.Group, containerItems);
+                    // Entry is a Group (Which could potentially contain other groups)
+                    AddGroupContents(_rawGroups[entry.Group].Items, itemsInThisContainer);
                 }
             }
         }
