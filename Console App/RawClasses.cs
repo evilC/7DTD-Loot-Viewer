@@ -67,4 +67,29 @@ namespace _7DTD_Loot_Parser
         //[XmlAttribute("prob")]
         //public string Prob { get; set; }
     }
+
+    [XmlRoot(ElementName = "blocks")]
+    public class RawBlocks
+    {
+        [XmlElement(ElementName = "block")]
+        public List<RawBlock> Blocks { get; set; }
+    }
+
+    public class RawBlock
+    {
+        [XmlAttribute("name")]
+        public string Name { get; set; }
+
+        [XmlElement(ElementName = "property")]
+        public List<RawBlockProperty> Properties { get; set; }
+    }
+
+    public class RawBlockProperty
+    {
+        [XmlAttribute("name")]
+        public string Name { get; set; }
+
+        [XmlAttribute("value")]
+        public string Value { get; set; }
+    }
 }

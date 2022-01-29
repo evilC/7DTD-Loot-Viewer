@@ -18,10 +18,11 @@ namespace _7DTD_Loot_Parser
         public LootParser(string configFilePath)
         {
             var localizationParser = new LocalizationParser();
-            _itemNames = localizationParser.ParseLocalizationFile(configFilePath);
+            _itemNames = localizationParser.GetDisplayNames(configFilePath);
 
             // Deserialize the XML file into the Raw classes
-            _rawContainers = DeserializeToObject<RawContainers>(Path.Combine(new string[] { configFilePath, "loot.xml" }));
+            _rawContainers = ObjectDeserializer.DeserializeToObject<RawContainers>
+                (Path.Combine(new string[] { configFilePath, "loot.xml" }));
             // Convert the Loot Groups into a Dictionary, indexed by name of Loot Group
             _rawGroups = _rawContainers.Groups.ToDictionary(i => i.Name);
 
@@ -88,16 +89,6 @@ namespace _7DTD_Loot_Parser
                     // Entry is a Group (Which could potentially contain other groups)
                     AddGroupContents(_rawGroups[entry.Group].Items, itemsInThisContainer);
                 }
-            }
-        }
-
-        public T DeserializeToObject<T>(string filepath) where T : class
-        {
-            XmlSerializer ser = new XmlSerializer(typeof(T));
-
-            using (StreamReader sr = new StreamReader(filepath))
-            {
-                return (T)ser.Deserialize(sr);
             }
         }
     }
