@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using System.Text.Json;
+using System.Diagnostics;
 
 namespace _7DTD_Loot_Parser
 {
@@ -12,8 +13,14 @@ namespace _7DTD_Loot_Parser
     {
         private RawContainers _rawContainers;
         private Dictionary<string, RawGroup> _rawGroups;
+        private Dictionary<string, string> _itemNames;
+
         public LootParser(string filename = "loot.xml")
         {
+            var localizationParser = new LocalizationParser();
+            _itemNames = localizationParser.ParseLocalizationFile();
+            return;
+
             // Deserialize the XML file into the Raw classes
             _rawContainers = DeserializeToObject<RawContainers>(filename);
             // Convert the Loot Groups into a Dictionary, indexed by name of Loot Group
@@ -65,7 +72,17 @@ namespace _7DTD_Loot_Parser
                 if (entry.Name != null)
                 {
                     // Entry is a single Item ... Add item to container
-                    itemsInThisContainer.Add(entry.Name);
+                    //itemsInThisContainer.Add(entry.Name);
+                    if (_itemNames.ContainsKey(entry.Name))
+                    {
+                        itemsInThisContainer.Add(_itemNames[entry.Name]);
+                    }
+                    else
+                    {
+                        // Only Seems to happen for "Loadout Tier X"
+                        Debug.WriteLine($"Warning! Item Name for {entry.Name} not found!");
+                    }
+                    
                 }
                 else if (entry.Group != null)
                 {

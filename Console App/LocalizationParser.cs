@@ -1,15 +1,19 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 
 namespace _7DTD_Loot_Parser
 {
     public class LocalizationParser
     {
-        private Dictionary<string, string> ParseLocalizationFile()
+        public Dictionary<string, string> ParseLocalizationFile()
         {
             /*
             To find Display name for containers
@@ -28,7 +32,17 @@ namespace _7DTD_Loot_Parser
             localization.txt:
             cntMedicineCabinetClosed,blocks,Container,,,"Medicine Cabinet, Closed"
             */
-            var data = new Dictionary<string, string>();
+            Dictionary<string, string> data;
+            // If we already have cached data, load that
+            if (File.Exists("ItemNames.json"))
+            {
+                string jsonString = File.ReadAllText("ItemNames.json");
+                data = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString);
+                return data;
+            }
+
+            // Build data
+            data = new Dictionary<string, string>();
             using (var parser = new TextFieldParser("Localization.txt"))
             {
                 //parser.CommentTokens = new string[] { "#" };
@@ -44,17 +58,24 @@ namespace _7DTD_Loot_Parser
                     {
                         string[] fields = parser.ReadFields();
 
-                        //if (fields[1] == "items" && fields[2] == "Item")
-                        if (fields[5] != "")
+                        // Ignore Descriptions
+                        if (fields[0].EndsWith("Desc")) continue;
+                        // Ignore localization entries that are not to do with items or containers
+                        if (fields[1] == "items" || fields[1] == "item_modifiers" || fields[1] == "blocks" || fields[1] == "vehicles")
                         {
-                            data.Add(fields[0], fields[5]);
+                            //Debug.WriteLine($"Writing Item {fields[0]} = {fields[5]}");
+                            var displayName = fields[5];
+                            displayName = displayName.Replace("\"", "");
+                            data.Add(fields[0], displayName);
                         }
                     }
                     catch { };
-
-
                 }
             }
+
+            // Write out the localization data as JSON, so that we do not need to parse it on each run
+            var opt = new JsonSerializerOptions() { WriteIndented = true };
+            File.WriteAllText("ItemNames.json", JsonSerializer.Serialize(data, opt));
             return data;
         }
 
