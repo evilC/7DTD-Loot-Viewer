@@ -10,7 +10,7 @@ namespace _7DTD_Loot_Parser
     /// </summary>
     public class LocalizationParser
     {
-        public Dictionary<string, string> ParseLocalizationFile()
+        public Dictionary<string, string> ParseLocalizationFile(string configFilePath)
         {
             /*
             To find Display name for containers
@@ -40,7 +40,8 @@ namespace _7DTD_Loot_Parser
 
             // Build data
             data = new Dictionary<string, string>();
-            using (var parser = new TextFieldParser("Localization.txt"))
+            
+            using (var parser = new TextFieldParser(Path.Combine(new string[] { configFilePath, "Localization.txt" })))
             {
                 //parser.CommentTokens = new string[] { "#" };
                 parser.SetDelimiters(new string[] { "," });

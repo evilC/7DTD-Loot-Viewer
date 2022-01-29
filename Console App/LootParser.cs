@@ -15,14 +15,13 @@ namespace _7DTD_Loot_Parser
         private Dictionary<string, RawGroup> _rawGroups;
         private Dictionary<string, string> _itemNames;
 
-        public LootParser(string filename = "loot.xml")
+        public LootParser(string configFilePath)
         {
             var localizationParser = new LocalizationParser();
-            _itemNames = localizationParser.ParseLocalizationFile();
-            return;
+            _itemNames = localizationParser.ParseLocalizationFile(configFilePath);
 
             // Deserialize the XML file into the Raw classes
-            _rawContainers = DeserializeToObject<RawContainers>(filename);
+            _rawContainers = DeserializeToObject<RawContainers>(Path.Combine(new string[] { configFilePath, "loot.xml" }));
             // Convert the Loot Groups into a Dictionary, indexed by name of Loot Group
             _rawGroups = _rawContainers.Groups.ToDictionary(i => i.Name);
 
