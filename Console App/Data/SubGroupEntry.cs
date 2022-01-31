@@ -11,12 +11,12 @@ namespace _7DTD_Loot_Parser.Data
     /// ... count, or loot_prob_template, which is independent of the same attributes of the child group itself
     /// This class allows us to reflect that fact
     /// </summary>
-    public class LootGroupSubGroupEntry
+    public class SubGroupEntry
     {
         /// <summary>
         /// Link to the Loot Group referenced in the entry
         /// </summary>
-        public LootGroup Group { get; set; }
+        public Group Group { get; set; }
 
         /// <summary>
         /// The Count value of the ENTRY (NOT OF THE GROUP ITSELF!)

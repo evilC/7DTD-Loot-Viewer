@@ -10,7 +10,7 @@ namespace _7DTD_Loot_Parser.Data
     /// <summary>
     /// Refers to a single lootgroup node of the XML
     /// </summary>
-    public class LootGroup
+    public class Group
     {
         /// <summary>
         /// The name attribute of the lootgroup node
@@ -27,16 +27,16 @@ namespace _7DTD_Loot_Parser.Data
         /// A list of the item elements in the lootgroup node whose name was that of an individual item (eg Steel meleeToolPickT2SteelPickaxe)
         /// Indexed by name of Item
         /// </summary>
-        public Dictionary<string, LootGroupItem> Items { get; } = new Dictionary<string, LootGroupItem>();
+        public Dictionary<string, Item> Items { get; } = new Dictionary<string, Item>();
 
         /// <summary>
         /// A list of the item elements in the lootgroup node whose name was that of another Group (eg groupToolsT2)
         /// indexed by name of Group
         /// </summary>
-        public Dictionary<string, LootGroupSubGroupEntry> Groups { get; } = new Dictionary<string, LootGroupSubGroupEntry>();
+        public Dictionary<string, SubGroupEntry> Groups { get; } = new Dictionary<string, SubGroupEntry>();
 
 
-        public LootGroup(string name, Range? count)
+        public Group(string name, Range? count)
         {
             Name = name;
             Count = count;

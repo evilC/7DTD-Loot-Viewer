@@ -10,14 +10,14 @@ namespace _7DTD_Loot_Parser.Data
     /// <summary>
     /// Refers to a specific in-game Item (eg Steel Pickaxe)
     /// </summary>
-    public class LootGroupItem
+    public class Item
     {
         public string Name { get; set; }
         public Range? Count { get; set; }
         public ProbTemplate? ProbTemplate { get; set; }
         public decimal? Prob { get; set; }
 
-        public LootGroupItem(XmlClasses.Loot.Item rawItem, SortedDictionary<string, ProbTemplate> probTemplates)
+        public Item(XmlClasses.Loot.Item rawItem, SortedDictionary<string, ProbTemplate> probTemplates)
         {
             Name = rawItem.Name;
             Count = Parsers.ParseRange(rawItem.Count);

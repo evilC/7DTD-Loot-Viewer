@@ -17,7 +17,7 @@ namespace _7DTD_Loot_Parser.Data
         /// Loot Groups. Essentially the contents of all lootgroup nodes.
         /// Note however that one loot group can refer to another loot group
         /// </summary>
-        public SortedDictionary<string, LootGroup> Groups { get; set; } = new SortedDictionary<string, LootGroup>();
+        public SortedDictionary<string, Group> Groups { get; set; } = new SortedDictionary<string, Group>();
 
         /// <summary>
         /// Probability Templates
@@ -27,12 +27,12 @@ namespace _7DTD_Loot_Parser.Data
         /// <summary>
         /// Containers
         /// </summary>
-        public SortedDictionary<string, LootContainer> Containers { get; set; } = new SortedDictionary<string, LootContainer> ();
+        public SortedDictionary<string, Container> Containers { get; set; } = new SortedDictionary<string, Container> ();
 
         /// <summary>
         /// Items
         /// </summary>
-        public SortedDictionary<string, LootGroupItem>  Items { get; set; } = new SortedDictionary<string, LootGroupItem> ();
+        public SortedDictionary<string, Item>  Items { get; set; } = new SortedDictionary<string, Item> ();
 
         /// <summary>
         /// Data table is built upon instantiation of the class
@@ -79,7 +79,7 @@ namespace _7DTD_Loot_Parser.Data
 
         private void AddContainer(XmlClasses.Loot.Container rawContainer)
         {
-            var container = new LootContainer();
+            var container = new Container();
             container.Name = rawContainer.Name;
             for (int i = 0; i < rawContainer.Entries.Count(); i++)
             {
@@ -112,7 +112,7 @@ namespace _7DTD_Loot_Parser.Data
         /// <param name="groupsDictionary">The existing dictionary of groups which have been processed</param>
         /// <returns>The processed loot group</returns>
         /// <exception cref="FormatException">Should never happen - Group entries should always contain Name (Item) or Group</exception>
-        private LootGroup AddGroup(string groupName, Dictionary<string, XmlClasses.Loot.Group> groupsDictionary)
+        private Group AddGroup(string groupName, Dictionary<string, XmlClasses.Loot.Group> groupsDictionary)
         {
             var rawGroup = groupsDictionary[groupName];
             Range? groupCount;
@@ -125,7 +125,7 @@ namespace _7DTD_Loot_Parser.Data
                 groupCount = Parsers.ParseRange(rawGroup.Count);
             }
 
-            LootGroup group;
+            Group group;
             if (Groups.ContainsKey(rawGroup.Name))
             {
                 // Group has already been added, skip
@@ -135,7 +135,7 @@ namespace _7DTD_Loot_Parser.Data
             else
             {
                 // First time this group was encountered
-                group = new LootGroup(rawGroup.Name, groupCount);
+                group = new Group(rawGroup.Name, groupCount);
                 Groups.Add(rawGroup.Name, group);
             }
 
@@ -175,7 +175,7 @@ namespace _7DTD_Loot_Parser.Data
                         continue;
                     }
                     var childGroup = AddGroup(rawEntry.Group, groupsDictionary);
-                    var subGroupEntry = new LootGroupSubGroupEntry();
+                    var subGroupEntry = new SubGroupEntry();
                     subGroupEntry.Group = childGroup;
                     subGroupEntry.Count = Parsers.ParseRange(rawEntry.Count);
                     subGroupEntry.ProbTemplate = rawEntry.ProbTemplate != null ? Templates[rawEntry.ProbTemplate] : null;
@@ -195,16 +195,16 @@ namespace _7DTD_Loot_Parser.Data
         /// </summary>
         /// <param name="rawEntry"></param>
         /// <returns></returns>
-        private LootGroupItem AddItem(XmlClasses.Loot.Item rawEntry)
+        private Item AddItem(XmlClasses.Loot.Item rawEntry)
         {
-            LootGroupItem item;
+            Item item;
             if (Items.ContainsKey(rawEntry.Name))
             {
                 item = Items[rawEntry.Name];
             }
             else
             {
-                item = new LootGroupItem(rawEntry, Templates);
+                item = new Item(rawEntry, Templates);
                 Items.Add(rawEntry.Name, item);
             }
             return item;

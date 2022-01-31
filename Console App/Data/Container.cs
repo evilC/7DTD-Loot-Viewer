@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _7DTD_Loot_Parser.Data
 {
-    public class LootContainer
+    public class Container
     {
         /// <summary>
         /// The name of the Container (eg passngasCrate)
@@ -17,11 +17,11 @@ namespace _7DTD_Loot_Parser.Data
         /// <summary>
         /// Groups that the Container contains
         /// </summary>
-        public Dictionary<string, LootGroup> Groups { get; set; } = new Dictionary<string, LootGroup>();
+        public Dictionary<string, Group> Groups { get; set; } = new Dictionary<string, Group>();
 
         /// <summary>
         /// Items that the Container contains
         /// </summary>
-        public Dictionary<string, LootGroupItem> Items { get; set; } = new Dictionary<string, LootGroupItem>();
+        public Dictionary<string, Item> Items { get; set; } = new Dictionary<string, Item>();
     }
 }
