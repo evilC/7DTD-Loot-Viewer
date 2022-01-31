@@ -97,7 +97,7 @@ namespace _7DTD_Loot_Parser
 
             var containerNames = new Dictionary<string, string>();
 
-            var rawBlocks = ObjectDeserializer.DeserializeToObject<RawBlocks>
+            var rawBlocks = ObjectDeserializer.DeserializeToObject<RawClasses.BlockRoot>
                 (Path.Combine(new string[] { configFilePath, "blocks.xml" }));
 
             foreach (var rawBlock in rawBlocks.Blocks)

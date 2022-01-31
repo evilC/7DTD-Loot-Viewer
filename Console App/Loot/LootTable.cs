@@ -1,4 +1,4 @@
-﻿namespace _7DTD_Loot_Parser
+﻿namespace _7DTD_Loot_Parser.Loot
 {
     public class LootTable
     {

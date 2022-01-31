@@ -10,28 +10,31 @@ using System.Xml.Serialization;
 /// These classes are only temporarily used...
 /// ... a further pass is made to convert these "Raw" classes into something more easily processed
 /// </summary>
-namespace _7DTD_Loot_Parser
+namespace _7DTD_Loot_Parser.RawClasses
 {
     [XmlRoot(ElementName = "lootcontainers")]
-    public class RawContainers
+    public class _RootNode
     {
         [XmlElement(ElementName = "lootgroup")]
-        public List<RawGroup> Groups { get; set; }
+        public List<Group> Groups { get; set; }
 
         [XmlElement(ElementName = "lootcontainer")]
-        public List<RawContainer> Containers { get; set; }
+        public List<Container> Containers { get; set; }
+
+        [XmlElement(ElementName = "lootprobtemplates")]
+        public List<LootProbTemplateBase> LootProbTemplateBase { get; set; }
     }
 
-    public class RawContainer
+    public class Container
     {
         [XmlAttribute("name")]
         public string Name { get; set; }
 
         [XmlElement(ElementName = "item")]
-        public List<RawItem> Entries { get; set; }
+        public List<Item> Entries { get; set; }
     }
 
-    public class RawGroup
+    public class Group
     {
         [XmlAttribute("name")]
         public string Name { get; set; }
@@ -43,11 +46,11 @@ namespace _7DTD_Loot_Parser
         //public string QualityTemplate { get; set; }
 
         [XmlElement(ElementName = "item")]
-        public List<RawItem> Items { get; set; }
+        public List<Item> Items { get; set; }
 
     }
 
-    public class RawItem
+    public class Item
     {
         [XmlAttribute("name")]
         public string Name { get; set; }
@@ -66,30 +69,5 @@ namespace _7DTD_Loot_Parser
 
         //[XmlAttribute("prob")]
         //public string Prob { get; set; }
-    }
-
-    [XmlRoot(ElementName = "blocks")]
-    public class RawBlocks
-    {
-        [XmlElement(ElementName = "block")]
-        public List<RawBlock> Blocks { get; set; }
-    }
-
-    public class RawBlock
-    {
-        [XmlAttribute("name")]
-        public string Name { get; set; }
-
-        [XmlElement(ElementName = "property")]
-        public List<RawBlockProperty> Properties { get; set; }
-    }
-
-    public class RawBlockProperty
-    {
-        [XmlAttribute("name")]
-        public string Name { get; set; }
-
-        [XmlAttribute("value")]
-        public string Value { get; set; }
     }
 }
