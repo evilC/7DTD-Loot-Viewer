@@ -12,8 +12,8 @@ namespace _7DTD_Loot_Parser.XmlClasses.Loot
         [XmlAttribute("name")]
         public string Name { get; set; }
 
-        //[XmlAttribute("count")]
-        //public string Count { get; set; }
+        [XmlAttribute("count")]
+        public string Count { get; set; }
 
         //[XmlAttribute("loot_quality_template")]
         //public string QualityTemplate { get; set; }

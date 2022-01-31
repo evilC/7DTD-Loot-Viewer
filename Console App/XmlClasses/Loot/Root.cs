@@ -18,10 +18,21 @@ namespace _7DTD_Loot_Parser.XmlClasses.Loot
         [XmlElement(ElementName = "lootgroup")]
         public List<Group> Groups { get; set; }
 
+        [XmlIgnoreAttribute]
+        public Dictionary<string, Group> GroupsDictionary { get; set; }
+
         [XmlElement(ElementName = "lootcontainer")]
         public List<Container> Containers { get; set; }
 
         [XmlElement(ElementName = "lootprobtemplates")]
         public List<RootProbTemplate> LootProbTemplateBase { get; set; }
+
+        [XmlElement(ElementName = "lootqualitytemplates")]
+        public List<RootQualTemplate> LootQualTemplateBase { get; set; }
+
+        public void BuildGroupDictionary()
+        {
+             GroupsDictionary = Groups.ToDictionary(i => i.Name);
+        }
     }
 }

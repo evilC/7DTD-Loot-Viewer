@@ -23,12 +23,15 @@ namespace _7DTD_Loot_Parser
             // Deserialize the XML file into the Raw classes
             _rawContainers = ObjectDeserializer.DeserializeToObject<XmlClasses.Loot.Root>
                 (Path.Combine(new string[] { configFilePath, "loot.xml" }));
+            _rawContainers.BuildGroupDictionary();
+            var loot = new Data.Loot(_rawContainers);
 
-            var probTemplates = new Loot.ProbTemplates(_rawContainers);
+            //var probTemplates = new Loot.ProbTemplates(_rawContainers);
             return;
 
+            /*
             // Convert the Loot Groups into a Dictionary, indexed by name of Loot Group
-            _rawGroups = _rawContainers.Groups.ToDictionary(i => i.Name);
+            //_rawGroups = _rawContainers.Groups.ToDictionary(i => i.Name);
 
             // Start building the loot table
             var lootTable = new Loot.Table();
@@ -62,6 +65,7 @@ namespace _7DTD_Loot_Parser
 
             File.WriteAllText("ContainerItems.json", JsonSerializer.Serialize(containerItems, opt));
             File.WriteAllText("ItemContainers.json", JsonSerializer.Serialize(itemContainers, opt));
+            */
         }
 
         /// <summary>

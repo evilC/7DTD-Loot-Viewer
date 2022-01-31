@@ -1,4 +1,4 @@
-﻿namespace _7DTD_Loot_Parser.Loot
+﻿namespace _7DTD_Loot_Parser.Data
 {
     public class Table
     {

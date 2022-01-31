@@ -15,16 +15,18 @@ namespace _7DTD_Loot_Parser.XmlClasses.Loot
         [XmlAttribute("group")]
         public string Group { get; set; }
 
-        //[XmlAttribute("loot_prob_template")]
-        //public string ProbTemplate { get; set; }
+        [XmlAttribute("count")]
+        public string Count { get; set; }
 
+        [XmlAttribute("loot_prob_template")]
+        public string ProbTemplate { get; set; }
+
+        [XmlAttribute("prob")]
+        public string Prob { get; set; }
         //[XmlAttribute("mods")]
         //public string Mods { get; set; }
 
         //[XmlAttribute("mod_chance")]
         //public string ModChance { get; set; }
-
-        //[XmlAttribute("prob")]
-        //public string Prob { get; set; }
     }
 }
