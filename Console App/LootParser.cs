@@ -17,6 +17,8 @@ namespace _7DTD_Loot_Parser
             // Now we have the raw data from the XML, attempt to parse all the entries and build a data tree
 
             var loot = new Data.Loot(xmlRoot);
+            var groupToolsTiered = loot.Groups["groupToolsTiered"];
+            var groupPassNGas = loot.Groups["groupPassNGas"];
 
             // We don't need the original XML data any more, so free it from memory
             xmlRoot = null;

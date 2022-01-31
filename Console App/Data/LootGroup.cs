@@ -33,7 +33,7 @@ namespace _7DTD_Loot_Parser.Data
         /// A list of the item elements in the lootgroup node whose name was that of another Group (eg groupToolsT2)
         /// indexed by name of Group
         /// </summary>
-        public Dictionary<string, LootGroup> Groups { get; } = new Dictionary<string, LootGroup>();
+        public Dictionary<string, LootGroupSubGroupEntry> Groups { get; } = new Dictionary<string, LootGroupSubGroupEntry>();
 
 
         public LootGroup(string name, Range? count)

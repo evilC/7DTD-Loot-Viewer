@@ -13,9 +13,20 @@ namespace _7DTD_Loot_Parser.Data
     /// </summary>
     public class ProbTemplate
     {
-        private Dictionary<Range, decimal> _items = new Dictionary<Range, decimal>();
+        /// <summary>
+        /// The Name of the Template
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// The entries in the Template
+        /// Maps to the XML "loot" elements
+        /// </summary>
+        public Dictionary<Range, decimal> Entries = new Dictionary<Range, decimal>();
+
         public ProbTemplate(XmlClasses.Loot.ProbTemplate template)
         {
+            Name = template.Name;
             foreach (var item in template.LootProbTemplateItems)
             {
                 var range = Parsers.ParseRange(item.Level);
@@ -24,12 +35,13 @@ namespace _7DTD_Loot_Parser.Data
                 {
                     throw new Exception("Not expecting null range");
                 }
-                _items.Add((Range)range, Convert.ToDecimal(item.Prob));
+                Entries.Add((Range)range, Convert.ToDecimal(item.Prob));
             }
         }
 
         public ProbTemplate(XmlClasses.Loot.QualTemplate template)
         {
+            Name = template.Name;
             foreach (var item in template.LootQualTemplateItems)
             {
                 var range = Parsers.ParseRange(item.Level);
@@ -38,7 +50,7 @@ namespace _7DTD_Loot_Parser.Data
                 {
                     throw new Exception("Not expecting null range");
                 }
-                _items.Add((Range)range, Convert.ToDecimal(item.Prob));
+                Entries.Add((Range)range, Convert.ToDecimal(item.Prob));
             }
         }
     }

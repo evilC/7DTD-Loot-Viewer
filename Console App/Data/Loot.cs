@@ -130,7 +130,22 @@ namespace _7DTD_Loot_Parser.Data
                         continue;
                     }
                     var childGroup = AddGroup(rawItem.Group, groupsDictionary);
-                    group.Groups.Add(childGroup.Name, childGroup);
+                    //group.Groups.Add(childGroup.Name, childGroup);
+                    var subGroupEntry = new LootGroupSubGroupEntry();
+                    subGroupEntry.Group = childGroup;
+                    subGroupEntry.Count = Parsers.ParseRange(rawItem.Count);
+                    subGroupEntry.ProbTemplate = rawItem.ProbTemplate != null ? Templates[rawItem.ProbTemplate] : null;
+                    //if (Templates.ContainsKey(rawItem.ProbTemplate))
+                    //{
+                    //    subGroupEntry.ProbTemplate = Templates[rawItem.ProbTemplate];
+                    //}
+                    //else
+                    //{
+                    //    subGroupEntry.ProbTemplate = null;
+                    //}
+                    //subGroupEntry.ProbTemplate = Templates.ContainsKey(rawItem.ProbTemplate) ? Templates[rawItem.ProbTemplate] : null;
+                    group.Groups.Add(rawItem.Group, subGroupEntry);
+                    //group.Groups.Add(rawItem.Group, )
                 }
                 else
                 {
