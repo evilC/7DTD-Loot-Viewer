@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace _7DTD_Loot_Parser.Data
 {
+    /// <summary>
+    /// Refers to a specific in-game Item (eg Steel Pickaxe)
+    /// </summary>
     public class LootGroupItem
     {
         public string Name { get; set; }
@@ -14,7 +17,7 @@ namespace _7DTD_Loot_Parser.Data
         public ProbTemplate? ProbTemplate { get; set; }
         public decimal? Prob { get; set; }
 
-        public LootGroupItem(XmlClasses.Loot.Item rawItem, Dictionary<string, ProbTemplate> probTemplates)
+        public LootGroupItem(XmlClasses.Loot.Item rawItem, SortedDictionary<string, ProbTemplate> probTemplates)
         {
             Name = rawItem.Name;
             Count = Parsers.ParseRange(rawItem.Count);

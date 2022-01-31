@@ -17,12 +17,12 @@ namespace _7DTD_Loot_Parser.Data
         /// Loot Groups. Essentially the contents of all lootgroup nodes.
         /// Note however that one loot group can refer to another loot group
         /// </summary>
-        public Dictionary<string, LootGroup> Groups { get; set; } = new Dictionary<string, LootGroup>();
+        public SortedDictionary<string, LootGroup> Groups { get; set; } = new SortedDictionary<string, LootGroup>();
 
         /// <summary>
         /// Probability Templates
         /// </summary>
-        public Dictionary<string, ProbTemplate> Template { get; set; } = new Dictionary<string, ProbTemplate>();
+        public SortedDictionary<string, ProbTemplate> Template { get; set; } = new SortedDictionary<string, ProbTemplate>();
 
         /// <summary>
         /// Data table is built upon instantiation of the class
