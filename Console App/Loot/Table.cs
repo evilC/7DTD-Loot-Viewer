@@ -1,6 +1,6 @@
 ﻿namespace _7DTD_Loot_Parser.Loot
 {
-    public class LootTable
+    public class Table
     {
         /// <summary>
         /// Key is Item Name, value is a HashSet (List) of Containers that the Item can spawn in

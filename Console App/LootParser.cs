@@ -11,8 +11,8 @@ namespace _7DTD_Loot_Parser
     /// </summary>
     internal class LootParser
     {
-        private RawClasses._RootNode _rawContainers;
-        private Dictionary<string, RawClasses.Group> _rawGroups;
+        private XmlClasses.Loot.Root _rawContainers;
+        private Dictionary<string, XmlClasses.Loot.Group> _rawGroups;
         private Dictionary<string, string> _itemNames;
 
         public LootParser(string configFilePath)
@@ -21,13 +21,13 @@ namespace _7DTD_Loot_Parser
             _itemNames = localizationParser.GetDisplayNames(configFilePath);
 
             // Deserialize the XML file into the Raw classes
-            _rawContainers = ObjectDeserializer.DeserializeToObject<RawClasses._RootNode>
+            _rawContainers = ObjectDeserializer.DeserializeToObject<XmlClasses.Loot.Root>
                 (Path.Combine(new string[] { configFilePath, "loot.xml" }));
             // Convert the Loot Groups into a Dictionary, indexed by name of Loot Group
             _rawGroups = _rawContainers.Groups.ToDictionary(i => i.Name);
 
             // Start building the loot table
-            var lootTable = new Loot.LootTable();
+            var lootTable = new Loot.Table();
             var containerItems = lootTable.ContainerItems;
             var itemContainers = lootTable.ItemContainers;
             // Iterate through all of the containers, and find which items could spawn in them
@@ -65,7 +65,7 @@ namespace _7DTD_Loot_Parser
         /// </summary>
         /// <param name="entries">The list of items in this group</param>
         /// <param name="itemsInThisContainer">The list of items to be added to</param>
-        private void AddGroupContents(List<RawClasses.Item> entries, HashSet<string> itemsInThisContainer)
+        private void AddGroupContents(List<XmlClasses.Loot.Item> entries, HashSet<string> itemsInThisContainer)
         {
             foreach (var entry in entries)
             {
