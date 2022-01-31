@@ -22,7 +22,7 @@ namespace _7DTD_Loot_Parser.Data
         /// <summary>
         /// Probability Templates
         /// </summary>
-        public SortedDictionary<string, ProbTemplate> Template { get; set; } = new SortedDictionary<string, ProbTemplate>();
+        public SortedDictionary<string, ProbTemplate> Templates { get; set; } = new SortedDictionary<string, ProbTemplate>();
 
         /// <summary>
         /// Data table is built upon instantiation of the class
@@ -35,7 +35,7 @@ namespace _7DTD_Loot_Parser.Data
             var probTemplates = rawRoot.LootProbTemplateBase[0].LootProbTemplates;
             foreach (var template in probTemplates)
             {
-                Template.Add(template.Name, new ProbTemplate(template));
+                Templates.Add(template.Name, new ProbTemplate(template));
             }
 
             // Iterate through all lootqualitytemplate nodes in the XML
@@ -45,7 +45,7 @@ namespace _7DTD_Loot_Parser.Data
             {
                 foreach (var template in qualTemplateBase.LootQualTemplates)
                 {
-                    Template.Add(template.Name, new ProbTemplate(template));
+                    Templates.Add(template.Name, new ProbTemplate(template));
                 }
 
             }
@@ -111,7 +111,7 @@ namespace _7DTD_Loot_Parser.Data
                     }
                     try
                     {
-                        group.Items.Add(rawItem.Name, new LootGroupItem(rawItem, Template));
+                        group.Items.Add(rawItem.Name, new LootGroupItem(rawItem, Templates));
                     }
                     catch(KeyNotFoundException ex)
                     {
