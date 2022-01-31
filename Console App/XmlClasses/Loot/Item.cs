@@ -1,9 +1,9 @@
 ﻿using System.Xml.Serialization;
 
 /// <summary>
-/// Classes which are used for Deserialization of the loot.xml file
-/// These classes are only temporarily used...
-/// ... a further pass is made to convert these "Raw" classes into something more easily processed
+/// XML lootcontainer item elements deserialize into this class
+/// Note that this class can hold an Item or a Group...
+/// So when this file is later parsed, it may turn into a Data.LootGroup or a Data.LootGroupItem class
 /// </summary>
 namespace _7DTD_Loot_Parser.XmlClasses.Loot
 {

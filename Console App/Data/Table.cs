@@ -1,5 +1,8 @@
 ﻿namespace _7DTD_Loot_Parser.Data
 {
+    /// <summary>
+    /// Old data structure only used by OldLootParser
+    /// </summary>
     public class Table
     {
         /// <summary>

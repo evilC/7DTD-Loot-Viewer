@@ -7,7 +7,10 @@ using _7DTD_Loot_Parser.Utilities;
 
 namespace _7DTD_Loot_Parser.Data
 {
-
+    /// <summary>
+    /// Holds data which allows one to calulate probability of something dropping
+    /// Can be an attribute of an Item or a Group
+    /// </summary>
     public class ProbTemplate
     {
         private Dictionary<Range, decimal> _items = new Dictionary<Range, decimal>();

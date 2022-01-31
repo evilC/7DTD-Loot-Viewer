@@ -7,19 +7,38 @@ using System.Threading.Tasks;
 
 namespace _7DTD_Loot_Parser.Data
 {
+    /// <summary>
+    /// Parses the Raw XML classes, and attempts to build a more useful data structure from it...
+    /// ... where all items refer to other items, allowing you to walk the tree
+    /// </summary>
     public class Loot
     {
-        public Dictionary<string, LootGroup> Group { get; set; } = new Dictionary<string, LootGroup>();
+        /// <summary>
+        /// Loot Groups. Essentially the contents of all lootgroup nodes.
+        /// Note however that one loot group can refer to another loot group
+        /// </summary>
+        public Dictionary<string, LootGroup> Groups { get; set; } = new Dictionary<string, LootGroup>();
+
+        /// <summary>
+        /// Probability Templates
+        /// </summary>
         public Dictionary<string, ProbTemplate> Template { get; set; } = new Dictionary<string, ProbTemplate>();
 
+        /// <summary>
+        /// Data table is built upon instantiation of the class
+        /// </summary>
+        /// <param name="rawRoot">The deserialized XML document</param>
         public Loot(XmlClasses.Loot.Root rawRoot)
         {
+            // Iterate through all lootprobtemplate nodes in the XML
+            // We do this before iterating groups, as groups reference probability templates
             var probTemplates = rawRoot.LootProbTemplateBase[0].LootProbTemplates;
             foreach (var template in probTemplates)
             {
                 Template.Add(template.Name, new ProbTemplate(template));
             }
 
+            // Iterate through all lootqualitytemplate nodes in the XML
             // Some Items (eg ammo9mmBulletBall in groupAmmoRegularGunslingerT1) use a Quality Template as a Probability Template...
             // ... so even if not trying to calculate Quality, we need to add the Quality Templates to the Probability Template list
             foreach (var qualTemplateBase in rawRoot.LootQualTemplateBase)
@@ -30,24 +49,27 @@ namespace _7DTD_Loot_Parser.Data
                 }
 
             }
-            //var qualTemplates = rawRoot.LootQualTemplateBase[0].LootQualTemplates;
 
+            // Iterate through all lootgroup nodes
+            // Each lootgroup node can reference Items or (possibly nested) Groups, as well as Probability / Quality templates
             var lootGroups = rawRoot.Groups;
             foreach (var group in lootGroups)
             {
-                //Group.Add(group.Name, new LootGroup(group));
                 AddGroup(group.Name, rawRoot.GroupsDictionary);
             }
 
         }
 
+        /// <summary>
+        /// Recursive function to process groups
+        /// If the group contains a reference to another group, this function will recursively call itself
+        /// </summary>
+        /// <param name="groupName">The name of the group to process</param>
+        /// <param name="groupsDictionary">The existing dictionary of groups which have been processed</param>
+        /// <returns>The processed loot group</returns>
+        /// <exception cref="FormatException">Should never happen - Group entries should always contain Name (Item) or Group</exception>
         private LootGroup AddGroup(string groupName, Dictionary<string, XmlClasses.Loot.Group> groupsDictionary)
         {
-            //throw new NotImplementedException();
-        //}
-
-        //private LootGroup AddGroup(string groupName, List<XmlClasses.Loot.Group> lootGroups)
-        //{
             var rawGroup = groupsDictionary[groupName];
             Range? groupCount;
             if (rawGroup.Count == null)
@@ -60,19 +82,20 @@ namespace _7DTD_Loot_Parser.Data
             }
 
             LootGroup group;
-            if (Group.ContainsKey(rawGroup.Name))
+            if (Groups.ContainsKey(rawGroup.Name))
             {
-                var debug = "me"; // Can this happen?
-                //group = Group[rawGroup.Name];
-                return Group[rawGroup.Name];
+                // Group has already been added, skip
+                // This may happen if a previously processed group referenced this group
+                return Groups[rawGroup.Name];
             }
             else
             {
+                // First time this group was encountered
                 group = new LootGroup(rawGroup.Name, groupCount);
-                Group.Add(rawGroup.Name, group);
+                Groups.Add(rawGroup.Name, group);
             }
 
-
+            // Iterate through all 
             for (int i = 0; i < rawGroup.Items.Count(); i++)
             {
                 var rawItem = rawGroup.Items[i];
@@ -111,7 +134,7 @@ namespace _7DTD_Loot_Parser.Data
                 }
                 else
                 {
-                    throw new Exception($"Loot Group {rawGroup.Name} item {i} has neither a Name nor Group");
+                    throw new FormatException ($"Loot Group {rawGroup.Name} item {i} has neither a Name nor Group");
                 }
 
             }

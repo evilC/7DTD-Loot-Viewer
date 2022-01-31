@@ -12,12 +12,19 @@ using System.Xml.Serialization;
 /// </summary>
 namespace _7DTD_Loot_Parser.XmlClasses.Loot
 {
+    /// <summary>
+    /// This class is passed to the Deserializer and lets it interpret the root node of the XML
+    /// </summary>
     [XmlRoot(ElementName = "lootcontainers")]
     public class Root
     {
         [XmlElement(ElementName = "lootgroup")]
         public List<Group> Groups { get; set; }
 
+        /// <summary>
+        /// When Deserializing the XML, you get a list of groups, rather than a dictionary...
+        /// So BuildGroupDictionary converts this into a Dictionary after parsing, for easy group lookup
+        /// </summary>
         [XmlIgnoreAttribute]
         public Dictionary<string, Group> GroupsDictionary { get; set; }
 

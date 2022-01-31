@@ -2,6 +2,9 @@
 
 namespace _7DTD_Loot_Parser.XmlClasses.Loot
 {
+    /// <summary>
+    /// XML lootprobtemplate loot elements deserialize into this class
+    /// </summary>
     public class ProbTemplateItem
     {
         [XmlAttribute("level")]
