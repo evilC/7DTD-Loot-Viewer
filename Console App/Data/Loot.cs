@@ -155,8 +155,8 @@ namespace _7DTD_Loot_Parser.Data
                     }
                     try
                     {
-                        var item = AddItem(rawEntry);
-                        group.Items.Add(rawEntry.Name, item);
+                        var itemInstance = AddItem(rawEntry);
+                        group.Items.Add(rawEntry.Name, itemInstance);
                     }
                     catch(KeyNotFoundException ex)
                     {
@@ -195,19 +195,22 @@ namespace _7DTD_Loot_Parser.Data
         /// </summary>
         /// <param name="rawEntry"></param>
         /// <returns></returns>
-        private Item AddItem(XmlClasses.Loot.Item rawEntry)
+        private ItemInstance AddItem(XmlClasses.Loot.Item rawEntry)
         {
             Item item;
             if (Items.ContainsKey(rawEntry.Name))
             {
+                // Item already exists in the database, just add an instance of it
                 item = Items[rawEntry.Name];
             }
             else
             {
-                item = new Item(rawEntry, Templates);
+                // First time this Item has been seen
+                item = new Item(rawEntry.Name);
                 Items.Add(rawEntry.Name, item);
             }
-            return item;
+            var itemInstance = item.AddInstance(rawEntry, Templates);
+            return itemInstance;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace _7DTD_Loot_Parser.Data
         /// A list of the item elements in the lootgroup node whose name was that of an individual item (eg Steel meleeToolPickT2SteelPickaxe)
         /// Indexed by name of Item
         /// </summary>
-        public Dictionary<string, Item> Items { get; } = new Dictionary<string, Item>();
+        public Dictionary<string, ItemInstance> Items { get; } = new Dictionary<string, ItemInstance>();
 
         /// <summary>
         /// A list of the item elements in the lootgroup node whose name was that of another Group (eg groupToolsT2)
