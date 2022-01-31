@@ -23,6 +23,10 @@ namespace _7DTD_Loot_Parser
             // Deserialize the XML file into the Raw classes
             _rawContainers = ObjectDeserializer.DeserializeToObject<XmlClasses.Loot.Root>
                 (Path.Combine(new string[] { configFilePath, "loot.xml" }));
+
+            var probTemplates = new Loot.ProbTemplates(_rawContainers);
+            return;
+
             // Convert the Loot Groups into a Dictionary, indexed by name of Loot Group
             _rawGroups = _rawContainers.Groups.ToDictionary(i => i.Name);
 
