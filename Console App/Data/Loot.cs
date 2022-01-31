@@ -25,6 +25,16 @@ namespace _7DTD_Loot_Parser.Data
         public SortedDictionary<string, ProbTemplate> Templates { get; set; } = new SortedDictionary<string, ProbTemplate>();
 
         /// <summary>
+        /// Containers
+        /// </summary>
+        public SortedDictionary<string, LootContainer> Containers { get; set; } = new SortedDictionary<string, LootContainer> ();
+
+        /// <summary>
+        /// Items
+        /// </summary>
+        public SortedDictionary<string, LootGroupItem>  Items { get; set; } = new SortedDictionary<string, LootGroupItem> ();
+
+        /// <summary>
         /// Data table is built upon instantiation of the class
         /// </summary>
         /// <param name="rawRoot">The deserialized XML document</param>
@@ -58,6 +68,40 @@ namespace _7DTD_Loot_Parser.Data
                 AddGroup(group.Name, rawRoot.GroupsDictionary);
             }
 
+            // Iterate through all container nodes
+            // Each container node can reference Items or (possibly nested) Groups, as well as Probability / Quality templates
+            var containers = rawRoot.Containers;
+            foreach (var container in containers)
+            {
+                AddContainer(container);
+            }
+        }
+
+        private void AddContainer(XmlClasses.Loot.Container rawContainer)
+        {
+            var container = new LootContainer();
+            container.Name = rawContainer.Name;
+            for (int i = 0; i < rawContainer.Entries.Count(); i++)
+            {
+                var entry = rawContainer.Entries[i];
+                if (!string.IsNullOrEmpty(entry.Name))
+                {
+                    var item = AddItem(entry);
+                }
+                else if (!string.IsNullOrEmpty(entry.Group))
+                {
+                    if (!Groups.ContainsKey(entry.Group))
+                    {
+                        throw new Exception($"Container {container.Name} references a non-existant group");
+                    }
+                    container.Groups.Add(entry.Group, Groups[entry.Group]);
+                }
+                else
+                {
+                    throw new FormatException($"Container entry {rawContainer.Name} item {i} has neither a Name nor Group");
+                }
+            }
+            Containers.Add(container.Name, container);
         }
 
         /// <summary>
@@ -95,14 +139,14 @@ namespace _7DTD_Loot_Parser.Data
                 Groups.Add(rawGroup.Name, group);
             }
 
-            // Iterate through all 
-            for (int i = 0; i < rawGroup.Items.Count(); i++)
+            // Iterate through all Entries in the Group
+            for (int i = 0; i < rawGroup.Entries.Count(); i++)
             {
-                var rawItem = rawGroup.Items[i];
-                if (!string.IsNullOrEmpty(rawItem.Name))
+                var rawEntry = rawGroup.Entries[i];
+                if (!string.IsNullOrEmpty(rawEntry.Name))
                 {
                     // Single item
-                    if (group.Items.ContainsKey(rawItem.Name))
+                    if (group.Items.ContainsKey(rawEntry.Name))
                     {
                         // ToDo: ammo9mmBulletBall appears twice in groupAmmoRegularGunslingerT1...
                         // ... once with ProbTemplate QLTemplateT0 and once with QLTemplateT1
@@ -111,7 +155,8 @@ namespace _7DTD_Loot_Parser.Data
                     }
                     try
                     {
-                        group.Items.Add(rawItem.Name, new LootGroupItem(rawItem, Templates));
+                        var item = AddItem(rawEntry);
+                        group.Items.Add(rawEntry.Name, item);
                     }
                     catch(KeyNotFoundException ex)
                     {
@@ -121,39 +166,48 @@ namespace _7DTD_Loot_Parser.Data
                     }
                     
                 }
-                else if (!string.IsNullOrEmpty(rawItem.Group))
+                else if (!string.IsNullOrEmpty(rawEntry.Group))
                 {
                     // Group (Which could contain other groups)
-                    if (group.Groups.ContainsKey(rawItem.Group))
+                    if (group.Groups.ContainsKey(rawEntry.Group))
                     {
                         // ToDo: groupArmorScaledTPlus contains groupArmorT2 twice ?!?
                         continue;
                     }
-                    var childGroup = AddGroup(rawItem.Group, groupsDictionary);
-                    //group.Groups.Add(childGroup.Name, childGroup);
+                    var childGroup = AddGroup(rawEntry.Group, groupsDictionary);
                     var subGroupEntry = new LootGroupSubGroupEntry();
                     subGroupEntry.Group = childGroup;
-                    subGroupEntry.Count = Parsers.ParseRange(rawItem.Count);
-                    subGroupEntry.ProbTemplate = rawItem.ProbTemplate != null ? Templates[rawItem.ProbTemplate] : null;
-                    //if (Templates.ContainsKey(rawItem.ProbTemplate))
-                    //{
-                    //    subGroupEntry.ProbTemplate = Templates[rawItem.ProbTemplate];
-                    //}
-                    //else
-                    //{
-                    //    subGroupEntry.ProbTemplate = null;
-                    //}
-                    //subGroupEntry.ProbTemplate = Templates.ContainsKey(rawItem.ProbTemplate) ? Templates[rawItem.ProbTemplate] : null;
-                    group.Groups.Add(rawItem.Group, subGroupEntry);
-                    //group.Groups.Add(rawItem.Group, )
+                    subGroupEntry.Count = Parsers.ParseRange(rawEntry.Count);
+                    subGroupEntry.ProbTemplate = rawEntry.ProbTemplate != null ? Templates[rawEntry.ProbTemplate] : null;
+                    group.Groups.Add(rawEntry.Group, subGroupEntry);
                 }
                 else
                 {
-                    throw new FormatException ($"Loot Group {rawGroup.Name} item {i} has neither a Name nor Group");
+                    throw new FormatException ($"Loot Group entry {i} has neither a Name nor Group");
                 }
 
             }
             return group;
+        }
+
+        /// <summary>
+        /// Adds an item to the list of Items
+        /// </summary>
+        /// <param name="rawEntry"></param>
+        /// <returns></returns>
+        private LootGroupItem AddItem(XmlClasses.Loot.Item rawEntry)
+        {
+            LootGroupItem item;
+            if (Items.ContainsKey(rawEntry.Name))
+            {
+                item = Items[rawEntry.Name];
+            }
+            else
+            {
+                item = new LootGroupItem(rawEntry, Templates);
+                Items.Add(rawEntry.Name, item);
+            }
+            return item;
         }
     }
 }

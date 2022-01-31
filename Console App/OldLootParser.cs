@@ -93,7 +93,7 @@ namespace _7DTD_Loot_Parser
                 else if (entry.Group != null)
                 {
                     // Entry is a Group (Which could potentially contain other groups)
-                    AddGroupContents(_rawGroups[entry.Group].Items, itemsInThisContainer);
+                    AddGroupContents(_rawGroups[entry.Group].Entries, itemsInThisContainer);
                 }
             }
         }

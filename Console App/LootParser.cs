@@ -19,6 +19,8 @@ namespace _7DTD_Loot_Parser
             var loot = new Data.Loot(xmlRoot);
             var groupToolsTiered = loot.Groups["groupToolsTiered"];
             var groupPassNGas = loot.Groups["groupPassNGas"];
+            var passngasCrate = loot.Containers["passngasCrate"];
+            var meleeToolSalvageT2Ratchet = loot.Items["meleeToolSalvageT2Ratchet"];
 
             // We don't need the original XML data any more, so free it from memory
             xmlRoot = null;
