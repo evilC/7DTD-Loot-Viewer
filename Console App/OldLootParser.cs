@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace _7DTD_Loot_Parser
 {
+
     public class OldLootParser
     {
         private XmlClasses.Loot.Root _rawContainers;

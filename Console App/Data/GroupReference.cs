@@ -7,16 +7,24 @@ using System.Threading.Tasks;
 namespace _7DTD_Loot_Parser.Data
 {
     /// <summary>
-    /// When a lootgroup refers to another lootgroup, the entry itself can have it's own prob (flat probability)...
-    /// ... count, or loot_prob_template, which is independent of the same attributes of the child group itself
-    /// This class allows us to reflect that fact
+    /// When one Group references another, this class holds the reference
     /// </summary>
-    public class SubGroupEntry
+    /*
+    <lootgroup name="groupSavageCountryCrate01">                        <-- The Parent Group (Which holds the reference)
+	    <item group="groupArmorScaled" loot_prob_template="low"/>       <-- This is the Reference. It has a prob_template of it's own
+    </lootgroup>
+    */
+    public class GroupReference
     {
         /// <summary>
         /// Link to the Loot Group referenced in the entry
         /// </summary>
         public Group Group { get; set; }
+
+        /// <summary>
+        /// The Parent (owner) of the Reference
+        /// </summary>
+        public Group Parent { get; set; }
 
         /// <summary>
         /// The Count value of the ENTRY (NOT OF THE GROUP ITSELF!)

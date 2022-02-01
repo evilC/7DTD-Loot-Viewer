@@ -29,7 +29,7 @@ namespace _7DTD_Loot_Parser.XmlClasses.Loot
         public Dictionary<string, Group> GroupsDictionary { get; set; }
 
         [XmlElement(ElementName = "lootcontainer")]
-        public List<Container> Containers { get; set; }
+        public List<Group> Containers { get; set; }
 
         [XmlElement(ElementName = "lootprobtemplates")]
         public List<RootProbTemplate> LootProbTemplateBase { get; set; }
@@ -39,7 +39,19 @@ namespace _7DTD_Loot_Parser.XmlClasses.Loot
 
         public void BuildGroupDictionary()
         {
-             GroupsDictionary = Groups.ToDictionary(i => i.Name);
+            GroupsDictionary = Groups.ToDictionary(i => i.Name);
+            foreach (var container in Containers)
+            {
+                if (IsIgnoredContainer(container.Name)) continue;
+                GroupsDictionary.Add(container.Name, container);
+            }
+        }
+
+        public bool IsIgnoredContainer(string name)
+        {
+            return name == "weaponTestLoot"
+                    || name == "toolTestLoot"
+                    || name.StartsWith("twitch_");
         }
     }
 }

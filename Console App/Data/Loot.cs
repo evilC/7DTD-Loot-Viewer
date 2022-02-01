@@ -27,7 +27,7 @@ namespace _7DTD_Loot_Parser.Data
         /// <summary>
         /// Containers
         /// </summary>
-        public SortedDictionary<string, Container> Containers { get; set; } = new SortedDictionary<string, Container> ();
+        public SortedDictionary<string, Group> Containers { get; set; } = new SortedDictionary<string, Group> ();
 
         /// <summary>
         /// Items
@@ -61,83 +61,32 @@ namespace _7DTD_Loot_Parser.Data
             }
 
             // Iterate through all lootgroup nodes
-            // Each lootgroup node can reference Items or (possibly nested) Groups, as well as Probability / Quality templates
-            var lootGroups = rawRoot.Groups;
-            foreach (var group in lootGroups)
+            // At this point, only add Groups, and not Group References
+            foreach (var rawGroup in rawRoot.Groups)
             {
-                AddGroup(group.Name, rawRoot.GroupsDictionary);
+                var group = new Group(rawGroup.Name, Parsers.ParseRange(rawGroup.Count), GroupType.Group);
+                Groups.Add(rawGroup.Name, group);
             }
 
             // Iterate through all container nodes
-            // Each container node can reference Items or (possibly nested) Groups, as well as Probability / Quality templates
-            var containers = rawRoot.Containers;
-            foreach (var container in containers)
+            // Add Groups to containers
+            foreach (var rawGroup in rawRoot.Containers)
             {
-                AddContainer(container);
-            }
-        }
-
-        private void AddContainer(XmlClasses.Loot.Container rawContainer)
-        {
-            var container = new Container();
-            container.Name = rawContainer.Name;
-            for (int i = 0; i < rawContainer.Entries.Count(); i++)
-            {
-                var entry = rawContainer.Entries[i];
-                if (!string.IsNullOrEmpty(entry.Name))
-                {
-                    var item = AddItem(entry);
-                }
-                else if (!string.IsNullOrEmpty(entry.Group))
-                {
-                    if (!Groups.ContainsKey(entry.Group))
-                    {
-                        throw new Exception($"Container {container.Name} references a non-existant group");
-                    }
-                    container.Groups.Add(entry.Group, Groups[entry.Group]);
-                }
-                else
-                {
-                    throw new FormatException($"Container entry {rawContainer.Name} item {i} has neither a Name nor Group");
-                }
-            }
-            Containers.Add(container.Name, container);
-        }
-
-        /// <summary>
-        /// Recursive function to process groups
-        /// If the group contains a reference to another group, this function will recursively call itself
-        /// </summary>
-        /// <param name="groupName">The name of the group to process</param>
-        /// <param name="groupsDictionary">The existing dictionary of groups which have been processed</param>
-        /// <returns>The processed loot group</returns>
-        /// <exception cref="FormatException">Should never happen - Group entries should always contain Name (Item) or Group</exception>
-        private Group AddGroup(string groupName, Dictionary<string, XmlClasses.Loot.Group> groupsDictionary)
-        {
-            var rawGroup = groupsDictionary[groupName];
-            Range? groupCount;
-            if (rawGroup.Count == null)
-            {
-                groupCount = null;
-            }
-            else
-            {
-                groupCount = Parsers.ParseRange(rawGroup.Count);
-            }
-
-            Group group;
-            if (Groups.ContainsKey(rawGroup.Name))
-            {
-                // Group has already been added, skip
-                // This may happen if a previously processed group referenced this group
-                return Groups[rawGroup.Name];
-            }
-            else
-            {
-                // First time this group was encountered
-                group = new Group(rawGroup.Name, groupCount);
+                if (rawRoot.IsIgnoredContainer(rawGroup.Name)) continue;
+                var group = new Group(rawGroup.Name, Parsers.ParseRange(rawGroup.Count), GroupType.Container);
                 Groups.Add(rawGroup.Name, group);
+                Containers.Add(rawGroup.Name, group);
+                BuildGroup(rawGroup.Name, rawRoot.GroupsDictionary);
             }
+        }
+
+        private void BuildGroup(string groupName, Dictionary<string, XmlClasses.Loot.Group> rawGroups)
+        {
+            var rawGroup = rawGroups[groupName];
+            var group = Groups[groupName];
+
+            // If we have already built this group, then do not build it again
+            if (group.Items.Count > 0 || group.GroupReferences.Count > 0) return;
 
             // Iterate through all Entries in the Group
             for (int i = 0; i < rawGroup.Entries.Count(); i++)
@@ -145,7 +94,7 @@ namespace _7DTD_Loot_Parser.Data
                 var rawEntry = rawGroup.Entries[i];
                 if (!string.IsNullOrEmpty(rawEntry.Name))
                 {
-                    // Single item
+                    // Entry is an Item
                     if (group.Items.ContainsKey(rawEntry.Name))
                     {
                         // ToDo: ammo9mmBulletBall appears twice in groupAmmoRegularGunslingerT1...
@@ -155,41 +104,43 @@ namespace _7DTD_Loot_Parser.Data
                     }
                     try
                     {
-                        var itemInstance = AddItem(rawEntry);
-                        group.Items.Add(rawEntry.Name, itemInstance);
+                        //var itemInstance = AddItem(rawEntry);
+                        //group.Items.Add(rawEntry.Name, itemInstance);
                     }
-                    catch(KeyNotFoundException ex)
+                    catch (KeyNotFoundException ex)
                     {
                         // ToDo: ammo9mmBulletBall in groupAmmoAdvancedGunslinger references Probability Template "T0", which does not exist
                         // Until I know if this is an error in the XML or not, I will have to throw an exception and catch it
                         continue;
                     }
-                    
+
                 }
                 else if (!string.IsNullOrEmpty(rawEntry.Group))
                 {
-                    // Group (Which could contain other groups)
-                    if (group.Groups.ContainsKey(rawEntry.Group))
-                    {
-                        // ToDo: groupArmorScaledTPlus contains groupArmorT2 twice ?!?
-                        continue;
-                    }
-                    var childGroup = AddGroup(rawEntry.Group, groupsDictionary);
-                    var subGroupEntry = new SubGroupEntry();
-                    subGroupEntry.Group = childGroup;
-                    subGroupEntry.Count = Parsers.ParseRange(rawEntry.Count);
-                    subGroupEntry.ProbTemplate = rawEntry.ProbTemplate != null ? Templates[rawEntry.ProbTemplate] : null;
-                    group.Groups.Add(rawEntry.Group, subGroupEntry);
+                    // Entry is a Group (Which could contain other groups)
+                    var childGroup = Groups[rawEntry.Group];
+                    // Build a reference that links this group and the childGroup
+                    var childGroupReference = new GroupReference();
+                    childGroupReference.Group = childGroup;
+                    childGroupReference.Parent = group;
+                    childGroupReference.Count = Parsers.ParseRange(rawEntry.Count);
+                    childGroupReference.ProbTemplate = rawEntry.ProbTemplate != null ? Templates[rawEntry.ProbTemplate] : null;
+                    // Add the reference to the child to this Group
+                    group.GroupReferences.Add(childGroupReference);
+                    // Add the reference to this Group to the child
+                    childGroup.ParentGroupReferences.Add(childGroupReference);
+                    // Build the Items and Groups in the child
+                    BuildGroup(childGroup.Name, rawGroups);
                 }
                 else
                 {
-                    throw new FormatException ($"Loot Group entry {i} has neither a Name nor Group");
+                    throw new FormatException($"Loot Group entry {i} has neither a Name nor Group");
                 }
 
             }
-            return group;
         }
 
+        /*
         /// <summary>
         /// Adds an item to the list of Items
         /// </summary>
@@ -212,5 +163,6 @@ namespace _7DTD_Loot_Parser.Data
             var itemInstance = item.AddInstance(rawEntry, Templates);
             return itemInstance;
         }
+        */
     }
 }
