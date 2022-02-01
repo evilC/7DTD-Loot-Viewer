@@ -1,12 +1,14 @@
 ﻿using System.Xml.Serialization;
 using System.Text.Json;
 using System.Diagnostics;
+using LootParser.Data;
 
 namespace LootParser
 {
-
     public class ConfigParser
     {
+        public Loot Loot { get; set; }
+
         public ConfigParser(string configFilePath)
         {
             // Deserialize the XML file into the Raw classes
@@ -16,15 +18,7 @@ namespace LootParser
             xmlRoot.BuildGroupDictionary();
             // Now we have the raw data from the XML, attempt to parse all the entries and build a data tree
 
-            var loot = new Data.Loot(xmlRoot);
-            var groupToolsTiered = loot.Groups["groupToolsTiered"];
-            var groupRareToolsTiered = loot.Groups["groupRareToolsTiered"]; // Should have 3 child groups: groupToolsTiered, groupToolsT2, groupToolsT3 and 1 parent: groupWorkbenchLoot04
-            var groupPassNGas = loot.Groups["groupPassNGas"];
-            var groupPassNGas03 = loot.Groups["groupPassNGas03"];
-            var passngasCrate = loot.Containers["passngasCrate"];
-            var meleeToolSalvageT2Ratchet = loot.Items["meleeToolSalvageT2Ratchet"];
-            var resourceMetalPipe = loot.Items["resourceMetalPipe"];
-
+            Loot = new Loot(xmlRoot);
 
             // We don't need the original XML data any more, so free it from memory
             xmlRoot = null;

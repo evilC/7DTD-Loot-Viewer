@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<lootcontainers>
+	<lootprobtemplates>
+		<!-- *** A20_Loot_Probabilities_Templates -->
+		<lootprobtemplate name="veryLow">
+			<loot level="1,999999" prob=".05"/>
+		</lootprobtemplate>
+		<lootprobtemplate name="low">
+			<loot level="1,999999" prob=".20"/>
+		</lootprobtemplate>
+		<lootprobtemplate name="medLow">
+			<loot level="1,999999" prob=".35"/>
+		</lootprobtemplate>
+		<lootprobtemplate name="med">
+			<loot level="1,999999" prob=".5"/>
+		</lootprobtemplate>
+		<lootprobtemplate name="medHigh">
+			<loot level="1,999999" prob=".63"/>
+		</lootprobtemplate>
+		<lootprobtemplate name="high">
+			<loot level="1,999999" prob=".75"/>
+		</lootprobtemplate>
+		<lootprobtemplate name="guaranteed">
+			<loot level="1,999999" prob="1"/>
+		</lootprobtemplate>
+	</lootprobtemplates>
+
+	<lootcontainer id="1" name="container-01" count="0" size="8,6" sound_open="UseActions/open_chest" sound_close="UseActions/close_chest" loot_quality_template="qualBaseTemplate">
+		<item name="item-01" count="1,2"/>
+		<item group="group-02"/>
+	</lootcontainer>
+
+	<lootgroup name="group-02">
+		<item name="item-02"/>
+		<item group="group-03-01" loot_prob_template="veryLow"/>
+		<item group="group-03-02" loot_prob_template="low"/>
+	</lootgroup>
+	
+	<lootgroup name="group-03-01">
+		<item name="item-03-01"/>
+		<item group="group-04-01" loot_prob_template="veryLow"/>
+	</lootgroup>
+	
+	<lootgroup name="group-03-02">
+		<item name="item-03-02"/>
+		<item name="targetitem"/>
+	</lootgroup>
+	
+	<lootgroup name="group-04-01">
+		<item name="item-04"/>
+		<item name="targetitem"/>
+	</lootgroup>
+	
+</lootcontainers>
