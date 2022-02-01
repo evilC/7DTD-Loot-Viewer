@@ -3,7 +3,7 @@
 using ConfigParsers.Loot;
 
 var loot = new LootParser(@"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml");
-//var parser = new OldLootParser(@"E:\Games\steamapps\common\7 Days To Die\Data\Config");
+//var oldLootParser = new OldLootParser(@"E:\Games\steamapps\common\7 Days To Die\Data\Config");
 
 var groupToolsTiered = loot.Data.Groups["groupToolsTiered"];
 var groupRareToolsTiered = loot.Data.Groups["groupRareToolsTiered"]; // Should have 3 child groups: groupToolsTiered, groupToolsT2, groupToolsT3 and 1 parent: groupWorkbenchLoot04
