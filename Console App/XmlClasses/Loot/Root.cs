@@ -47,6 +47,8 @@ namespace _7DTD_Loot_Parser.XmlClasses.Loot
             }
         }
 
+        // These names appear in loot.xml as both Containers and Groups
+        // They seem to be to do with testing / twitch and not normal gameplay, so safe to ignore?
         public bool IsIgnoredContainer(string name)
         {
             return name == "weaponTestLoot"
