@@ -41,24 +41,23 @@ namespace ConfigParsers.Loot
             }
         }
 
-        private void GetParentGroups(Group group, List<List<string>> paths, int currentPath)
+        private void GetParentGroups(Group group, List<List<string>> paths, int currentIndex)
         {
-            Debug.WriteLine($"In group {group.Name}");
-            paths[currentPath].Add(group.Name);
-            //if (group.ParentGroupReferences.Count > 1)
-            //{
-            //    Debug.WriteLine($"{group.ParentGroupReferences.Count} paths exist");
-            //}
-            for (int i = 0; i < group.ParentGroupReferences.Count; i++)
+            Debug.WriteLine($"In group {group.Name}, adding to path {currentIndex}");
+            paths[currentIndex].Add(group.Name);
+            // If the path branches, process the other branches first...
+            // ... so that we can clone the current path
+            for (int i = 1; i < group.ParentGroupReferences.Count(); i++)
             {
-                var newPath = currentPath;
-                if (i > 0)
-                {
-                    newPath = paths.Count();
-                    paths.Add(new List<string>(paths[currentPath]));
-                }
                 var groupReference = group.ParentGroupReferences[i];
-                GetParentGroups(groupReference.Parent, paths, newPath);
+                paths.Add(new List<string>(paths[currentIndex]));
+                GetParentGroups(groupReference.Parent, paths, paths.Count()-1);
+            }
+
+            // Process the current branch
+            if (group.ParentGroupReferences.Count != 0)
+            {
+                GetParentGroups(group.ParentGroupReferences[0].Parent, paths, currentIndex);
             }
         }
 
