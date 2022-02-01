@@ -9,7 +9,8 @@ namespace UnitTests
         [Fact]
         public void Test1()
         {
-            var lootParser = new LootParser(Directory.GetCurrentDirectory());
+            var lootXmlPath = Path.Combine(new string[] { Directory.GetCurrentDirectory(), "loot.xml" });
+            var lootParser = new LootParser(lootXmlPath);
         }
     }
 }

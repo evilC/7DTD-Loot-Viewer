@@ -2,7 +2,7 @@
 
 using ConfigParsers.Loot;
 
-var loot = new LootParser(@"E:\Games\steamapps\common\7 Days To Die\Data\Config");
+var loot = new LootParser(@"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml");
 //var parser = new OldLootParser(@"E:\Games\steamapps\common\7 Days To Die\Data\Config");
 
 var groupToolsTiered = loot.Data.Groups["groupToolsTiered"];
