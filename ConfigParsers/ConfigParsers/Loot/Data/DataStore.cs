@@ -37,10 +37,13 @@ namespace ConfigParsers.Loot.Data
         {
             // Iterate through all lootprobtemplate nodes in the XML
             // We do this before iterating groups, as groups reference probability templates
-            var probTemplates = rawRoot.LootProbTemplateBase[0].LootProbTemplates;
-            foreach (var template in probTemplates)
+            if (rawRoot.LootProbTemplateBase.Count() > 0)
             {
-                Templates.Add(template.Name, new ProbTemplate(template));
+                var probTemplates = rawRoot.LootProbTemplateBase[0].LootProbTemplates;
+                foreach (var template in probTemplates)
+                {
+                    Templates.Add(template.Name, new ProbTemplate(template));
+                }
             }
 
             // Iterate through all lootqualitytemplate nodes in the XML

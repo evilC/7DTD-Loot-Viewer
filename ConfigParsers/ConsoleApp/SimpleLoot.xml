@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<lootcontainers>
+	<lootcontainer id="1" name="container-01" count="0">
+		<item group="group-02"/>
+	</lootcontainer>
+
+	<lootgroup name="group-02">
+		<item group="group-03-01"/>
+		<item group="group-04-01"/>
+	</lootgroup>
+	
+	<lootgroup name="group-03-01">
+		<item group="group-04-01"/>
+	</lootgroup>
+	
+	<lootgroup name="group-04-01">
+		<item name="targetitem"/>
+	</lootgroup>
+</lootcontainers>

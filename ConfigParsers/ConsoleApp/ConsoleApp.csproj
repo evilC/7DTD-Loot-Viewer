@@ -11,4 +11,10 @@
     <ProjectReference Include="..\ConfigParsers\ConfigParsers.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="SimpleLoot.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
