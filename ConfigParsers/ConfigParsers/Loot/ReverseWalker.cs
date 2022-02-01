@@ -25,9 +25,9 @@ namespace ConfigParsers.Loot
                 var thisPath = paths.Count();
                 paths.Add(new List<string>());
                 var instance = item.Instances[i];
-                Debug.WriteLine($"Instance {i}");
+                //Debug.WriteLine($"Instance {i}");
                 GetParentGroups(instance.ParentGroup, paths, thisPath);
-                Debug.WriteLine($"End of chain\n");
+                //Debug.WriteLine($"End of chain\n");
             }
 
             for (int i = 0; i < paths.Count(); i++)
@@ -43,7 +43,7 @@ namespace ConfigParsers.Loot
 
         private void GetParentGroups(Group group, List<List<string>> paths, int currentIndex)
         {
-            Debug.WriteLine($"In group {group.Name}, adding to path {currentIndex}");
+            //Debug.WriteLine($"In group {group.Name}, adding to path {currentIndex}");
             paths[currentIndex].Add(group.Name);
             // If the path branches, process the other branches first...
             // ... so that we can clone the current path
