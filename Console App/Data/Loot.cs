@@ -104,8 +104,8 @@ namespace _7DTD_Loot_Parser.Data
                     }
                     try
                     {
-                        //var itemInstance = AddItem(rawEntry);
-                        //group.Items.Add(rawEntry.Name, itemInstance);
+                        var itemInstance = AddItem(rawEntry, group);
+                        group.Items.Add(rawEntry.Name, itemInstance);
                     }
                     catch (KeyNotFoundException ex)
                     {
@@ -140,13 +140,12 @@ namespace _7DTD_Loot_Parser.Data
             }
         }
 
-        /*
         /// <summary>
         /// Adds an item to the list of Items
         /// </summary>
         /// <param name="rawEntry"></param>
         /// <returns></returns>
-        private ItemInstance AddItem(XmlClasses.Loot.Item rawEntry)
+        private ItemInstance AddItem(XmlClasses.Loot.Item rawEntry, Group group)
         {
             Item item;
             if (Items.ContainsKey(rawEntry.Name))
@@ -160,9 +159,9 @@ namespace _7DTD_Loot_Parser.Data
                 item = new Item(rawEntry.Name);
                 Items.Add(rawEntry.Name, item);
             }
-            var itemInstance = item.AddInstance(rawEntry, Templates);
+
+            var itemInstance = item.AddInstance(rawEntry, Templates, group);
             return itemInstance;
         }
-        */
     }
 }

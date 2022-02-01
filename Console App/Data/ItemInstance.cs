@@ -25,7 +25,15 @@ namespace _7DTD_Loot_Parser.Data
         /// Probability Template for this instance
         /// </summary>
         public ProbTemplate? ProbTemplate { get; set; }
+
+        /// <summary>
+        /// Probability for this instance
+        /// </summary>
         public decimal? Prob { get; set; }
 
+        /// <summary>
+        /// The parent Group of this instance
+        /// </summary>
+        public Group ParentGroup { get; set; }
     }
 }

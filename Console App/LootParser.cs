@@ -22,8 +22,8 @@ namespace _7DTD_Loot_Parser
             var groupPassNGas = loot.Groups["groupPassNGas"];
             var groupPassNGas03 = loot.Groups["groupPassNGas03"];
             var passngasCrate = loot.Containers["passngasCrate"];
-            //var meleeToolSalvageT2Ratchet = loot.Items["meleeToolSalvageT2Ratchet"];
-            //var resourceMetalPipe = loot.Items["resourceMetalPipe"];
+            var meleeToolSalvageT2Ratchet = loot.Items["meleeToolSalvageT2Ratchet"];
+            var resourceMetalPipe = loot.Items["resourceMetalPipe"];
 
 
             // We don't need the original XML data any more, so free it from memory

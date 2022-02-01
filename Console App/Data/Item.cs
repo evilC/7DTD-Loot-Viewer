@@ -27,7 +27,7 @@ namespace _7DTD_Loot_Parser.Data
             Name = name;
         }
 
-        public ItemInstance AddInstance(XmlClasses.Loot.Item rawItem, SortedDictionary<string, ProbTemplate> probTemplates)
+        public ItemInstance AddInstance(XmlClasses.Loot.Item rawItem, SortedDictionary<string, ProbTemplate> probTemplates, Group group)
         {
             var instance = new ItemInstance();
 
@@ -46,7 +46,7 @@ namespace _7DTD_Loot_Parser.Data
             {
                 instance.Prob = Convert.ToDecimal(rawItem.Prob);
             }
-
+            instance.ParentGroup = group;
             Instances.Add(instance);
             return instance;
         }
