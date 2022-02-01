@@ -5,7 +5,7 @@ namespace ConfigParsers.Loot
 {
     public class LootParser
     {
-        public Data.LootParser Data { get; set; }
+        public DataStore Data { get; set; }
 
         public LootParser(string lootXmlPath)
         {
@@ -16,7 +16,7 @@ namespace ConfigParsers.Loot
             xmlRoot.BuildGroupDictionary();
             // Now we have the raw data from the XML, attempt to parse all the entries and build a data tree
 
-            Data = new Data.LootParser(xmlRoot);
+            Data = new DataStore(xmlRoot);
 
             // We don't need the original XML data any more, so free it from memory
             xmlRoot = null;

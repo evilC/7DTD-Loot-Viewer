@@ -6,7 +6,7 @@ namespace ConfigParsers.Loot.Data
     /// Parses the Raw XML classes, and attempts to build a more useful data structure from it...
     /// ... where all items refer to other items, allowing you to walk the tree
     /// </summary>
-    public class LootParser
+    public class DataStore
     {
         /// <summary>
         /// Loot Groups. Essentially the contents of all lootgroup nodes.
@@ -33,7 +33,7 @@ namespace ConfigParsers.Loot.Data
         /// Data table is built upon instantiation of the class
         /// </summary>
         /// <param name="rawRoot">The deserialized XML document</param>
-        public LootParser(XmlClasses.Root rawRoot)
+        public DataStore(XmlClasses.Root rawRoot)
         {
             // Iterate through all lootprobtemplate nodes in the XML
             // We do this before iterating groups, as groups reference probability templates
