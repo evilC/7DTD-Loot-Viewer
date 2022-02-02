@@ -121,6 +121,7 @@ namespace ConfigParsers.Loot.Data
                     var childGroupReference = new GroupReference();
                     childGroupReference.Group = childGroup;
                     childGroupReference.Parent = group;
+                    childGroupReference.ParentGroupReferenceIndex = group.GroupReferences.Count;
                     childGroupReference.Count = Parsers.ParseRange(rawEntry.Count);
                     childGroupReference.ProbTemplate = rawEntry.ProbTemplate != null ? Templates[rawEntry.ProbTemplate] : null;
                     // Add the reference to the child to this Group

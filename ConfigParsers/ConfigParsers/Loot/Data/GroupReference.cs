@@ -21,6 +21,11 @@
         public Group Parent { get; set; }
 
         /// <summary>
+        /// In the parent's GroupReferences list, what is the index of this item?
+        /// </summary>
+        public int ParentGroupReferenceIndex { get; set; }
+
+        /// <summary>
         /// The Count value of the ENTRY (NOT OF THE GROUP ITSELF!)
         /// </summary>
         public Range? Count { get; set; }
