@@ -2,25 +2,25 @@
 
 <lootcontainers>
 	<lootcontainer id="1" name="container-01" count="0">
-		<item group="group-02"/>
+		<item group="group-02" count="all"/>
 	</lootcontainer>
 
-	<lootcontainer id="2" name="container-x" count="0">
-		<item group="group-03-01"/>
+	<lootcontainer id="2" name="container-x" count="1">
+		<item group="group-03-01" count="11"/>
 	</lootcontainer>
 
-	<lootgroup name="group-02">
-		<item group="group-03-01"/>
-		<item group="group-04-01"/>
-		<item name="targetitem"/>
+	<lootgroup name="group-02" count="2">
+		<item group="group-03-01" count="21"/>
+		<item group="group-04-01" count="22"/>
+		<item name="targetitem" count="23"/>
 	</lootgroup>
 	
-	<lootgroup name="group-03-01">
-		<item group="group-04-01"/>
+	<lootgroup name="group-03-01" count="3">
+		<item group="group-04-01" count="31"/>
 	</lootgroup>
 	
-	<lootgroup name="group-04-01">
-		<item name="targetitem"/>
+	<lootgroup name="group-04-01" count="4">
+		<item name="targetitem" count="41"/>
 	</lootgroup>
 </lootcontainers>
 

@@ -2,8 +2,8 @@
 
 using ConfigParsers.Loot;
 
-var lootXmlPath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
-//var lootXmlPath = Path.Combine(new string[] { Directory.GetCurrentDirectory(), "SimpleLoot.xml" });
+//var lootXmlPath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
+var lootXmlPath = Path.Combine(new string[] { Directory.GetCurrentDirectory(), "SimpleLoot.xml" });
 var loot = new LootParser(lootXmlPath);
 //var oldLootParser = new OldLootParser(@"E:\Games\steamapps\common\7 Days To Die\Data\Config");
 
@@ -16,7 +16,7 @@ var loot = new LootParser(lootXmlPath);
 //var resourceMetalPipe = loot.Data.Items["resourceMetalPipe"];
 
 var rw = new ItemContainerFinder(loot.Data);
-//rw.GetItemProbabilities("targetitem");
-rw.GetItemProbabilities("meleeToolSalvageT2Ratchet");
+rw.GetItemProbabilities("targetitem");
+//rw.GetItemProbabilities("meleeToolSalvageT2Ratchet");
 
 Console.WriteLine("Done!");
