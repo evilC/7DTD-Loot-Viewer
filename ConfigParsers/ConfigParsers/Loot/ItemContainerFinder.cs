@@ -22,11 +22,11 @@ namespace ConfigParsers.Loot
         public void GetItemProbabilities(string itemName)
         {
             var item = _data.Items[itemName];
-            var paths = new List<List<Node>>();
+            var paths = new List<List<Group>>();
             for (int i = 0; i < item.Instances.Count; i++)
             {
                 var thisPath = paths.Count();
-                paths.Add(new List<Node>());
+                paths.Add(new List<Group>());
                 var instance = item.Instances[i];
                 //Debug.WriteLine($"Instance {i}");
                 GetParentGroups(instance.ParentGroup, paths, thisPath);
@@ -38,25 +38,22 @@ namespace ConfigParsers.Loot
                 var str = "";
                 foreach (var node in paths[i])
                 {
-                    str += $"{node.Name} (c={node.Group.Count}), ";
+                    str += $"{node.Name} (c={node.Count}), ";
                 }
                 Debug.WriteLine($"PATH {i}: {str}");
             }
         }
 
-        private void GetParentGroups(Group group, List<List<Node>> paths, int currentIndex)
+        private void GetParentGroups(Group group, List<List<Group>> paths, int currentIndex)
         {
             //Debug.WriteLine($"In group {group.Name}, adding to path {currentIndex}");
-            paths[currentIndex].Add(new Node() { 
-                Name = group.Name,
-                Group = group,
-            });
+            paths[currentIndex].Add(group);
             // If the path branches, process the other branches first...
             // ... so that we can clone the current path
             for (int i = 1; i < group.ParentGroupReferences.Count(); i++)
             {
                 var groupReference = group.ParentGroupReferences[i];
-                paths.Add(new List<Node>(paths[currentIndex]));
+                paths.Add(new List<Group>(paths[currentIndex]));
                 GetParentGroups(groupReference.Parent, paths, paths.Count()-1);
             }
 
