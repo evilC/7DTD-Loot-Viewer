@@ -23,7 +23,16 @@ namespace ConfigParsers.Loot.Data
             Name = name;
         }
 
-        public ItemInstance AddInstance(XmlClasses.Item rawItem, SortedDictionary<string, ProbTemplate> probTemplates, Group group)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rawItem"></param>
+        /// <param name="probTemplates"></param>
+        /// <param name="group">The Group that this ItemInstance is in</param>
+        /// <param name="instanceIndex">The index of this ItemInstance in the Group's Items array</param>
+        /// <returns></returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        public ItemInstance AddInstance(XmlClasses.Item rawItem, SortedDictionary<string, ProbTemplate> probTemplates, Group group, int instanceIndex)
         {
             var instance = new ItemInstance();
 
@@ -43,6 +52,7 @@ namespace ConfigParsers.Loot.Data
                 instance.Prob = Convert.ToDecimal(rawItem.Prob);
             }
             instance.ParentGroup = group;
+            instance.ParentGroupItemIndex = instanceIndex;
             Instances.Add(instance);
             return instance;
         }

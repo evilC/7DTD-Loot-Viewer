@@ -35,5 +35,10 @@ namespace ConfigParsers.Loot.Data
         /// The parent Group of this instance
         /// </summary>
         public Group ParentGroup { get; set; }
+
+        /// <summary>
+        /// What the index is of this ItemInstance in the ParentGroup's Items list
+        /// </summary>
+        public int ParentGroupItemIndex { get; set; }
     }
 }

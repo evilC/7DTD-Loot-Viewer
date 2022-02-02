@@ -102,7 +102,7 @@ namespace ConfigParsers.Loot.Data
                     }
                     try
                     {
-                        var itemInstance = AddItem(rawEntry, group);
+                        var itemInstance = AddItem(rawEntry, group, group.Items.Count);
                         group.Items.Add(rawEntry.Name, itemInstance);
                     }
                     catch (KeyNotFoundException ex)
@@ -141,9 +141,14 @@ namespace ConfigParsers.Loot.Data
         /// <summary>
         /// Adds an item to the list of Items
         /// </summary>
-        /// <param name="rawEntry"></param>
+        /// <param name="rawEntry">The XML for the Item</param>
+        /// <param name="group">The Group that the Item is being added to</param>
+        /// <param name="instanceIndex">The index that the item will have in the Group's Items dictionary</param>
+        /// </summary>
+        /// <returns>An ItemInstance object that refers to the instance of this Item</returns>
+
         /// <returns></returns>
-        private ItemInstance AddItem(XmlClasses.Item rawEntry, Group group)
+        private ItemInstance AddItem(XmlClasses.Item rawEntry, Group group, int instanceIndex)
         {
             Item item;
             if (Items.ContainsKey(rawEntry.Name))
@@ -158,7 +163,7 @@ namespace ConfigParsers.Loot.Data
                 Items.Add(rawEntry.Name, item);
             }
 
-            var itemInstance = item.AddInstance(rawEntry, Templates, group);
+            var itemInstance = item.AddInstance(rawEntry, Templates, group, instanceIndex);
             return itemInstance;
         }
     }
