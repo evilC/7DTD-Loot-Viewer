@@ -15,7 +15,7 @@ var loot = new LootParser(lootXmlPath);
 //var meleeToolSalvageT2Ratchet = loot.Data.Items["meleeToolSalvageT2Ratchet"];
 //var resourceMetalPipe = loot.Data.Items["resourceMetalPipe"];
 
-var rw = new ReverseWalker(loot.Data);
+var rw = new ItemContainerFinder(loot.Data);
 //rw.GetItemProbabilities("targetitem");
 rw.GetItemProbabilities("meleeToolSalvageT2Ratchet");
 

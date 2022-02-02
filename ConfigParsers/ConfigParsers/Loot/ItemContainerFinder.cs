@@ -8,10 +8,13 @@ using System.Threading.Tasks;
 
 namespace ConfigParsers.Loot
 {
-    public class ReverseWalker
+    /// <summary>
+    /// For a given Item, finds which Contaainer (And Groups) that it is in
+    /// </summary>
+    public class ItemContainerFinder
     {
         private DataStore _data;
-        public ReverseWalker(DataStore data)
+        public ItemContainerFinder(DataStore data)
         {
             _data = data;
         }
