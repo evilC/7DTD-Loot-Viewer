@@ -22,11 +22,11 @@ namespace ConfigParsers.Loot
         public void GetItemProbabilities(string itemName)
         {
             var item = _data.Items[itemName];
-            var paths = new List<List<string>>();
+            var paths = new List<List<Node>>();
             for (int i = 0; i < item.Instances.Count; i++)
             {
                 var thisPath = paths.Count();
-                paths.Add(new List<string>());
+                paths.Add(new List<Node>());
                 var instance = item.Instances[i];
                 //Debug.WriteLine($"Instance {i}");
                 GetParentGroups(instance.ParentGroup, paths, thisPath);
@@ -38,22 +38,25 @@ namespace ConfigParsers.Loot
                 var str = "";
                 foreach (var node in paths[i])
                 {
-                    str += node + ", ";
+                    str += $"{node.Name} (c={node.Group.Count}), ";
                 }
                 Debug.WriteLine($"PATH {i}: {str}");
             }
         }
 
-        private void GetParentGroups(Group group, List<List<string>> paths, int currentIndex)
+        private void GetParentGroups(Group group, List<List<Node>> paths, int currentIndex)
         {
             //Debug.WriteLine($"In group {group.Name}, adding to path {currentIndex}");
-            paths[currentIndex].Add(group.Name);
+            paths[currentIndex].Add(new Node() { 
+                Name = group.Name,
+                Group = group,
+            });
             // If the path branches, process the other branches first...
             // ... so that we can clone the current path
             for (int i = 1; i < group.ParentGroupReferences.Count(); i++)
             {
                 var groupReference = group.ParentGroupReferences[i];
-                paths.Add(new List<string>(paths[currentIndex]));
+                paths.Add(new List<Node>(paths[currentIndex]));
                 GetParentGroups(groupReference.Parent, paths, paths.Count()-1);
             }
 
@@ -98,6 +101,7 @@ namespace ConfigParsers.Loot
 
     public class Node
     {
+        public string Name { get; set; }
         public Group Group { get; set; }
         public GroupReference GroupReference { get; set; }
     }
