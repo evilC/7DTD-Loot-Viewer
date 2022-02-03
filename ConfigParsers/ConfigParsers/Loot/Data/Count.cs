@@ -26,16 +26,21 @@
         /// </summary>
         public int To { get; }
 
-        public Count(string? rawRange)
+        /// <summary>
+        /// Instanmtiate a new Count class
+        /// </summary>
+        /// <param name="countStr">The raw value of the count attribute, as it comes from the XML
+        /// eg "1,3", "all", "", or null</param>
+        public Count(string? countStr)
         {
-            if (string.IsNullOrEmpty(rawRange)) return;
+            if (string.IsNullOrEmpty(countStr)) return;
             IsSet = true;
-            if (rawRange == "all")
+            if (countStr == "all")
             {
                 IsAll = true;
                 return;
             }
-            var range = rawRange.Split(',');
+            var range = countStr.Split(',');
             From = Convert.ToInt32(range[0]);
             int rangeHigh;
             if (range.Count() > 1)
