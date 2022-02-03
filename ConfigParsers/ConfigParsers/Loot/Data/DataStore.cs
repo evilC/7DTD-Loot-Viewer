@@ -12,22 +12,22 @@ namespace ConfigParsers.Loot.Data
         /// Loot Groups. Essentially the contents of all lootgroup nodes.
         /// Note however that one loot group can refer to another loot group
         /// </summary>
-        public SortedDictionary<string, Group> Groups { get; set; } = new SortedDictionary<string, Group>();
+        public SortedDictionary<string, Group> Groups { get; } = new SortedDictionary<string, Group>();
 
         /// <summary>
         /// Probability Templates
         /// </summary>
-        public SortedDictionary<string, ProbTemplate> Templates { get; set; } = new SortedDictionary<string, ProbTemplate>();
+        public SortedDictionary<string, ProbTemplate> Templates { get; } = new SortedDictionary<string, ProbTemplate>();
 
         /// <summary>
         /// Containers
         /// </summary>
-        public SortedDictionary<string, Group> Containers { get; set; } = new SortedDictionary<string, Group> ();
+        public SortedDictionary<string, Group> Containers { get; } = new SortedDictionary<string, Group> ();
 
         /// <summary>
         /// Items
         /// </summary>
-        public SortedDictionary<string, Item>  Items { get; set; } = new SortedDictionary<string, Item> ();
+        public SortedDictionary<string, Item>  Items { get; } = new SortedDictionary<string, Item> ();
 
         /// <summary>
         /// Data table is built upon instantiation of the class

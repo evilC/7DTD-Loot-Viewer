@@ -11,12 +11,12 @@ namespace ConfigParsers.Loot.Data
         /// <summary>
         /// The name of the item (eg meleeToolSalvageT2Ratchet)
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
 
         /// <summary>
         /// List of instances of this item
         /// </summary>
-        public List<ItemInstance> Instances { get; set; } = new List<ItemInstance>();
+        public List<ItemInstance> Instances { get; } = new List<ItemInstance>();
 
         public Item(string name)
         {

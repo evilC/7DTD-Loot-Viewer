@@ -18,18 +18,18 @@ namespace ConfigParsers.Loot.Data
         /// <summary>
         /// The name attribute of the lootgroup node
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
 
         /// <summary>
         /// Whether this Group references a Group or a Container
         /// </summary>
-        public GroupType GroupType { get; set; }
+        public GroupType GroupType { get; }
 
         /// <summary>
         /// Holds the data from the count attribute of the lootgroup node
         /// Could be a single value, or a range
         /// </summary>
-        public Count Count { get; set; }
+        public Count Count { get; }
 
         /// <summary>
         /// A list of the item elements in the lootgroup node whose name was that of an individual item (eg Steel meleeToolPickT2SteelPickaxe)
@@ -45,7 +45,7 @@ namespace ConfigParsers.Loot.Data
             <item group="groupArmorScaled" loot_prob_template="low"/>       <-- This is a Reference. It has a prob_template of it's own
         </lootgroup>
         */
-        public List<GroupReference> GroupReferences { get; set; } = new List<GroupReference>();
+        public List<GroupReference> GroupReferences { get; } = new List<GroupReference>();
 
         /// <summary>
         /// Holds a list of Groups that refer to this Group
@@ -55,7 +55,7 @@ namespace ConfigParsers.Loot.Data
 	        <item group="groupArmorScaled" loot_prob_template="low"/>       <-- This is the Reference. It points to the Parent Group
         </lootgroup>
         */
-        public List<GroupReference> ParentGroupReferences { get; set; } = new List<GroupReference>();
+        public List<GroupReference> ParentGroupReferences { get; } = new List<GroupReference>();
 
         public Group(string name, Count count, GroupType groupType)
         {

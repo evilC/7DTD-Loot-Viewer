@@ -11,7 +11,7 @@ namespace ConfigParsers.Loot.Data
         /// <summary>
         /// The Name of the Template
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
 
         /// <summary>
         /// The entries in the Template
