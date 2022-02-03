@@ -8,6 +8,6 @@ namespace ConfigParsers.Loot.XmlClasses
     public class RootQualTemplate
     {
         [XmlElement(ElementName = "lootqualitytemplate")]
-        public List<QualTemplate> LootQualTemplates { get; set; }
+        public List<QualTemplate> LootQualTemplates { get; set; } = new List<QualTemplate>();
     }
 }

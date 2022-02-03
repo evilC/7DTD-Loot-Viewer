@@ -11,6 +11,6 @@ namespace ConfigParsers.Blocks.XmlClasses
     public class Root
     {
         [XmlElement(ElementName = "block")]
-        public List<Block> Blocks { get; set; }
+        public List<Block> Blocks { get; set; } = new List<Block>();
     }
 }

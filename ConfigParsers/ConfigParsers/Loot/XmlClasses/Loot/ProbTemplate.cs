@@ -8,9 +8,9 @@ namespace ConfigParsers.Loot.XmlClasses
     public class ProbTemplate
     {
         [XmlAttribute("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [XmlElement(ElementName = "loot")]
-        public List<ProbTemplateItem> LootProbTemplateItems { get; set; }
+        public List<ProbTemplateItem> LootProbTemplateItems { get; set; } = new List<ProbTemplateItem>();
     }
 }

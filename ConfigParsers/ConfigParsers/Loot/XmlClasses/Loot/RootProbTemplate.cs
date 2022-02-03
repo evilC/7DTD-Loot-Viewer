@@ -14,6 +14,6 @@ namespace ConfigParsers.Loot.XmlClasses
     public class RootProbTemplate
     {
         [XmlElement(ElementName = "lootprobtemplate")]
-        public List<ProbTemplate> LootProbTemplates { get; set; }
+        public List<ProbTemplate> LootProbTemplates { get; set; } = new List<ProbTemplate>();
     }
 }

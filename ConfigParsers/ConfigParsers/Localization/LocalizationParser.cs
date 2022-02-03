@@ -103,10 +103,6 @@ namespace ConfigParsers.Localization
 
             foreach (var rawBlock in rawBlocks.Blocks)
             {
-                if (rawBlock.Name == "cntMedicineCabinetClosed")
-                {
-                    var debug = 1;
-                }
                 foreach (var property in rawBlock.Properties)
                 {
                     if (property.Name == "LootList")

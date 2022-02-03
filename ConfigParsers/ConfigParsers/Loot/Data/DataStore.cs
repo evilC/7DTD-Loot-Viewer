@@ -100,12 +100,13 @@ namespace ConfigParsers.Loot.Data
                         // Until I know how to deal with this, skip subsequent entries
                         continue;
                     }
+
                     try
                     {
                         var itemInstance = AddItem(rawEntry, group, group.Items.Count);
                         group.Items.Add(rawEntry.Name, itemInstance);
                     }
-                    catch (KeyNotFoundException ex)
+                    catch (KeyNotFoundException)
                     {
                         // ToDo: ammo9mmBulletBall in groupAmmoAdvancedGunslinger references Probability Template "T0", which does not exist
                         // Until I know if this is an error in the XML or not, I will have to throw an exception and catch it
@@ -124,7 +125,7 @@ namespace ConfigParsers.Loot.Data
                         parentGroupReferenceIndex: group.GroupReferences.Count,
                         count: new Count(rawEntry.Count),
                         prob: string.IsNullOrEmpty(rawEntry.Prob) ? null : Convert.ToDecimal(rawEntry.Prob),
-                        probTemplate: rawEntry.ProbTemplate != null ? Templates[rawEntry.ProbTemplate] : null
+                        probTemplate: string.IsNullOrEmpty(rawEntry.ProbTemplate) ? null : Templates[rawEntry.ProbTemplate]
                     );
                     // Add the reference to the child to this Group
                     group.GroupReferences.Add(childGroupReference);

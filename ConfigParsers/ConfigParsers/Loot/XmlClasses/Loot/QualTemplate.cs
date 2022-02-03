@@ -15,9 +15,9 @@ namespace ConfigParsers.Loot.XmlClasses
     public class QualTemplate
     {
         [XmlAttribute("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [XmlElement(ElementName = "qualitytemplate")]
-        public List<QualTemplateItem> LootQualTemplateItems { get; set; }
+        public List<QualTemplateItem> LootQualTemplateItems { get; set; } = new List<QualTemplateItem>();
     }
 }

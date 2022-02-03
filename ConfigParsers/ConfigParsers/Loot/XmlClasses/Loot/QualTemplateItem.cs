@@ -10,7 +10,7 @@ namespace ConfigParsers.Loot.XmlClasses
     public class QualTemplateItem
     {
         [XmlAttribute("level")]
-        public string Level { get; set; }
+        public string Level { get; set; } = string.Empty;
 
         [XmlAttribute("prob")]
         public decimal Prob { get; set; }

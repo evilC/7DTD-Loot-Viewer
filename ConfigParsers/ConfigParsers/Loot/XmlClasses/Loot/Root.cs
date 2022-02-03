@@ -19,23 +19,23 @@ namespace ConfigParsers.Loot.XmlClasses
     public class Root
     {
         [XmlElement(ElementName = "lootgroup")]
-        public List<Group> Groups { get; set; }
+        public List<Group> Groups { get; set; } = new List<Group>();
 
         /// <summary>
         /// When Deserializing the XML, you get a list of groups, rather than a dictionary...
         /// So BuildGroupDictionary converts this into a Dictionary after parsing, for easy group lookup
         /// </summary>
-        [XmlIgnoreAttribute]
-        public Dictionary<string, Group> GroupsDictionary { get; set; }
+        [XmlIgnore]
+        public Dictionary<string, Group> GroupsDictionary { get; set; } = new Dictionary<string, Group>();
 
         [XmlElement(ElementName = "lootcontainer")]
-        public List<Group> Containers { get; set; }
+        public List<Group> Containers { get; set; } = new List<Group>();
 
         [XmlElement(ElementName = "lootprobtemplates")]
-        public List<RootProbTemplate> LootProbTemplateBase { get; set; }
+        public List<RootProbTemplate> LootProbTemplateBase { get; set; } = new List<RootProbTemplate>();
 
         [XmlElement(ElementName = "lootqualitytemplates")]
-        public List<RootQualTemplate> LootQualTemplateBase { get; set; }
+        public List<RootQualTemplate> LootQualTemplateBase { get; set; } = new List<RootQualTemplate>();
 
         public void BuildGroupDictionary()
         {
