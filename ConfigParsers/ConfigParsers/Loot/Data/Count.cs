@@ -42,7 +42,6 @@
             }
             var range = countStr.Split(',');
             From = Convert.ToInt32(range[0]);
-            int rangeHigh;
             if (range.Count() > 1)
             {
                 To = Convert.ToInt32(range[1]);
