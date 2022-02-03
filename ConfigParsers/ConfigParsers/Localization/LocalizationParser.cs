@@ -14,19 +14,18 @@ namespace ConfigParsers.Localization
         public Dictionary<string, string> GetDisplayNames(string configFilePath)
         {
             //var containerNames = GetContainerNames(configFilePath);
-
-            Dictionary<string, string> data;
+            //Dictionary<string, string> data;
 
             // If we already have cached data, load that
             if (File.Exists("ItemNames.json"))
             {
                 string jsonString = File.ReadAllText("ItemNames.json");
-                data = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString);
-                return data;
+                var cachedData = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString);
+                if (cachedData == null) throw new Exception("JSON serialization failed");
             }
 
             // Build data
-            data = new Dictionary<string, string>();
+            var data = new Dictionary<string, string>();
             
             using (var parser = new TextFieldParser(Path.Combine(new string[] { configFilePath, "Localization.txt" })))
             {
@@ -41,29 +40,33 @@ namespace ConfigParsers.Localization
                 {
                     try
                     {
-                        string[] fields = parser.ReadFields();
-
-                        // Ignore Descriptions
-                        if (fields[0].EndsWith("Desc")) continue;
-                        // Ignore localization entries that are not to do with items or containers
-                        //if (fields[1] == "items" || fields[1] == "item_modifiers" || fields[1] == "blocks" || fields[1] == "vehicles")
-                        if (fields[1] == "items" || fields[1] == "item_modifiers" || fields[1] == "blocks" || fields[1] == "vehicles")
+                        var val = parser.ReadFields();
+                        if (val != null)
                         {
-                            //Debug.WriteLine($"Writing Item {fields[0]} = {fields[5]}");
-                            var displayName = fields[5];
+                            string[] fields = val;
 
-                            //string key;
-                            //if (fields[2] == "Container")
-                            //{
-                            //    key = containerNames[fields[0]];
-                            //}
-                            //else
-                            //{
-                            //    key = fields[0];
-                            //}
-                            displayName = displayName.Replace("\"", "");
-                            //data.Add(key, displayName);
-                            data.Add(fields[0], displayName);
+                            // Ignore Descriptions
+                            if (fields[0].EndsWith("Desc")) continue;
+                            // Ignore localization entries that are not to do with items or containers
+                            //if (fields[1] == "items" || fields[1] == "item_modifiers" || fields[1] == "blocks" || fields[1] == "vehicles")
+                            if (fields[1] == "items" || fields[1] == "item_modifiers" || fields[1] == "blocks" || fields[1] == "vehicles")
+                            {
+                                //Debug.WriteLine($"Writing Item {fields[0]} = {fields[5]}");
+                                var displayName = fields[5];
+
+                                //string key;
+                                //if (fields[2] == "Container")
+                                //{
+                                //    key = containerNames[fields[0]];
+                                //}
+                                //else
+                                //{
+                                //    key = fields[0];
+                                //}
+                                displayName = displayName.Replace("\"", "");
+                                //data.Add(key, displayName);
+                                data.Add(fields[0], displayName);
+                            }
                         }
                     }
                     catch { };
