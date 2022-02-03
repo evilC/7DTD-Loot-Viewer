@@ -6,14 +6,12 @@ namespace ConfigParsers.Common
     {
         public static T DeserializeToObject<T>(string filepath) where T : class
         {
-            XmlSerializer ser = new XmlSerializer(typeof(T));
+            var ser = new XmlSerializer(typeof(T));
 
-            using (var sr = new StreamReader(filepath))
-            {
-                var data = ser.Deserialize(sr);
-                if (data == null) throw new Exception($"Could not Deserialize {filepath} to {typeof(T)}");
-                return (T)data;
-            }
+            using var sr = new StreamReader(filepath);
+            var data = ser.Deserialize(sr);
+            if (data == null) throw new Exception($"Could not Deserialize {filepath} to {typeof(T)}");
+            return (T)data;
         }
 
     }
