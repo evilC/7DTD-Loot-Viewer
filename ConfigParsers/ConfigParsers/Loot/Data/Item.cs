@@ -37,7 +37,7 @@ namespace ConfigParsers.Loot.Data
             var instance = new ItemInstance();
 
             instance.Item = this;
-            instance.Count = Parsers.ParseRange(rawItem.Count);
+            instance.Count = new Count(rawItem.Count);
             if (!string.IsNullOrEmpty(rawItem.ProbTemplate))
             {
                 if (!probTemplates.ContainsKey(rawItem.ProbTemplate))

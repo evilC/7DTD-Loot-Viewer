@@ -62,7 +62,7 @@ namespace ConfigParsers.Loot.Data
             // At this point, only add Groups, and not Group References
             foreach (var rawGroup in rawRoot.Groups)
             {
-                var group = new Group(rawGroup.Name, Parsers.ParseRange(rawGroup.Count), GroupType.Group);
+                var group = new Group(rawGroup.Name, new Count(rawGroup.Count), GroupType.Group);
                 Groups.Add(rawGroup.Name, group);
             }
 
@@ -71,7 +71,7 @@ namespace ConfigParsers.Loot.Data
             foreach (var rawGroup in rawRoot.Containers)
             {
                 if (rawRoot.IsIgnoredContainer(rawGroup.Name)) continue;
-                var group = new Group(rawGroup.Name, Parsers.ParseRange(rawGroup.Count), GroupType.Container);
+                var group = new Group(rawGroup.Name, new Count(rawGroup.Count), GroupType.Container);
                 Groups.Add(rawGroup.Name, group);
                 Containers.Add(rawGroup.Name, group);
                 BuildGroup(rawGroup.Name, rawRoot.GroupsDictionary);
@@ -122,7 +122,7 @@ namespace ConfigParsers.Loot.Data
                     childGroupReference.Group = childGroup;
                     childGroupReference.Parent = group;
                     childGroupReference.ParentGroupReferenceIndex = group.GroupReferences.Count;
-                    childGroupReference.Count = Parsers.ParseRange(rawEntry.Count);
+                    childGroupReference.Count = new Count(rawEntry.Count);
                     childGroupReference.ProbTemplate = rawEntry.ProbTemplate != null ? Templates[rawEntry.ProbTemplate] : null;
                     // Add the reference to the child to this Group
                     group.GroupReferences.Add(childGroupReference);

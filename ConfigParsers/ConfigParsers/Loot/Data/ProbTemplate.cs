@@ -17,20 +17,20 @@ namespace ConfigParsers.Loot.Data
         /// The entries in the Template
         /// Maps to the XML "loot" elements
         /// </summary>
-        public Dictionary<Range, decimal> Entries = new Dictionary<Range, decimal>();
+        public Dictionary<Count, decimal> Entries = new Dictionary<Count, decimal>();
 
         public ProbTemplate(XmlClasses.ProbTemplate template)
         {
             Name = template.Name;
             foreach (var item in template.LootProbTemplateItems)
             {
-                var range = Parsers.ParseRange(item.Level);
+                var range = new Count(item.Level);
 
                 if (range == null)
                 {
                     throw new Exception("Not expecting null range");
                 }
-                Entries.Add((Range)range, Convert.ToDecimal(item.Prob));
+                Entries.Add(range, Convert.ToDecimal(item.Prob));
             }
         }
 
@@ -39,13 +39,13 @@ namespace ConfigParsers.Loot.Data
             Name = template.Name;
             foreach (var item in template.LootQualTemplateItems)
             {
-                var range = Parsers.ParseRange(item.Level);
+                var range = new Count(item.Level);
 
                 if (range == null)
                 {
                     throw new Exception("Not expecting null range");
                 }
-                Entries.Add((Range)range, Convert.ToDecimal(item.Prob));
+                Entries.Add(range, Convert.ToDecimal(item.Prob));
             }
         }
     }

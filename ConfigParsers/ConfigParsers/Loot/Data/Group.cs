@@ -29,7 +29,7 @@ namespace ConfigParsers.Loot.Data
         /// Holds the data from the count attribute of the lootgroup node
         /// Could be a single value, or a range
         /// </summary>
-        public Range? Count { get; set; }
+        public Count Count { get; set; }
 
         /// <summary>
         /// A list of the item elements in the lootgroup node whose name was that of an individual item (eg Steel meleeToolPickT2SteelPickaxe)
@@ -57,7 +57,7 @@ namespace ConfigParsers.Loot.Data
         */
         public List<GroupReference> ParentGroupReferences { get; set; } = new List<GroupReference>();
 
-        public Group(string name, Range? count, GroupType groupType)
+        public Group(string name, Count count, GroupType groupType)
         {
             Name = name;
             Count = count;

@@ -30,10 +30,10 @@ foreach (var containerResult in results.ContainerResults)
         Debug.WriteLine($"PATH FOR RESULT #{nl}:\n");
         foreach (var node in nodeList)
         {
-            var str = $"Group: {node.Group.Name}, Count: {node.Group.Count}";
+            var str = $"Group: {node.Group.Name}, Count: {node.Group.Count.Render()}";
             if (node.GroupReferenceIndex != null)
             {
-                str += $" | GroupReference to next node - Index: {node.GroupReferenceIndex}, Count: {node.Group.GroupReferences[(int)node.GroupReferenceIndex].Count}";
+                str += $" | GroupReference to next node - Index: {node.GroupReferenceIndex}, Count: {node.Group.GroupReferences[(int)node.GroupReferenceIndex].Count.Render()}";
             }
             Debug.WriteLine($"{str}");
         }

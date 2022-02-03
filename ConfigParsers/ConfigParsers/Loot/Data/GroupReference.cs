@@ -28,7 +28,7 @@
         /// <summary>
         /// The Count value of the ENTRY (NOT OF THE GROUP ITSELF!)
         /// </summary>
-        public Range? Count { get; set; }
+        public Count Count { get; set; }
 
         /// <summary>
         /// The Probability of the ENTRY (NOT OF THE GROUP ITSELF!)

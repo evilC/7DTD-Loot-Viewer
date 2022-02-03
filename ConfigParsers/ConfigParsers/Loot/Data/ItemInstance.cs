@@ -19,7 +19,7 @@ namespace ConfigParsers.Loot.Data
         /// <summary>
         /// Count value for this instance
         /// </summary>
-        public Range? Count { get; set; }
+        public Count Count { get; set; }
 
         /// <summary>
         /// Probability Template for this instance

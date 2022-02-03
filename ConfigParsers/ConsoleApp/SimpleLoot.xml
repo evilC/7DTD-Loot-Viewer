@@ -6,7 +6,7 @@
 		<item group="group-02" count="all"/>
 	</lootcontainer>
 
-	<lootcontainer id="2" name="container-x" count="1">
+	<lootcontainer id="2" name="container-x">
 		<item group="group-unused" count="998"/>
 		<item group="group-03-01" count="11"/>
 	</lootcontainer>
