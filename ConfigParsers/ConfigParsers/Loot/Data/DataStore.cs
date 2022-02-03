@@ -118,12 +118,14 @@ namespace ConfigParsers.Loot.Data
                     // Entry is a Group (Which could contain other groups)
                     var childGroup = Groups[rawEntry.Group];
                     // Build a reference that links this group and the childGroup
-                    var childGroupReference = new GroupReference();
-                    childGroupReference.Group = childGroup;
-                    childGroupReference.Parent = group;
-                    childGroupReference.ParentGroupReferenceIndex = group.GroupReferences.Count;
-                    childGroupReference.Count = new Count(rawEntry.Count);
-                    childGroupReference.ProbTemplate = rawEntry.ProbTemplate != null ? Templates[rawEntry.ProbTemplate] : null;
+                    var childGroupReference = new GroupReference(
+                        group: childGroup,
+                        parent: group,
+                        parentGroupReferenceIndex: group.GroupReferences.Count,
+                        count: new Count(rawEntry.Count),
+                        prob: string.IsNullOrEmpty(rawEntry.Prob) ? null : Convert.ToDecimal(rawEntry.Prob),
+                        probTemplate: rawEntry.ProbTemplate != null ? Templates[rawEntry.ProbTemplate] : null
+                    );
                     // Add the reference to the child to this Group
                     group.GroupReferences.Add(childGroupReference);
                     // Add the reference to this Group to the child

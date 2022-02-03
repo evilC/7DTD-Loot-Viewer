@@ -13,31 +13,41 @@
         /// <summary>
         /// Link to the Loot Group referenced in the entry
         /// </summary>
-        public Group Group { get; set; }
+        public Group Group { get; }
+
+        public GroupReference(Group group, Group parent, int parentGroupReferenceIndex, Count count, decimal? prob, ProbTemplate? probTemplate)
+        {
+            Group = group;
+            Parent = parent;
+            ParentGroupReferenceIndex = parentGroupReferenceIndex;
+            Count = count;
+            Prob = prob;
+            ProbTemplate = probTemplate;
+        }
 
         /// <summary>
         /// The Parent (owner) of the Reference
         /// </summary>
-        public Group Parent { get; set; }
+        public Group Parent { get; }
 
         /// <summary>
         /// In the parent's GroupReferences list, what is the index of this item?
         /// </summary>
-        public int ParentGroupReferenceIndex { get; set; }
+        public int ParentGroupReferenceIndex { get; }
 
         /// <summary>
         /// The Count value of the ENTRY (NOT OF THE GROUP ITSELF!)
         /// </summary>
-        public Count Count { get; set; }
+        public Count Count { get; }
 
         /// <summary>
         /// The Probability of the ENTRY (NOT OF THE GROUP ITSELF!)
         /// </summary>
-        public decimal? Prob { get; set; }
+        public decimal? Prob { get; }
 
         /// <summary>
         /// The Probability Template of the ENTRY (NOT OF THE GROUP ITSELF!)
         /// </summary>
-        public ProbTemplate? ProbTemplate { get; set; }
+        public ProbTemplate? ProbTemplate { get; }
     }
 }
