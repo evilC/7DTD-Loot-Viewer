@@ -27,10 +27,7 @@ namespace ConfigParsers.Loot
             {
                 var thisPath = paths.Count();
                 var instance = item.Instances[i];
-                var result = new Result()
-                {
-                    ItemInstance = instance
-                };
+                var result = new Result(instance);
                 paths.Add(result);
                 //Debug.WriteLine($"Instance {i}");
                 GetParentGroups(instance.ParentGroup, null, paths, thisPath);
@@ -72,22 +69,14 @@ namespace ConfigParsers.Loot
         private void GetParentGroups(Group group, int? parentReferenceIndex, List<Result> paths, int currentIndex)
         {
             //Debug.WriteLine($"In group {group.Name}, adding to path {currentIndex}");
-            paths[currentIndex].Nodes.Add(new Node()
-            {
-                Group = group,
-                GroupReferenceIndex = parentReferenceIndex
-            });
+            paths[currentIndex].Nodes.Add(new Node(group, parentReferenceIndex));
             // If the path branches, process the other branches first...
             // ... so that we can clone the current path
             for (int i = 1; i < group.ParentGroupReferences.Count(); i++)
             {
                 var groupReference = group.ParentGroupReferences[i];
                 var oldResult = paths[currentIndex];
-                paths.Add(new Result() {
-                    ItemInstance = oldResult.ItemInstance,
-                    //ContainerName = oldResult.ContainerName,
-                    Nodes = new List<Node>(oldResult.Nodes)
-                });
+                paths.Add(new Result(oldResult.ItemInstance, new List<Node>(oldResult.Nodes)));
                 GetParentGroups(groupReference.Parent, groupReference.ParentGroupReferenceIndex, paths, paths.Count()-1);
             }
 
@@ -112,13 +101,29 @@ namespace ConfigParsers.Loot
 
     public class Result
     {
-        public ItemInstance ItemInstance { get; set; }
-        public List<Node> Nodes { get; set;  } = new List<Node>();
+        public ItemInstance ItemInstance { get; }
+
+        public List<Node> Nodes { get; }
+
+        public Result(ItemInstance itemInstance, List<Node>? nodes = null)
+        {
+            if (nodes == null) nodes = new List<Node>();
+            ItemInstance = itemInstance;
+            Nodes = nodes;
+        }
+
+
     }
 
     public class Node
     {
-        public Group Group { get; set; }
-        public int? GroupReferenceIndex { get; set; }
+        public Group Group { get; }
+        public int? GroupReferenceIndex { get; }
+
+        public Node(Group group, int? groupReferenceIndex = null)
+        {
+            Group = group;
+            GroupReferenceIndex = groupReferenceIndex;
+        }
     }
 }
