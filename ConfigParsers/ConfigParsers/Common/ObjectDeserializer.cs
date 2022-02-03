@@ -8,9 +8,11 @@ namespace ConfigParsers.Common
         {
             XmlSerializer ser = new XmlSerializer(typeof(T));
 
-            using (StreamReader sr = new StreamReader(filepath))
+            using (var sr = new StreamReader(filepath))
             {
-                return (T)ser.Deserialize(sr);
+                var data = ser.Deserialize(sr);
+                if (data == null) throw new Exception($"Could not Deserialize {filepath} to {typeof(T)}");
+                return (T)data;
             }
         }
 
