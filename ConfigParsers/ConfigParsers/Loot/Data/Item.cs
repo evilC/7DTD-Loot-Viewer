@@ -34,7 +34,7 @@ namespace ConfigParsers.Loot.Data
         /// <exception cref="KeyNotFoundException"></exception>
         public ItemInstance AddInstance(XmlClasses.Item rawItem, SortedDictionary<string, ProbTemplate> probTemplates, Group group, int instanceIndex)
         {
-            if (rawItem.ProbTemplate != null && !probTemplates.ContainsKey(rawItem.ProbTemplate))
+            if (!string.IsNullOrEmpty(rawItem.ProbTemplate) && !probTemplates.ContainsKey(rawItem.ProbTemplate))
             {
                 throw new KeyNotFoundException($"No such Probability Template {rawItem.ProbTemplate}");
             }
