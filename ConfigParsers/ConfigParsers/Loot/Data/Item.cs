@@ -34,25 +34,19 @@ namespace ConfigParsers.Loot.Data
         /// <exception cref="KeyNotFoundException"></exception>
         public ItemInstance AddInstance(XmlClasses.Item rawItem, SortedDictionary<string, ProbTemplate> probTemplates, Group group, int instanceIndex)
         {
-            var instance = new ItemInstance();
-
-            instance.Item = this;
-            instance.Count = new Count(rawItem.Count);
-            if (!string.IsNullOrEmpty(rawItem.ProbTemplate))
+            if (rawItem.ProbTemplate != null && !probTemplates.ContainsKey(rawItem.ProbTemplate))
             {
-                if (!probTemplates.ContainsKey(rawItem.ProbTemplate))
-                {
-                    throw new KeyNotFoundException($"No such Probability Template {rawItem.ProbTemplate}");
-                }
-                instance.ProbTemplate = probTemplates[rawItem.ProbTemplate];
+                throw new KeyNotFoundException($"No such Probability Template {rawItem.ProbTemplate}");
             }
+            var instance = new ItemInstance(
+                item: this,
+                count: new Count(rawItem.Count),
+                parentGroup: group,
+                parentGroupItemIndex: instanceIndex,
+                prob: string.IsNullOrEmpty(rawItem.Prob) ? null : Convert.ToDecimal(rawItem.Prob),
+                probTemplate: string.IsNullOrEmpty(rawItem.ProbTemplate) ? null : probTemplates[rawItem.ProbTemplate]
+            );
 
-            if (!string.IsNullOrEmpty(rawItem.Prob))
-            {
-                instance.Prob = Convert.ToDecimal(rawItem.Prob);
-            }
-            instance.ParentGroup = group;
-            instance.ParentGroupItemIndex = instanceIndex;
             Instances.Add(instance);
             return instance;
         }

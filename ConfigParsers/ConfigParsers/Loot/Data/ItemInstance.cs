@@ -14,31 +14,41 @@ namespace ConfigParsers.Loot.Data
         /// <summary>
         /// Link back up to the Item that this is an instance of
         /// </summary>
-        public Item Item { get; set; }
+        public Item Item { get; }
 
         /// <summary>
         /// Count value for this instance
         /// </summary>
-        public Count Count { get; set; }
-
-        /// <summary>
-        /// Probability Template for this instance
-        /// </summary>
-        public ProbTemplate? ProbTemplate { get; set; }
-
-        /// <summary>
-        /// Probability for this instance
-        /// </summary>
-        public decimal? Prob { get; set; }
+        public Count Count { get; }
 
         /// <summary>
         /// The parent Group of this instance
         /// </summary>
-        public Group ParentGroup { get; set; }
+        public Group ParentGroup { get; }
 
         /// <summary>
         /// What the index is of this ItemInstance in the ParentGroup's Items list
         /// </summary>
-        public int ParentGroupItemIndex { get; set; }
+        public int ParentGroupItemIndex { get; }
+
+        /// <summary>
+        /// Probability Template for this instance
+        /// </summary>
+        public ProbTemplate? ProbTemplate { get; }
+
+        /// <summary>
+        /// Probability for this instance
+        /// </summary>
+        public decimal? Prob { get; }
+
+        public ItemInstance(Item item, Count count, Group parentGroup, int parentGroupItemIndex, decimal? prob, ProbTemplate? probTemplate)
+        {
+            Item = item;
+            Count = count;
+            ParentGroup = parentGroup;
+            ParentGroupItemIndex = parentGroupItemIndex;
+            Prob = prob;
+            ProbTemplate = probTemplate;
+        }
     }
 }
