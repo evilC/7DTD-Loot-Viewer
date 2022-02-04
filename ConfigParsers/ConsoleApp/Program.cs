@@ -17,23 +17,27 @@ var loot = new LootParser(lootXmlPath);
 //var resourceMetalPipe = loot.Data.Items["resourceMetalPipe"];
 
 var rw = new ItemContainerFinder(loot.Data);
-var results = rw.GetItemProbabilities("targetitem");
+var results = rw.GetItemContainers("targetitem");
 //var results = rw.GetItemProbabilities("meleeToolSalvageT2Ratchet");
 
-foreach (var containerResult in results.ContainerResults)
-{
-    Debug.WriteLine($"---------------------------------------\nCONTAINER: {containerResult.Key}\n");
-    for (int nl = 0; nl < containerResult.Value.Results.Count; nl++)
-    {
-        var nodeList = containerResult.Value.Results[nl].Nodes;
-        Debug.WriteLine($"PATH FOR RESULT #{nl}:");
-        foreach (var node in nodeList)
-        {
-            var str = node.Render();
-            Debug.WriteLine($"{str} // Prob @ loot level 20: {node.GetProb(20)}");
-        }
-        Debug.WriteLine($"");
-    }
-}
+//foreach (var containerResult in results.ContainerResults)
+//{
+//    Debug.WriteLine($"---------------------------------------\nCONTAINER: {containerResult.Key}\n");
+//    for (int nl = 0; nl < containerResult.Value.Results.Count; nl++)
+//    {
+//        var nodeList = containerResult.Value.Results[nl].Nodes;
+//        Debug.WriteLine($"PATH FOR RESULT #{nl}:");
+//        foreach (var node in nodeList)
+//        {
+//            var str = node.Render();
+//            Debug.WriteLine($"{str}");
+//        }
+//        Debug.WriteLine($"");
+//    }
+//}
+
+var cr = results.ContainerResults.FirstOrDefault().Value;
+var probCalc = new ProbabilityCalculator(cr);
+probCalc.CalculateProbability(20);
 
 Console.WriteLine("Done!");

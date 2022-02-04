@@ -10,7 +10,7 @@ namespace UnitTests
         private LootParser _lootParser;
         public LootParserTests()
         {
-            var lootXmlPath = Path.Combine(new string[] { Directory.GetCurrentDirectory(), "loot.xml" });
+            var lootXmlPath = Path.Combine(new string[] { Directory.GetCurrentDirectory(), "LootParserTests.xml" });
             _lootParser = new LootParser(lootXmlPath);
         }
 

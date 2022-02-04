@@ -19,54 +19,44 @@ namespace ConfigParsers.Loot
             _data = data;
         }
 
-        public Results GetItemProbabilities(string itemName)
+        public ItemContainers GetItemContainers(string itemName)
         {
             var item = _data.Items[itemName];
-            var paths = new List<Result>();
+            var itemPaths = new List<ItemPath>();
             for (int i = 0; i < item.Instances.Count; i++)
             {
-                var thisPath = paths.Count();
+                var thisPath = itemPaths.Count();
                 var instance = item.Instances[i];
-                var result = new Result(instance);
-                paths.Add(result);
+                var result = new ItemPath(instance);
+                itemPaths.Add(result);
                 //Debug.WriteLine($"Instance {i}");
-                GetParentGroups(instance.ParentGroup, null, paths, thisPath);
+                GetParentGroups(instance.ParentGroup, null, itemPaths, thisPath);
                 //Debug.WriteLine($"End of chain\n");
             }
 
-            //for (int i = 0; i < paths.Count(); i++)
-            //{
-            //    var str = "";
-            //    foreach (var node in paths[i].Nodes)
-            //    {
-            //        str += $"{node.Group.Name} (c={node.Group.Count}, ri={node.GroupReferenceIndex}), ";
-            //    }
-            //    Debug.WriteLine($"PATH {i}: {str}");
-            //}
-
-            var results = new Results();
-            for (int i = 0; i < paths.Count(); i++)
+            var itemContainers = new ItemContainers();
+            for (int i = 0; i < itemPaths.Count(); i++)
             {
-                var result = paths[i];
+                var itemPath = itemPaths[i];
                 // Flip the order of the nodes, so that the list starts with the container
-                result.Nodes.Reverse();
-                var container = result.Nodes[0].Group.Name;
-                ContainerResult containerResult;
-                if (results.ContainerResults.ContainsKey(container))
+                itemPath.Nodes.Reverse();
+                var containerName = itemPath.Nodes[0].Group.Name;
+                ItemContainer itemContainer;
+                if (itemContainers.ContainerResults.ContainsKey(containerName))
                 {
-                    containerResult = results.ContainerResults[container];
+                    itemContainer = itemContainers.ContainerResults[containerName];
                 }
                 else
                 {
-                    containerResult = new ContainerResult();
-                    results.ContainerResults.Add(container, containerResult);
+                    itemContainer = new ItemContainer();
+                    itemContainers.ContainerResults.Add(containerName, itemContainer);
                 }
-                containerResult.Results.Add(result);
+                itemContainer.Paths.Add(itemPath);
             }
-            return results;
+            return itemContainers;
         }
 
-        private void GetParentGroups(Group group, int? parentReferenceIndex, List<Result> paths, int currentIndex)
+        private void GetParentGroups(Group group, int? parentReferenceIndex, List<ItemPath> paths, int currentIndex)
         {
             //Debug.WriteLine($"In group {group.Name}, adding to path {currentIndex}");
             paths[currentIndex].Nodes.Add(new Node(group, parentReferenceIndex));
@@ -76,7 +66,7 @@ namespace ConfigParsers.Loot
             {
                 var groupReference = group.ParentGroupReferences[i];
                 var oldResult = paths[currentIndex];
-                paths.Add(new Result(oldResult.ItemInstance, new List<Node>(oldResult.Nodes)));
+                paths.Add(new ItemPath(oldResult.ItemInstance, new List<Node>(oldResult.Nodes)));
                 GetParentGroups(groupReference.Parent, groupReference.ParentGroupReferenceIndex, paths, paths.Count()-1);
             }
 
@@ -89,23 +79,23 @@ namespace ConfigParsers.Loot
         }
     }
 
-    public class Results
+    public class ItemContainers
     {
-        public Dictionary<string, ContainerResult> ContainerResults { get; set; } = new Dictionary<string, ContainerResult>();
+        public Dictionary<string, ItemContainer> ContainerResults { get; set; } = new Dictionary<string, ItemContainer>();
     }
 
-    public class ContainerResult
+    public class ItemContainer
     {
-        public List<Result> Results { get; } = new List<Result>();
+        public List<ItemPath> Paths { get; } = new List<ItemPath>();
     }
 
-    public class Result
+    public class ItemPath
     {
         public ItemInstance ItemInstance { get; }
 
         public List<Node> Nodes { get; }
 
-        public Result(ItemInstance itemInstance, List<Node>? nodes = null)
+        public ItemPath(ItemInstance itemInstance, List<Node>? nodes = null)
         {
             if (nodes == null) nodes = new List<Node>();
             ItemInstance = itemInstance;
