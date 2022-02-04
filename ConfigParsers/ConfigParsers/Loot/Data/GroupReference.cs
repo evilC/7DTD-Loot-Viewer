@@ -50,6 +50,13 @@
             ProbTemplate = probTemplate;
         }
 
+        public decimal GetProb(int lootLevel)
+        {
+            if (Prob != null) return (decimal)Prob;
+            if (ProbTemplate != null) return ProbTemplate.GetProb(lootLevel);
+            return 1;
+        }
+
         /// <summary>
         /// Used for debugging output - renders attributes of this class
         /// </summary>

@@ -30,7 +30,7 @@ foreach (var containerResult in results.ContainerResults)
         foreach (var node in nodeList)
         {
             var str = node.Render();
-            Debug.WriteLine($"{str}");
+            Debug.WriteLine($"{str} // Prob @ loot level 20: {node.GetProb(20)}");
         }
         Debug.WriteLine($"");
     }

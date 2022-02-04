@@ -126,12 +126,29 @@ namespace ConfigParsers.Loot
             GroupReferenceIndex = groupReferenceIndex;
         }
 
+        public GroupReference? GetGroupReference()
+        {
+            if (GroupReferenceIndex != null)
+            {
+                return Group.GroupReferences[(int)GroupReferenceIndex];
+            }
+            return null;
+        }
+
+        public decimal GetProb(int lootLevel)
+        {
+            var gr = GetGroupReference();
+            if (gr == null) return 1;
+            return gr.GetProb(lootLevel);
+        }
+
         public string Render()
         {
             var str = Group.Render();
-            if (GroupReferenceIndex != null)
+            var gr = GetGroupReference();
+            if (gr != null)
             {
-                str += $" | GroupReferenceIndex={GroupReferenceIndex} | {Group.GroupReferences[(int)GroupReferenceIndex].Render()}";
+                str += $" | GroupReferenceIndex={GroupReferenceIndex} | {gr.Render()}";
             }
             return str;
         }
