@@ -19,7 +19,7 @@ namespace ConfigParsers.Loot.Data
         /// The key of the dictionary maps to the "level" attribute, and uses a Count class, as it does the same thing
         /// The value of the dictionary maps to the "prob" attribute
         /// </summary>
-        public Dictionary<Count, decimal> Entries = new Dictionary<Count, decimal>();
+        public SortedDictionary<Count, decimal> Entries = new SortedDictionary<Count, decimal>();
 
         public ProbTemplate(XmlClasses.ProbTemplate template)
         {
@@ -49,6 +49,15 @@ namespace ConfigParsers.Loot.Data
                 }
                 Entries.Add(range, Convert.ToDecimal(item.Prob));
             }
+        }
+
+        public decimal GetProb(int lootLevel)
+        {
+            foreach (var entry in Entries)
+            {
+                if (entry.Key.IsInRange(lootLevel)) return entry.Value;
+            }
+            return 0;
         }
     }
 }
