@@ -53,6 +53,17 @@
         }
 
         /// <summary>
+        /// Checks whether a value falls within the range of this Count
+        /// </summary>
+        /// <param name="value">The value to check</param>
+        /// <returns>True for is in range, False for not in range</returns>
+        public bool IsInRange(int value)
+        {
+            if (IsAll || !IsSet) return true;
+            return (value >= From && value <= To);
+        }
+
+        /// <summary>
         /// When debugging or displaying in a UI, converts Count to a string representation
         /// </summary>
         /// <returns></returns>

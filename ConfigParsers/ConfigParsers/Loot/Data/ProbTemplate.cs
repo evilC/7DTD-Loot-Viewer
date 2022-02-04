@@ -16,6 +16,8 @@ namespace ConfigParsers.Loot.Data
         /// <summary>
         /// The entries in the Template
         /// Maps to the XML "loot" elements
+        /// The key of the dictionary maps to the "level" attribute, and uses a Count class, as it does the same thing
+        /// The value of the dictionary maps to the "prob" attribute
         /// </summary>
         public Dictionary<Count, decimal> Entries = new Dictionary<Count, decimal>();
 
