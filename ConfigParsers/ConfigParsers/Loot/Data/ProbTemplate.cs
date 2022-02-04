@@ -19,7 +19,8 @@ namespace ConfigParsers.Loot.Data
         /// The key of the dictionary maps to the "level" attribute, and uses a Count class, as it does the same thing
         /// The value of the dictionary maps to the "prob" attribute
         /// </summary>
-        public SortedDictionary<Count, decimal> Entries = new SortedDictionary<Count, decimal>();
+        //public SortedDictionary<Count, decimal> Entries = new SortedDictionary<Count, decimal>();
+        public List<Tuple<Count, decimal>> Entries { get; set; } = new List<Tuple<Count, decimal>>();
 
         public ProbTemplate(XmlClasses.ProbTemplate template)
         {
@@ -32,7 +33,7 @@ namespace ConfigParsers.Loot.Data
                 {
                     throw new Exception("Not expecting null range");
                 }
-                Entries.Add(range, Convert.ToDecimal(item.Prob));
+                Entries.Add(new Tuple<Count, decimal>(range, Convert.ToDecimal(item.Prob)));
             }
         }
 
@@ -47,7 +48,7 @@ namespace ConfigParsers.Loot.Data
                 {
                     throw new Exception("Not expecting null range");
                 }
-                Entries.Add(range, Convert.ToDecimal(item.Prob));
+                Entries.Add(new Tuple<Count, decimal>(range, Convert.ToDecimal(item.Prob)));
             }
         }
 
@@ -55,7 +56,7 @@ namespace ConfigParsers.Loot.Data
         {
             foreach (var entry in Entries)
             {
-                if (entry.Key.IsInRange(lootLevel)) return entry.Value;
+                if (entry.Item1.IsInRange(lootLevel)) return entry.Item2;
             }
             return 0;
         }
