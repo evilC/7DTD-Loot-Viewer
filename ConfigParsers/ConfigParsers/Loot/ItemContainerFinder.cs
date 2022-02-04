@@ -125,5 +125,15 @@ namespace ConfigParsers.Loot
             Group = group;
             GroupReferenceIndex = groupReferenceIndex;
         }
+
+        public string Render()
+        {
+            var str = Group.Render();
+            if (GroupReferenceIndex != null)
+            {
+                str += $" | GroupReferenceIndex={GroupReferenceIndex} | {Group.GroupReferences[(int)GroupReferenceIndex].Render()}";
+            }
+            return str;
+        }
     }
 }

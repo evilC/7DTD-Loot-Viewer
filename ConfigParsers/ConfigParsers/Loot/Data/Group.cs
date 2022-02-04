@@ -63,5 +63,13 @@ namespace ConfigParsers.Loot.Data
             Count = count;
             GroupType = groupType;
         }
+
+        /// <summary>
+        /// Used for debugging output - renders attributes of this class
+        /// </summary>
+        public string Render()
+        {
+            return $"{GroupType}: name={Name}, count={Count.Render()}";
+        }
     }
 }

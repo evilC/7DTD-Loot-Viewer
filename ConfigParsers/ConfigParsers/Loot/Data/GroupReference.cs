@@ -15,16 +15,6 @@
         /// </summary>
         public Group Group { get; }
 
-        public GroupReference(Group group, Group parent, int parentGroupReferenceIndex, Count count, decimal? prob, ProbTemplate? probTemplate)
-        {
-            Group = group;
-            Parent = parent;
-            ParentGroupReferenceIndex = parentGroupReferenceIndex;
-            Count = count;
-            Prob = prob;
-            ProbTemplate = probTemplate;
-        }
-
         /// <summary>
         /// The Parent (owner) of the Reference
         /// </summary>
@@ -49,5 +39,28 @@
         /// The Probability Template of the ENTRY (NOT OF THE GROUP ITSELF!)
         /// </summary>
         public ProbTemplate? ProbTemplate { get; }
+
+        public GroupReference(Group group, Group parent, int parentGroupReferenceIndex, Count count, decimal? prob, ProbTemplate? probTemplate)
+        {
+            Group = group;
+            Parent = parent;
+            ParentGroupReferenceIndex = parentGroupReferenceIndex;
+            Count = count;
+            Prob = prob;
+            ProbTemplate = probTemplate;
+        }
+
+        /// <summary>
+        /// Used for debugging output - renders attributes of this class
+        /// </summary>
+        public string Render()
+        {
+            var str = $"GroupReference: count={Count.Render()}";
+            if (Prob != null) str += $", prob={Prob}";
+            if (ProbTemplate != null) str += $", prob_template={ProbTemplate.Name}";
+            return str;
+        }
+
     }
+
 }

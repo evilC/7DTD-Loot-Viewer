@@ -20,24 +20,19 @@ var rw = new ItemContainerFinder(loot.Data);
 var results = rw.GetItemProbabilities("targetitem");
 //var results = rw.GetItemProbabilities("meleeToolSalvageT2Ratchet");
 
-Debug.WriteLine($"RESULTS\n=======\n\n");
 foreach (var containerResult in results.ContainerResults)
 {
-    Debug.WriteLine($"CONTAINER: {containerResult.Key}\n---------------------------------------");
+    Debug.WriteLine($"---------------------------------------\nCONTAINER: {containerResult.Key}\n");
     for (int nl = 0; nl < containerResult.Value.Results.Count; nl++)
     {
         var nodeList = containerResult.Value.Results[nl].Nodes;
-        Debug.WriteLine($"PATH FOR RESULT #{nl}:\n");
+        Debug.WriteLine($"PATH FOR RESULT #{nl}:");
         foreach (var node in nodeList)
         {
-            var str = $"Group: {node.Group.Name}, Count: {node.Group.Count.Render()}";
-            if (node.GroupReferenceIndex != null)
-            {
-                str += $" | GroupReference to next node - Index: {node.GroupReferenceIndex}, Count: {node.Group.GroupReferences[(int)node.GroupReferenceIndex].Count.Render()}";
-            }
+            var str = node.Render();
             Debug.WriteLine($"{str}");
         }
-        Debug.WriteLine($"\n..........................\n");
+        Debug.WriteLine($"");
     }
 }
 
