@@ -125,7 +125,8 @@ namespace ConfigParsers.Loot.Data
                         parentGroupReferenceIndex: group.GroupReferences.Count,
                         count: new Count(rawEntry.Count),
                         prob: string.IsNullOrEmpty(rawEntry.Prob) ? null : Convert.ToDecimal(rawEntry.Prob),
-                        probTemplate: string.IsNullOrEmpty(rawEntry.ProbTemplate) ? null : Templates[rawEntry.ProbTemplate]
+                        probTemplate: string.IsNullOrEmpty(rawEntry.ProbTemplate) ? null : Templates[rawEntry.ProbTemplate],
+                        forceProb: string.IsNullOrEmpty(rawEntry.ForceProb) ? null : Convert.ToBoolean(rawEntry.ForceProb)
                     );
                     // Add the reference to the child to this Group
                     group.GroupReferences.Add(childGroupReference);

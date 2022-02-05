@@ -40,7 +40,12 @@
         /// </summary>
         public ProbTemplate? ProbTemplate { get; }
 
-        public GroupReference(Group group, Group parent, int parentGroupReferenceIndex, Count count, decimal? prob, ProbTemplate? probTemplate)
+        /// <summary>
+        /// Whether force_prob is set, true or false for this reference
+        /// </summary>
+        public bool? ForceProb { get; }
+
+        public GroupReference(Group group, Group parent, int parentGroupReferenceIndex, Count count, decimal? prob, ProbTemplate? probTemplate, bool? forceProb)
         {
             Group = group;
             Parent = parent;
@@ -48,6 +53,7 @@
             Count = count;
             Prob = prob;
             ProbTemplate = probTemplate;
+            ForceProb = forceProb;
         }
 
         public decimal GetProb(int lootLevel)
@@ -65,6 +71,7 @@
             var str = $"GroupReference: count={Count.Render()}";
             if (Prob != null) str += $", prob={Prob}";
             if (ProbTemplate != null) str += $", prob_template={ProbTemplate.Name}";
+            if (ForceProb != null) str += $", force_prob={ForceProb}";
             return str;
         }
 

@@ -23,10 +23,10 @@ namespace ConfigParsers.Loot.XmlClasses
 
         [XmlAttribute("prob")]
         public string Prob { get; set; } = string.Empty;
-        //[XmlAttribute("mods")]
-        //public string Mods { get; set; }
 
-        //[XmlAttribute("mod_chance")]
-        //public string ModChance { get; set; }
+        [XmlAttribute("force_prob")]
+        public string ForceProb { get; set; } = string.Empty;
+
+
     }
 }

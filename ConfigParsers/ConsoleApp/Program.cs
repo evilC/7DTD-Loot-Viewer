@@ -4,7 +4,7 @@ using ConfigParsers.Loot;
 using System.Diagnostics;
 
 //var lootXmlPath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
-var lootXmlPath = Path.Combine(new string[] { Directory.GetCurrentDirectory(), "SimpleLoot.xml" });
+var lootXmlPath = Path.Combine(new string[] { Directory.GetCurrentDirectory(), "Ratchet.xml" });
 var loot = new LootParser(lootXmlPath);
 //var oldLootParser = new OldLootParser(@"E:\Games\steamapps\common\7 Days To Die\Data\Config");
 
@@ -17,8 +17,7 @@ var loot = new LootParser(lootXmlPath);
 //var resourceMetalPipe = loot.Data.Items["resourceMetalPipe"];
 
 var rw = new ItemContainerFinder(loot.Data);
-var results = rw.GetItemContainers("targetitem");
-//var results = rw.GetItemProbabilities("meleeToolSalvageT2Ratchet");
+var results = rw.GetItemContainers("meleeToolSalvageT2Ratchet");
 
 //foreach (var containerResult in results.ContainerResults)
 //{
@@ -36,8 +35,15 @@ var results = rw.GetItemContainers("targetitem");
 //    }
 //}
 
-var cr = results.ContainerResults.FirstOrDefault().Value;
+var container = results.ContainerResults.FirstOrDefault();
+Debug.WriteLine($"Showing probabilities for container {container.Key}");
+var cr = container.Value;
 var probCalc = new ProbabilityCalculator(cr);
-probCalc.CalculateProbability(20);
+probCalc.CalculateProbability(1);
+Debug.WriteLine($"\n==============================\n");
+probCalc.CalculateProbability(102);
+Debug.WriteLine($"\n==============================\n");
+probCalc.CalculateProbability(134);
+Debug.WriteLine($"\n==============================\n");
 
 Console.WriteLine("Done!");

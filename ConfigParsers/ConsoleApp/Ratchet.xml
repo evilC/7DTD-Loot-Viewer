@@ -1,0 +1,574 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<lootcontainers>
+	<lootcontainer id="90" name="passngasCrate" count="1" size="6,4" sound_open="UseActions/open_cardboard" sound_close="UseActions/close_cardboard" loot_quality_template="qualBaseTemplate">
+		<item group="groupPassNGas"/>
+	</lootcontainer>
+
+	<lootgroup name="groupPassNGas01">
+		<item name="resourceRepairKit" count="2,5" loot_prob_template="medLow"/>
+		<item group="groupToolsTiered" loot_prob_template="med"/>
+		<item group="schematicsToolsCommon" loot_prob_template="med"/> <!--UNUSED-->
+	</lootgroup>
+
+	<lootgroup name="groupPassNGas03">
+		<item group="vehiclePartsTiered" loot_prob_template="medLow"/> <!--UNUSED-->
+		<item group="vehicleModSchematics" loot_prob_template="medLow"/> <!--UNUSED-->
+		<item group="groupRareToolsTiered" loot_prob_template="veryLow"/>
+		<item group="schematicsToolsRare" loot_prob_template="veryLow"/> <!--UNUSED-->
+	</lootgroup>
+
+	<lootgroup name="groupPassNGas" count="all">
+		<item group="groupPassNGas01" count="1"/>
+		<item group="groupPassNGas02" count="1"/> <!--UNUSED-->
+		<item group="groupPassNGas03" loot_prob_template="med" force_prob="true"/>
+		<item name="vehicleWheels" count="1" loot_prob_template="low" force_prob="true"/> <!--UNUSED-->
+	</lootgroup>
+
+	<lootgroup name="groupRareToolsTiered" count="1">
+		<item group="groupToolsTiered"/>
+		<item group="groupToolsT2" loot_prob_template="ProbT2"/>
+		<item group="groupToolsT3" loot_prob_template="ProbT3"/> <!--UNUSED-->
+	</lootgroup>
+
+	<lootgroup name="groupToolsTiered" count="1">
+		<item group="groupToolsT1" loot_prob_template="ProbT0"/> <!--UNUSED-->
+		<item group="toolParts" loot_prob_template="ProbT1"/> <!--UNUSED-->
+		<item group="groupToolsT2" loot_prob_template="ProbT2Cap"/>
+		<item group="groupToolsT3" loot_prob_template="ProbT3"/> <!--UNUSED-->
+	</lootgroup>
+
+	<lootgroup name="groupToolsT2" loot_quality_template="QLTemplateT2">
+		<item name="meleeToolShovelT2SteelShovel"/>
+		<item name="meleeToolPickT2SteelPickaxe"/>
+		<item name="meleeToolAxeT2SteelAxe"/>
+		<item name="meleeWpnSledgeT3SteelSledgehammer" loot_prob_template="medLow"/>
+		<item name="meleeToolSalvageT2Ratchet"/>
+	</lootgroup>	
+	
+	<!--=== START OF GROUPS WHICH ARE NOT USED ===-->
+	<!--They are just included so that the XML can be parsed without errors-->
+	<lootgroup name="groupPassNGas02">
+	</lootgroup>
+	
+	<lootgroup name="schematicsToolsCommon">
+	</lootgroup>
+	
+	<lootgroup name="vehiclePartsTiered">
+	</lootgroup>
+	
+	<lootgroup name="vehicleModSchematics">
+	</lootgroup>
+	
+	<lootgroup name="schematicsToolsRare">
+	</lootgroup>
+	
+	<lootgroup name="vehicleWheels">
+	</lootgroup>
+	
+	<lootgroup name="groupToolsT1">
+	</lootgroup>
+	
+	<lootgroup name="groupToolsT3">
+	</lootgroup>
+	
+	<lootgroup name="toolParts">
+	</lootgroup>
+	
+	<!--=== END OF GROUPS WHICH ARE NOT USED ===-->
+	
+	<lootprobtemplates>
+		<lootprobtemplate name="veryLow">
+			<loot level="1,999999" prob=".05"/>
+		</lootprobtemplate>
+		<lootprobtemplate name="low">
+			<loot level="1,999999" prob=".20"/>
+		</lootprobtemplate>
+		<lootprobtemplate name="medLow">
+			<loot level="1,999999" prob=".35"/>
+		</lootprobtemplate>
+		<lootprobtemplate name="med">
+			<loot level="1,999999" prob=".5"/>
+		</lootprobtemplate>
+		<lootprobtemplate name="medHigh">
+			<loot level="1,999999" prob=".63"/>
+		</lootprobtemplate>
+		<lootprobtemplate name="high">
+			<loot level="1,999999" prob=".75"/>
+		</lootprobtemplate>
+		<lootprobtemplate name="guaranteed">
+			<loot level="1,999999" prob="1"/>
+		</lootprobtemplate>
+
+		<lootprobtemplate name="ProbT0">
+			<loot level="0,1" prob="0.03"/>
+			<loot level="2" prob="0.07"/>
+			<loot level="3" prob="0.10"/>
+			<loot level="4" prob="0.13"/>
+			<loot level="5" prob="0.17"/>
+			<loot level="6" prob="0.20"/>
+			<loot level="7" prob="0.23"/>
+			<loot level="8" prob="0.27"/>
+			<loot level="9" prob="0.30"/>
+			<loot level="10" prob="0.33"/>
+			<loot level="11" prob="0.37"/>
+			<loot level="12" prob="0.40"/>
+			<loot level="13" prob="0.43"/>
+			<loot level="14" prob="0.47"/>
+			<loot level="15" prob="0.5"/>
+			<loot level="16" prob="0.53"/>
+			<loot level="17" prob="0.57"/>
+			<loot level="18" prob="0.60"/>
+			<loot level="19" prob="0.63"/>
+			<loot level="20" prob="0.67"/>
+			<loot level="21" prob="0.70"/>
+			<loot level="22" prob="0.73"/>
+			<loot level="23" prob="0.77"/>
+			<loot level="24" prob="0.80"/>
+			<loot level="25" prob="0.83"/>
+			<loot level="26" prob="0.87"/>
+			<loot level="27" prob="0.90"/>
+			<loot level="28" prob="0.93"/>
+			<loot level="29" prob="0.97"/>
+			<loot level="30" prob="1.00"/>
+			<loot level="31" prob="0.97"/>
+			<loot level="32" prob="0.93"/>
+			<loot level="33" prob="0.90"/>
+			<loot level="34" prob="0.87"/>
+			<loot level="35" prob="0.83"/>
+			<loot level="36" prob="0.80"/>
+			<loot level="37" prob="0.77"/>
+			<loot level="38" prob="0.73"/>
+			<loot level="39" prob="0.70"/>
+			<loot level="40" prob="0.67"/>
+			<loot level="41" prob="0.63"/>
+			<loot level="42" prob="0.60"/>
+			<loot level="43" prob="0.57"/>
+			<loot level="44" prob="0.53"/>
+			<loot level="45" prob="0.50"/>
+			<loot level="46" prob="0.47"/>
+			<loot level="47" prob="0.43"/>
+			<loot level="48" prob="0.40"/>
+			<loot level="49" prob="0.37"/>
+			<loot level="50" prob="0.33"/>
+			<loot level="51" prob="0.30"/>
+			<loot level="52" prob="0.27"/>
+			<loot level="53" prob="0.23"/>
+			<loot level="54" prob="0.20"/>
+			<loot level="55" prob="0.17"/>
+			<loot level="56" prob="0.13"/>
+			<loot level="57" prob="0.10"/>
+			<loot level="58" prob="0.07"/>
+			<loot level="59" prob="0.03"/>
+			<loot level="60,999999" prob="0"/>
+		</lootprobtemplate>
+
+		<lootprobtemplate name="ProbT1">
+			<loot level="0,41" prob="0"/>
+			<loot level="42" prob="0.04"/>
+			<loot level="43" prob="0.07"/>
+			<loot level="44" prob="0.09"/>
+			<loot level="45" prob="0.11"/>
+			<loot level="46" prob="0.13"/>
+			<loot level="47" prob="0.16"/>
+			<loot level="48" prob="0.18"/>
+			<loot level="49" prob="0.20"/>
+			<loot level="50" prob="0.22"/>
+			<loot level="51" prob="0.24"/>
+			<loot level="52" prob="0.27"/>
+			<loot level="53" prob="0.29"/>
+			<loot level="54" prob="0.31"/>
+			<loot level="55" prob="0.33"/>
+			<loot level="56" prob="0.36"/>
+			<loot level="57" prob="0.38"/>
+			<loot level="58" prob="0.40"/>
+			<loot level="59" prob="0.42"/>
+			<loot level="60" prob="0.44"/>
+			<loot level="61" prob="0.47"/>
+			<loot level="62" prob="0.49"/>
+			<loot level="63" prob="0.51"/>
+			<loot level="64" prob="0.53"/>
+			<loot level="65" prob="0.56"/>
+			<loot level="66" prob="0.58"/>
+			<loot level="67" prob="0.60"/>
+			<loot level="68" prob="0.62"/>
+			<loot level="69" prob="0.64"/>
+			<loot level="70" prob="0.67"/>
+			<loot level="71" prob="0.69"/>
+			<loot level="72" prob="0.71"/>
+			<loot level="73" prob="0.73"/>
+			<loot level="74" prob="0.76"/>
+			<loot level="75" prob="0.78"/>
+			<loot level="76" prob="0.80"/>
+			<loot level="77" prob="0.82"/>
+			<loot level="78" prob="0.84"/>
+			<loot level="79" prob="0.87"/>
+			<loot level="80" prob="0.89"/>
+			<loot level="81" prob="0.91"/>
+			<loot level="82" prob="0.93"/>
+			<loot level="83" prob="0.96"/>
+			<loot level="84" prob="0.98"/>
+			<loot level="85" prob="1.00"/>
+			<loot level="86" prob="0.98"/>
+			<loot level="87" prob="0.96"/>
+			<loot level="88" prob="0.93"/>
+			<loot level="89" prob="0.91"/>
+			<loot level="90" prob="0.89"/>
+			<loot level="91" prob="0.87"/>
+			<loot level="92" prob="0.84"/>
+			<loot level="93" prob="0.82"/>
+			<loot level="94" prob="0.80"/>
+			<loot level="95" prob="0.78"/>
+			<loot level="96" prob="0.76"/>
+			<loot level="97" prob="0.73"/>
+			<loot level="98" prob="0.71"/>
+			<loot level="99" prob="0.69"/>
+			<loot level="100" prob="0.67"/>
+			<loot level="101" prob="0.64"/>
+			<loot level="102" prob="0.62"/>
+			<loot level="103" prob="0.60"/>
+			<loot level="104" prob="0.58"/>
+			<loot level="105" prob="0.56"/>
+			<loot level="106" prob="0.53"/>
+			<loot level="107" prob="0.51"/>
+			<loot level="108" prob="0.49"/>
+			<loot level="109" prob="0.47"/>
+			<loot level="110" prob="0.44"/>
+			<loot level="111" prob="0.42"/>
+			<loot level="112" prob="0.40"/>
+			<loot level="113" prob="0.38"/>
+			<loot level="114" prob="0.36"/>
+			<loot level="115" prob="0.33"/>
+			<loot level="116" prob="0.31"/>
+			<loot level="117" prob="0.29"/>
+			<loot level="118" prob="0.27"/>
+			<loot level="119" prob="0.24"/>
+			<loot level="120" prob="0.22"/>
+			<loot level="121" prob="0.20"/>
+			<loot level="122" prob="0.18"/>
+			<loot level="123" prob="0.16"/>
+			<loot level="124" prob="0.13"/>
+			<loot level="125" prob="0.11"/>
+			<loot level="126" prob="0.09"/>
+			<loot level="127" prob="0.07"/>
+			<loot level="128" prob="0.04"/>
+			<loot level="129" prob="0.02"/>
+			<loot level="130,999999" prob="0"/>
+		</lootprobtemplate>
+
+		<lootprobtemplate name="ProbT2">
+			<loot level="0,101" prob="0"/>
+			<loot level="102" prob="0.03"/>
+			<loot level="103" prob="0.04"/>
+			<loot level="104" prob="0.06"/>
+			<loot level="105" prob="0.07"/>
+			<loot level="106" prob="0.09"/>
+			<loot level="107" prob="0.10"/>
+			<loot level="108" prob="0.12"/>
+			<loot level="109" prob="0.13"/>
+			<loot level="110" prob="0.15"/>
+			<loot level="111" prob="0.16"/>
+			<loot level="112" prob="0.18"/>
+			<loot level="113" prob="0.19"/>
+			<loot level="114" prob="0.21"/>
+			<loot level="115" prob="0.22"/>
+			<loot level="116" prob="0.24"/>
+			<loot level="117" prob="0.25"/>
+			<loot level="118" prob="0.27"/>
+			<loot level="119" prob="0.28"/>
+			<loot level="120" prob="0.30"/>
+			<loot level="121" prob="0.31"/>
+			<loot level="122" prob="0.33"/>
+			<loot level="123" prob="0.34"/>
+			<loot level="124" prob="0.36"/>
+			<loot level="125" prob="0.37"/>
+			<loot level="126" prob="0.39"/>
+			<loot level="127" prob="0.40"/>
+			<loot level="128" prob="0.41"/>
+			<loot level="129" prob="0.43"/>
+			<loot level="130" prob="0.44"/>
+			<loot level="131" prob="0.46"/>
+			<loot level="132" prob="0.47"/>
+			<loot level="133" prob="0.49"/>
+			<loot level="134" prob="0.50"/>
+			<loot level="135" prob="0.52"/>
+			<loot level="136" prob="0.53"/>
+			<loot level="137" prob="0.55"/>
+			<loot level="138" prob="0.56"/>
+			<loot level="139" prob="0.58"/>
+			<loot level="140" prob="0.59"/>
+			<loot level="141" prob="0.61"/>
+			<loot level="142" prob="0.62"/>
+			<loot level="143" prob="0.64"/>
+			<loot level="144" prob="0.65"/>
+			<loot level="145" prob="0.67"/>
+			<loot level="146" prob="0.68"/>
+			<loot level="147" prob="0.70"/>
+			<loot level="148" prob="0.71"/>
+			<loot level="149" prob="0.73"/>
+			<loot level="150" prob="0.74"/>
+			<loot level="151" prob="0.76"/>
+			<loot level="152" prob="0.77"/>
+			<loot level="153" prob="0.79"/>
+			<loot level="154" prob="0.80"/>
+			<loot level="155" prob="0.81"/>
+			<loot level="156" prob="0.83"/>
+			<loot level="157" prob="0.84"/>
+			<loot level="158" prob="0.86"/>
+			<loot level="159" prob="0.87"/>
+			<loot level="160" prob="0.89"/>
+			<loot level="161" prob="0.90"/>
+			<loot level="162" prob="0.92"/>
+			<loot level="163" prob="0.93"/>
+			<loot level="164" prob="0.95"/>
+			<loot level="165" prob="0.96"/>
+			<loot level="166" prob="0.98"/>
+			<loot level="167" prob="0.99"/>
+			<loot level="168" prob="0.99"/>
+			<loot level="169" prob="0.98"/>
+			<loot level="170" prob="0.96"/>
+			<loot level="171" prob="0.95"/>
+			<loot level="172" prob="0.93"/>
+			<loot level="173" prob="0.92"/>
+			<loot level="174" prob="0.90"/>
+			<loot level="175" prob="0.89"/>
+			<loot level="176" prob="0.87"/>
+			<loot level="177" prob="0.86"/>
+			<loot level="178" prob="0.84"/>
+			<loot level="179" prob="0.83"/>
+			<loot level="180" prob="0.81"/>
+			<loot level="181" prob="0.80"/>
+			<loot level="182" prob="0.79"/>
+			<loot level="183" prob="0.77"/>
+			<loot level="184" prob="0.76"/>
+			<loot level="185" prob="0.74"/>
+			<loot level="186" prob="0.73"/>
+			<loot level="187" prob="0.71"/>
+			<loot level="188" prob="0.70"/>
+			<loot level="189" prob="0.68"/>
+			<loot level="190" prob="0.67"/>
+			<loot level="191" prob="0.65"/>
+			<loot level="192" prob="0.64"/>
+			<loot level="193" prob="0.62"/>
+			<loot level="194" prob="0.61"/>
+			<loot level="195" prob="0.59"/>
+			<loot level="196" prob="0.58"/>
+			<loot level="197" prob="0.56"/>
+			<loot level="198" prob="0.55"/>
+			<loot level="199" prob="0.53"/>
+			<loot level="200" prob="0.52"/>
+			<loot level="201" prob="0.50"/>
+			<loot level="202" prob="0.49"/>
+			<loot level="203" prob="0.47"/>
+			<loot level="204" prob="0.46"/>
+			<loot level="205" prob="0.44"/>
+			<loot level="206" prob="0.43"/>
+			<loot level="207" prob="0.41"/>
+			<loot level="208" prob="0.40"/>
+			<loot level="209" prob="0.39"/>
+			<loot level="210" prob="0.37"/>
+			<loot level="211" prob="0.36"/>
+			<loot level="212" prob="0.34"/>
+			<loot level="213" prob="0.33"/>
+			<loot level="214" prob="0.31"/>
+			<loot level="215" prob="0.30"/>
+			<loot level="216" prob="0.28"/>
+			<loot level="217" prob="0.27"/>
+			<loot level="218" prob="0.25"/>
+			<loot level="219" prob="0.24"/>
+			<loot level="220" prob="0.22"/>
+			<loot level="221" prob="0.21"/>
+			<loot level="222" prob="0.19"/>
+			<loot level="223" prob="0.18"/>
+			<loot level="224" prob="0.16"/>
+			<loot level="225" prob="0.15"/>
+			<loot level="226" prob="0.13"/>
+			<loot level="227" prob="0.12"/>
+			<loot level="228" prob="0.10"/>
+			<loot level="229" prob="0.09"/>
+			<loot level="230" prob="0.07"/>
+			<loot level="231" prob="0.06"/>
+			<loot level="232" prob="0.04"/>
+			<loot level="233" prob="0.03"/>
+			<loot level="234" prob="0.01"/>
+			<loot level="235,999999" prob="0"/>
+		</lootprobtemplate>
+
+		<lootprobtemplate name="ProbT2Cap">
+			<loot level="0,101" prob="0"/>
+			<loot level="102" prob="0.03"/>
+			<loot level="103" prob="0.04"/>
+			<loot level="104" prob="0.06"/>
+			<loot level="105" prob="0.07"/>
+			<loot level="106" prob="0.09"/>
+			<loot level="107" prob="0.10"/>
+			<loot level="108" prob="0.12"/>
+			<loot level="109" prob="0.13"/>
+			<loot level="110" prob="0.15"/>
+			<loot level="111" prob="0.16"/>
+			<loot level="112" prob="0.18"/>
+			<loot level="113" prob="0.19"/>
+			<loot level="114" prob="0.21"/>
+			<loot level="115" prob="0.22"/>
+			<loot level="116" prob="0.24"/>
+			<loot level="117" prob="0.25"/>
+			<loot level="118" prob="0.27"/>
+			<loot level="119" prob="0.28"/>
+			<loot level="120" prob="0.30"/>
+			<loot level="121" prob="0.31"/>
+			<loot level="122" prob="0.33"/>
+			<loot level="123" prob="0.34"/>
+			<loot level="124" prob="0.36"/>
+			<loot level="125" prob="0.37"/>
+			<loot level="126" prob="0.39"/>
+			<loot level="127" prob="0.40"/>
+			<loot level="128" prob="0.41"/>
+			<loot level="129" prob="0.43"/>
+			<loot level="130" prob="0.44"/>
+			<loot level="131" prob="0.46"/>
+			<loot level="132" prob="0.47"/>
+			<loot level="133" prob="0.49"/>
+			<loot level="134" prob="0.50"/>
+			<loot level="135" prob="0.52"/>
+			<loot level="136" prob="0.53"/>
+			<loot level="137" prob="0.55"/>
+			<loot level="138" prob="0.56"/>
+			<loot level="139" prob="0.58"/>
+			<loot level="140" prob="0.59"/>
+			<loot level="141" prob="0.61"/>
+			<loot level="142" prob="0.62"/>
+			<loot level="143" prob="0.64"/>
+			<loot level="144" prob="0.65"/>
+			<loot level="145" prob="0.67"/>
+			<loot level="146" prob="0.68"/>
+			<loot level="147" prob="0.70"/>
+			<loot level="148" prob="0.71"/>
+			<loot level="149" prob="0.73"/>
+			<loot level="150" prob="0.74"/>
+			<loot level="151" prob="0.76"/>
+			<loot level="152" prob="0.77"/>
+			<loot level="153" prob="0.79"/>
+			<loot level="154" prob="0.80"/>
+			<loot level="155" prob="0.81"/>
+			<loot level="156" prob="0.83"/>
+			<loot level="157" prob="0.84"/>
+			<loot level="158" prob="0.86"/>
+			<loot level="159" prob="0.87"/>
+			<loot level="160" prob="0.89"/>
+			<loot level="161" prob="0.90"/>
+			<loot level="162" prob="0.92"/>
+			<loot level="163" prob="0.93"/>
+			<loot level="164" prob="0.95"/>
+			<loot level="165" prob="0.96"/>
+			<loot level="166" prob="0.98"/>
+			<loot level="167" prob="0.99"/>
+			<loot level="168,999999" prob="1"/>
+		</lootprobtemplate>
+
+		<lootprobtemplate name="ProbT3">
+			<loot level="0,191" prob="0"/>
+			<loot level="192" prob="0.02"/>
+			<loot level="193" prob="0.03"/>
+			<loot level="194" prob="0.04"/>
+			<loot level="195" prob="0.05"/>
+			<loot level="196" prob="0.06"/>
+			<loot level="197" prob="0.07"/>
+			<loot level="198" prob="0.08"/>
+			<loot level="199" prob="0.09"/>
+			<loot level="200" prob="0.10"/>
+			<loot level="201" prob="0.11"/>
+			<loot level="202" prob="0.12"/>
+			<loot level="203" prob="0.13"/>
+			<loot level="204" prob="0.14"/>
+			<loot level="205" prob="0.15"/>
+			<loot level="206" prob="0.16"/>
+			<loot level="207" prob="0.17"/>
+			<loot level="208" prob="0.18"/>
+			<loot level="209" prob="0.19"/>
+			<loot level="210" prob="0.20"/>
+			<loot level="211" prob="0.21"/>
+			<loot level="212" prob="0.22"/>
+			<loot level="213" prob="0.23"/>
+			<loot level="214" prob="0.24"/>
+			<loot level="215" prob="0.25"/>
+			<loot level="216" prob="0.26"/>
+			<loot level="217" prob="0.27"/>
+			<loot level="218" prob="0.28"/>
+			<loot level="219" prob="0.29"/>
+			<loot level="220" prob="0.30"/>
+			<loot level="221" prob="0.31"/>
+			<loot level="222" prob="0.32"/>
+			<loot level="223" prob="0.33"/>
+			<loot level="224" prob="0.34"/>
+			<loot level="225" prob="0.35"/>
+			<loot level="226" prob="0.36"/>
+			<loot level="227" prob="0.37"/>
+			<loot level="228" prob="0.38"/>
+			<loot level="229" prob="0.39"/>
+			<loot level="230" prob="0.40"/>
+			<loot level="231" prob="0.41"/>
+			<loot level="232" prob="0.42"/>
+			<loot level="233" prob="0.43"/>
+			<loot level="234" prob="0.44"/>
+			<loot level="235" prob="0.45"/>
+			<loot level="236" prob="0.46"/>
+			<loot level="237" prob="0.47"/>
+			<loot level="238" prob="0.48"/>
+			<loot level="239" prob="0.49"/>
+			<loot level="240" prob="0.50"/>
+			<loot level="241" prob="0.51"/>
+			<loot level="242" prob="0.52"/>
+			<loot level="243" prob="0.53"/>
+			<loot level="244" prob="0.54"/>
+			<loot level="245" prob="0.55"/>
+			<loot level="246" prob="0.56"/>
+			<loot level="247" prob="0.57"/>
+			<loot level="248" prob="0.58"/>
+			<loot level="249" prob="0.59"/>
+			<loot level="250" prob="0.60"/>
+			<loot level="251" prob="0.61"/>
+			<loot level="252" prob="0.62"/>
+			<loot level="253" prob="0.63"/>
+			<loot level="254" prob="0.64"/>
+			<loot level="255" prob="0.65"/>
+			<loot level="256" prob="0.66"/>
+			<loot level="257" prob="0.67"/>
+			<loot level="258" prob="0.68"/>
+			<loot level="259" prob="0.69"/>
+			<loot level="260" prob="0.70"/>
+			<loot level="261" prob="0.71"/>
+			<loot level="262" prob="0.72"/>
+			<loot level="263" prob="0.73"/>
+			<loot level="264" prob="0.74"/>
+			<loot level="265" prob="0.75"/>
+			<loot level="266" prob="0.76"/>
+			<loot level="267" prob="0.77"/>
+			<loot level="268" prob="0.78"/>
+			<loot level="269" prob="0.79"/>
+			<loot level="270" prob="0.80"/>
+			<loot level="271" prob="0.81"/>
+			<loot level="272" prob="0.82"/>
+			<loot level="273" prob="0.83"/>
+			<loot level="274" prob="0.84"/>
+			<loot level="275" prob="0.85"/>
+			<loot level="276" prob="0.86"/>
+			<loot level="277" prob="0.87"/>
+			<loot level="278" prob="0.88"/>
+			<loot level="279" prob="0.89"/>
+			<loot level="280" prob="0.90"/>
+			<loot level="281" prob="0.91"/>
+			<loot level="282" prob="0.92"/>
+			<loot level="283" prob="0.93"/>
+			<loot level="284" prob="0.94"/>
+			<loot level="285" prob="0.95"/>
+			<loot level="286" prob="0.96"/>
+			<loot level="287" prob="0.97"/>
+			<loot level="288" prob="0.98"/>
+			<loot level="289" prob="0.99"/>
+			<loot level="290,999999" prob="1"/>
+		</lootprobtemplate>
+
+	</lootprobtemplates>
+
+</lootcontainers>
+
