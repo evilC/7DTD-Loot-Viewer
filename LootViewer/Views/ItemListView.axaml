@@ -5,7 +5,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LootViewer.Views.ItemListView">
 	<DockPanel>
-		<Button DockPanel.Dock="Bottom">Add an item</Button>
 		<ItemsControl Items="{Binding Items}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>

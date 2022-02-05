@@ -20,7 +20,7 @@ namespace LootViewer
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                var db = new Database();
+                var db = new Database(@"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml");
 
                 desktop.MainWindow = new MainWindow
                 {
