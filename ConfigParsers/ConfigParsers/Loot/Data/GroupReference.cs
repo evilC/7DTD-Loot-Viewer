@@ -42,6 +42,15 @@
 
         /// <summary>
         /// Whether force_prob is set, true or false for this reference
+        /// If containing Group has a Count value of "all"...
+        /// Then all entries in it's list of Groups / Items will have a probability of 100%
+        /// ForceProb can be used to override that for a specific entry
+        /// ie
+        /// group name="gp" count="all"
+        ///     group gc1                               <-- will always pick one item from this group
+        ///     group gc2                               <-- will always pick one item from this group
+        ///     group gc3 force_prob="true" prob="0.5"  <-- will pick an item from this group 50% of the time
+        /// 
         /// </summary>
         public bool? ForceProb { get; }
 

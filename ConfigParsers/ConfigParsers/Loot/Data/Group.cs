@@ -27,7 +27,9 @@ namespace ConfigParsers.Loot.Data
 
         /// <summary>
         /// Holds the data from the count attribute of the lootgroup node
-        /// Could be a single value, or a range
+        /// Could be a single value, or a range, or "all"
+        /// If it is a single value or a range, then only that number of entries (Groups or Items) will be chosen
+        /// If it is "all", then ALL groups or entries will be chosen
         /// </summary>
         public Count Count { get; }
 
