@@ -100,7 +100,6 @@ namespace ConfigParsers.Loot
                 var itemName = itemInstance.Item.Name;
                 var str = itemName == itemPath.ItemInstance.Item.Name ? "--> " : "    ";
                 
-                var probTemplate = itemInstance.ProbTemplate == null ? 1 : itemInstance.ProbTemplate.GetProb(lootLevel);
                 str += $"{itemInstance.Item.Name} >>>  PROBABILITY = {itemInstance.GetProb(lootLevel)}";
                 Debug.WriteLine($"{str}");
             }
