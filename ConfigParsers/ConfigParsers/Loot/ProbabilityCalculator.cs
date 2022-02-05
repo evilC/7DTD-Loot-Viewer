@@ -53,57 +53,72 @@ namespace ConfigParsers.Loot
                 var group = node.Group;
                 var groupReferences = group.GroupReferences;
                 var validPath = node.GroupReferenceIndex;
-                decimal probFactor = 1 / (decimal)(groupReferences.Count + group.Items.Count);
+                // Process GroupReferences (Sub-Groups)
                 for (int i = 0; i < groupReferences.Count; i++)
                 {
                     var groupReference = groupReferences[i];
                     var baseProb = groupReference.GetProb(lootLevel);
+                    var forceProb = groupReference.ForceProb;
                     var str = i == validPath ? "--> " : "    ";
-                    var probStr = $"Base: {baseProb}, Adjusted: ";
-                    decimal prob;
-                    if (group.Count.IsAll)
-                    {
-                        if (groupReference.ForceProb)
-                        {
-                            prob = baseProb;
-                            probStr += $"(All, forced) ";
-                        }
-                        else
-                        {
-                            prob = 1;
-                            probStr += $"(All, not forced) ";
-                        }
-                    }
-                    else
-                    {
-                        // If the count of the group is not "all", then probability will be based upon the probability of all items in the group
-                        // ToDo: If Count > 1, then we need to multiply by Count? How does this work eg for Count of 1,3 ?
-                        // Also, what happens if a group's count is not set?
-                        prob = groupReference.GetProb(lootLevel) * probFactor;
-                    }
-                    str += $"(Group {groupReference.Group.Name}) {groupReference.Render()} >>> PROBABILITY = {probStr}{prob}";
-                    Debug.WriteLine($"{str}");
+                    var prob = CalculateEntryProb($"{str}(Group {groupReference.Group.Name}) {groupReference.Render()}", group, baseProb, forceProb, lootLevel);
                     if (i == validPath && prob == 0) 
                     {
                         Debug.WriteLine($"PATH ABORTED, NOT POSSIBLE AT LOOT LEVEL {lootLevel}");
                         return 0;
                     }
                 }
-                // ToDo: Adjusted values not calculated
-                Debug.WriteLine($"ToDo: Adjusted values not calculated yet");
+                // Process Items in Group
                 foreach (var itemInstance in group.Items.Values)
                 {
                     var itemName = itemInstance.Item.Name;
                     var str = itemName == itemPath.ItemInstance.Item.Name ? "--> " : "    ";
-
-                    str += $"{itemInstance.Item.Name} >>>  PROBABILITY = {itemInstance.GetProb(lootLevel)}";
-                    Debug.WriteLine($"{str}");
+                    str += $"{itemInstance.Render()}";
+                    var baseProb = itemInstance.GetProb(lootLevel);
+                    var forceProb = itemInstance.ForceProb;
+                    var prob = CalculateEntryProb(str, group, baseProb, forceProb, lootLevel);
                 }
 
             }
-
             Debug.WriteLine($"\nProbability for path = ???");
             return 1;
+        }
+
+        /// <summary>
+        /// Calculates the probability for an entry (GroupReference (sub-group) / Item)
+        /// </summary>
+        /// <param name="debugStr">Just used for debugging - what to print out at start of line</param>
+        /// <param name="group">The Group which this entry is in</param>
+        /// <param name="baseProb">The base probability of whether this entry drops</param>
+        /// <param name="forceProb">Whether force_prob is set for this entry</param>
+        /// <param name="lootLevel">The current LootLevel</param>
+        /// <returns></returns>
+        private decimal CalculateEntryProb(string debugStr, Group group, decimal baseProb, bool forceProb, int lootLevel)
+        {
+            decimal probFactor = 1 / (decimal)(group.GroupReferences.Count + group.Items.Count);
+            var probStr = $"Base: {baseProb}, Adjusted: ";
+            decimal prob;
+            if (group.Count.IsAll)
+            {
+                if (forceProb)
+                {
+                    prob = baseProb;
+                    probStr += $"(All, forced) ";
+                }
+                else
+                {
+                    prob = 1;
+                    probStr += $"(All, not forced) ";
+                }
+            }
+            else
+            {
+                // If the count of the group is not "all", then probability will be based upon the probability of all items in the group
+                // ToDo: If Count > 1, then we need to multiply by Count? How does this work eg for Count of 1,3 ?
+                // Also, what happens if a group's count is not set?
+                prob = baseProb * probFactor;
+            }
+            Debug.WriteLine($"{debugStr} >>> PROBABILITY = {probStr}{prob}");
+            return prob;
         }
     }
 }

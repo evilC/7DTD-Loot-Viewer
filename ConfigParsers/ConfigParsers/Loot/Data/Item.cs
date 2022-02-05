@@ -44,7 +44,8 @@ namespace ConfigParsers.Loot.Data
                 parentGroup: group,
                 parentGroupItemIndex: instanceIndex,
                 prob: string.IsNullOrEmpty(rawItem.Prob) ? null : Convert.ToDecimal(rawItem.Prob),
-                probTemplate: string.IsNullOrEmpty(rawItem.ProbTemplate) ? null : probTemplates[rawItem.ProbTemplate]
+                probTemplate: string.IsNullOrEmpty(rawItem.ProbTemplate) ? null : probTemplates[rawItem.ProbTemplate],
+                forceProb: string.IsNullOrEmpty(rawItem.ForceProb) ? null : Convert.ToBoolean(rawItem.ForceProb)
             );
 
             Instances.Add(instance);
