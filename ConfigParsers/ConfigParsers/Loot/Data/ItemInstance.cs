@@ -29,6 +29,8 @@ namespace ConfigParsers.Loot.Data
         /// <summary>
         /// What the index is of this ItemInstance in the ParentGroup's Items list
         /// </summary>
+        
+        // ToDo: This is useless, as parent's Items list is indexed by name?
         public int ParentGroupItemIndex { get; }
 
         /// <summary>
