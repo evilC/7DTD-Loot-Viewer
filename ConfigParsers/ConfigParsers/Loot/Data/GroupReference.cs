@@ -52,7 +52,7 @@
         ///     group gc3 force_prob="true" prob="0.5"  <-- will pick an item from this group 50% of the time
         /// 
         /// </summary>
-        public bool? ForceProb { get; }
+        public bool ForceProb { get; }
 
         public GroupReference(Group group, Group parent, int parentGroupReferenceIndex, Count count, decimal? prob, ProbTemplate? probTemplate, bool? forceProb)
         {
@@ -62,7 +62,7 @@
             Count = count;
             Prob = prob;
             ProbTemplate = probTemplate;
-            ForceProb = forceProb;
+            ForceProb = forceProb == null ? false : (bool) forceProb;
         }
 
         public decimal GetProb(int lootLevel)
@@ -80,7 +80,7 @@
             var str = $"GroupReference: count={Count.Render()}";
             if (Prob != null) str += $", prob={Prob}";
             if (ProbTemplate != null) str += $", prob_template={ProbTemplate.Name}";
-            if (ForceProb != null) str += $", force_prob={ForceProb}";
+            str += $", force_prob={ForceProb}";
             return str;
         }
 

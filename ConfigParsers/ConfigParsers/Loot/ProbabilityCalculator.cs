@@ -50,23 +50,50 @@ namespace ConfigParsers.Loot
             foreach (var node in nodeList)
             {
                 Debug.WriteLine($"{node.Group.Render()}");
-                var groupReferences = node.Group.GroupReferences;
+                var group = node.Group;
+                var groupReferences = group.GroupReferences;
                 var validPath = node.GroupReferenceIndex;
+                decimal probFactor = 1 / (decimal)(groupReferences.Count + group.Items.Count);
                 for (int i = 0; i < groupReferences.Count; i++)
                 {
-                    var str = i == validPath ? "--> " : "    ";
                     var groupReference = groupReferences[i];
+                    var baseProb = groupReference.GetProb(lootLevel);
+                    var str = i == validPath ? "--> " : "    ";
+                    var probStr = $"Base: {baseProb}, Adjusted: ";
                     // ToDo: Only ProbTemplate of GroupReference considered here, not Prob ?
-                    var probTemplate = groupReference.ProbTemplate == null ? 1 : groupReference.ProbTemplate.GetProb(lootLevel);
-                    str += $"(Group {groupReference.Group.Name}) {groupReference.Render()} >>> PROBABILITY = {probTemplate}";
+                    decimal prob;
+                    if (group.Count.IsAll)
+                    {
+                        if (groupReference.ForceProb)
+                        {
+                            prob = baseProb;
+                            probStr += $"(All, forced) ";
+                        }
+                        else
+                        {
+                            prob = 1;
+                            probStr += $"(All, not forced) ";
+                        }
+                    }
+                    else
+                    {
+                        // If the count of the group is not "all", then probability will be based upon the probability of all items in the group
+                        // ToDo: If Count > 1, then we need to multiply by Count? How does this work eg for Count of 1,3 ?
+                        // Also, what happens if a group's count is not set?
+                        prob = groupReference.GetProb(lootLevel) * probFactor;
+                    }
+                    str += $"(Group {groupReference.Group.Name}) {groupReference.Render()} >>> PROBABILITY = {probStr}{prob}";
                     Debug.WriteLine($"{str}");
-                    if (i == validPath && probTemplate == 0) 
+                    if (i == validPath && prob == 0) 
                     {
                         Debug.WriteLine($"PATH ABORTED, NOT POSSIBLE AT LOOT LEVEL {lootLevel}");
                         return 0;
                     }
                 }
             }
+            // Calculate probabilities for items in final group
+            // ToDo: Adjusted values not calculated
+            Debug.WriteLine($"ToDo: Adjusted values not calculated yet");
             var lastGroup = nodeList.Last().Group;
             foreach (var itemInstance in lastGroup.Items.Values)
             {
