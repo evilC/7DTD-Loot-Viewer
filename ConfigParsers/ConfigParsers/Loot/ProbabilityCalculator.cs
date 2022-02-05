@@ -81,10 +81,10 @@ namespace ConfigParsers.Loot
                     var baseProb = groupReference.GetProb(lootLevel);
                     var forceProb = groupReference.ForceProb;
                     var str = i == validPathIndex ? "--> " : "    ";
-                    if (i == validPathIndex /* || DebugMode */)
+                    if (DebugMode) Debug.Write($"{str}(Group {groupReference.Group.Name})");
+                    var prob = CalculateEntryProb(group.Count, probFactor, baseProb, forceProb, lootLevel);
+                    if (i == validPathIndex)
                     {
-                        if (DebugMode) Debug.Write($"{str}(Group {groupReference.Group.Name})");
-                        var prob = CalculateEntryProb(group.Count, probFactor, baseProb, forceProb, lootLevel);
                         if (i == validPathIndex)
                         {
                             if (prob == 0)
@@ -103,19 +103,20 @@ namespace ConfigParsers.Loot
                 {
                     var itemName = itemInstance.Item.Name;
                     var isItemPath = (itemName == itemPath.ItemInstance.Item.Name);
-                    if (isItemPath /* || DebugMode */)
+                    var str = isItemPath ? "--> " : "    ";
+                    str += $"{itemInstance.Render()}";
+                    if (DebugMode) Debug.Write(str);
+                    var baseProb = itemInstance.GetProb(lootLevel);
+                    var forceProb = itemInstance.ForceProb;
+                    if (itemInstance.Count.From == 0) throw new Exception("Code does not handle Items with a count From 0");
+                    var prob = CalculateEntryProb(group.Count, probFactor, baseProb, forceProb, lootLevel);
+                    if (isItemPath)
                     {
-                        var str = isItemPath ? "--> " : "    ";
-                        str += $"{itemInstance.Render()}";
-                        if (DebugMode) Debug.Write(str);
-                        var baseProb = itemInstance.GetProb(lootLevel);
-                        var forceProb = itemInstance.ForceProb;
-                        if (itemInstance.Count.From == 0) throw new Exception("Code does not handle Items with a count From 0");
-                        var prob = CalculateEntryProb(group.Count, probFactor, baseProb, forceProb, lootLevel);
-                        if (validPathIndex != null)
-                        {
-                            throw new Exception("Not expecting both a GroupReference leading to the Item and the Item itself in the same Group");
-                        }
+                        //if (validPathIndex != null)
+                        //{
+                        //    // Seems to be OK?
+                        //    throw new Exception("Not expecting both a GroupReference leading to the Item and the Item itself in the same Group");
+                        //}
                         if (itemProcessed)
                         {
                             throw new Exception("Code does not handle scenarios where eg the same item appears twice in a Group's Items list (eg with two different counts)");

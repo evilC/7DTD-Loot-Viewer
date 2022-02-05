@@ -3,8 +3,8 @@
 using ConfigParsers.Loot;
 using System.Diagnostics;
 
-//var lootXmlPath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
-var lootXmlPath = Path.Combine(new string[] { Directory.GetCurrentDirectory(), "Ratchet.xml" });
+var lootXmlPath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
+//var lootXmlPath = Path.Combine(new string[] { Directory.GetCurrentDirectory(), "Ratchet.xml" });
 var loot = new LootParser(lootXmlPath);
 //var oldLootParser = new OldLootParser(@"E:\Games\steamapps\common\7 Days To Die\Data\Config");
 
@@ -17,7 +17,8 @@ var loot = new LootParser(lootXmlPath);
 //var resourceMetalPipe = loot.Data.Items["resourceMetalPipe"];
 
 var rw = new ItemContainerFinder(loot.Data);
-var results = rw.GetItemContainers("meleeToolSalvageT2Ratchet");
+//var results = rw.GetItemContainers("meleeToolSalvageT2Ratchet");
+var results = rw.GetItemContainers("resourceSewingKit");
 
 //foreach (var containerResult in results.ContainerResults)
 //{
@@ -35,21 +36,25 @@ var results = rw.GetItemContainers("meleeToolSalvageT2Ratchet");
 //    }
 //}
 
-var container = results.ContainerResults.FirstOrDefault();
-Debug.WriteLine($"Showing probabilities for container {container.Key}");
-var cr = container.Value;
-var probCalc = new ProbabilityCalculator(cr);
-probCalc.DebugMode = true;
+//var container = results.ContainerResults.FirstOrDefault();
+foreach (var container in results.ContainerResults)
+{
+    Debug.WriteLine($"Showing probabilities for container {container.Key}");
+    var cr = container.Value;
+    var probCalc = new ProbabilityCalculator(cr);
+    probCalc.DebugMode = true;
 
-var prob1 = probCalc.CalculateProbability(1);
-Debug.WriteLine($"Total Probability: {prob1}");
-Debug.WriteLine($"==============================\n");
+    var prob1 = probCalc.CalculateProbability(50);
+    Debug.WriteLine($"Total Probability: {prob1}");
+    Debug.WriteLine($"==============================\n");
 
-var prob102 = probCalc.CalculateProbability(102);
-Debug.WriteLine($"Total Probability: {prob102}");
-Debug.WriteLine($"==============================\n");
+    var prob102 = probCalc.CalculateProbability(102);
+    Debug.WriteLine($"Total Probability: {prob102}");
+    Debug.WriteLine($"==============================\n");
+}
+//var prob134 = probCalc.CalculateProbability(134);
+//Debug.WriteLine($"Total Probability: {prob134}");
 
-var prob134 = probCalc.CalculateProbability(134);
-Debug.WriteLine($"Total Probability: {prob134}");
+
 
 Console.WriteLine("Done!");
