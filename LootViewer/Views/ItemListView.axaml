@@ -5,14 +5,13 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LootViewer.Views.ItemListView">
 	<DockPanel>
-		<ItemsControl Items="{Binding Items}">
-			<ItemsControl.ItemTemplate>
+		<!--https://docs.avaloniaui.net/docs/controls/listbox-->
+		<ListBox Items="{Binding Items}">
+			<ListBox.ItemTemplate>
 				<DataTemplate>
-					<CheckBox Margin="4"
-							  IsChecked="{Binding IsChecked}"
-							  Content="{Binding Description}"/>
+						<TextBlock Text="{Binding Description}"/>
 				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
+			</ListBox.ItemTemplate>
+		</ListBox>
 	</DockPanel>
 </UserControl>
