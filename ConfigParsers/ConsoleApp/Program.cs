@@ -41,15 +41,15 @@ var cr = container.Value;
 var probCalc = new ProbabilityCalculator(cr);
 probCalc.DebugMode = true;
 
-//var prob1 = probCalc.CalculateProbability(1);
-//Debug.WriteLine($"TOTAL PROBABILITY: {prob1}");
-//Debug.WriteLine($"==============================\n");
-
-var prob102 = probCalc.CalculateProbability(102);
-Debug.WriteLine($"TOTAL PROBABILITY: {prob102}");
+var prob1 = probCalc.CalculateProbability(1);
+Debug.WriteLine($"Total Probability: {prob1}");
 Debug.WriteLine($"==============================\n");
 
-//var prob134 = probCalc.CalculateProbability(134);
-//Debug.WriteLine($"TOTAL PROBABILITY: {prob134}");
+var prob102 = probCalc.CalculateProbability(102);
+Debug.WriteLine($"Total Probability: {prob102}");
+Debug.WriteLine($"==============================\n");
+
+var prob134 = probCalc.CalculateProbability(134);
+Debug.WriteLine($"Total Probability: {prob134}");
 
 Console.WriteLine("Done!");
