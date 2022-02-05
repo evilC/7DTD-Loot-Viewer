@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+Stripped down Loot.xml with just the entries required to calculate probability of the ratchet dropping
+All entries as in vanilla loot.xml, except the count of groupToolsT2, which is set to 2,3 so that part of code can be tested
+-->
+
 <lootcontainers>
 	<lootcontainer id="90" name="passngasCrate" count="1" size="6,4" sound_open="UseActions/open_cardboard" sound_close="UseActions/close_cardboard" loot_quality_template="qualBaseTemplate">
 		<item group="groupPassNGas"/>
@@ -38,7 +43,7 @@
 		<item group="groupToolsT3" loot_prob_template="ProbT3"/> <!--UNUSED-->
 	</lootgroup>
 
-	<lootgroup name="groupToolsT2" loot_quality_template="QLTemplateT2">
+	<lootgroup name="groupToolsT2" loot_quality_template="QLTemplateT2" count="2,3"> <!--EDITED - COUNT IS 2,3 WHEREAS UNSET IN NORMAL LOOT.XML-->
 		<item name="meleeToolShovelT2SteelShovel"/>
 		<item name="meleeToolPickT2SteelPickaxe"/>
 		<item name="meleeToolAxeT2SteelAxe"/>

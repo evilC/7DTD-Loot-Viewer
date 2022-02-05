@@ -9,7 +9,8 @@
         /// True if a count attribute was specified, otherwise false.
         /// If true, IsAll or From and To must be set
         /// </summary>
-        public bool IsSet { get; } = false;
+        //Deprecated - an unset count is assumed to be 1
+        //public bool IsSet { get; } = false;
 
         /// <summary>
         /// True if the count attribute was "all"
@@ -26,6 +27,8 @@
         /// </summary>
         public int To { get; }
 
+        private decimal _probFactor;
+
         /// <summary>
         /// Instanmtiate a new Count class
         /// </summary>
@@ -33,13 +36,12 @@
         /// eg "1,3", "all", "", or null</param>
         public Count(string? countStr)
         {
-            if (string.IsNullOrEmpty(countStr)) return;
-            IsSet = true;
             if (countStr == "all")
             {
                 IsAll = true;
                 return;
             }
+            if (string.IsNullOrEmpty(countStr)) countStr = "1,1";
             var range = countStr.Split(',');
             From = Convert.ToInt32(range[0]);
             if (range.Count() > 1)
@@ -50,6 +52,18 @@
             {
                 To = From;
             }
+            if (From > To)
+            {
+                throw new ArgumentException($"Invalid Count of {countStr} - From must not be higher than To");
+            }
+            var entries = 0;
+            var total = 0;
+            for (int i = From; i <= To; i++)
+            {
+                entries++;
+                total += i;
+            }
+            _probFactor = (decimal)total / entries;
         }
 
         /// <summary>
@@ -59,8 +73,14 @@
         /// <returns>True for is in range, False for not in range</returns>
         public bool IsInRange(int value)
         {
-            if (IsAll || !IsSet) return true;
+            if (IsAll) return true;
             return (value >= From && value <= To);
+        }
+
+        public decimal AdjustProbForCount(decimal prob)
+        {
+            if (IsAll) throw new Exception("Should not be calling with count of all, as it does not take into account force_prob");
+            return prob * _probFactor;
         }
 
         /// <summary>
@@ -69,7 +89,6 @@
         /// <returns></returns>
         public string Render()
         {
-            if (!IsSet) return "<Not Set>";
             if (IsAll) return "all";
             if (From == To) return From.ToString();
             return $"{From},{To}";

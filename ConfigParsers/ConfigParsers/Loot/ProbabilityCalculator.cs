@@ -1,10 +1,5 @@
 ﻿using ConfigParsers.Loot.Data;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConfigParsers.Loot
 {
@@ -67,6 +62,11 @@ namespace ConfigParsers.Loot
                 }
                 probFactor = 1 / probFactor;
 
+                // Now we can divide a prob of 100% amongst the remaining probabilities
+                // Unless the group's count is "all", in which case the prob of each entry is 1
+                // Or if group's count is "all", and force_prob is true for a given item...
+                // ...Then that item has that specific prob, and the remainder is divided amongst the other entries
+
                 // Process GroupReferences (Sub-Groups)
                 for (int i = 0; i < groupReferences.Count; i++)
                 {
@@ -75,7 +75,7 @@ namespace ConfigParsers.Loot
                     var forceProb = groupReference.ForceProb;
                     var str = i == validPath ? "--> " : "    ";
                     var prob = CalculateEntryProb($"{str}(Group {groupReference.Group.Name}) {groupReference.Render()}",
-                        group.Count.IsAll, probFactor, baseProb, forceProb, lootLevel);
+                        group.Count, probFactor, baseProb, forceProb, lootLevel);
                     if (i == validPath && prob == 0) 
                     {
                         Debug.WriteLine($"PATH ABORTED, NOT POSSIBLE AT LOOT LEVEL {lootLevel}");
@@ -90,7 +90,8 @@ namespace ConfigParsers.Loot
                     str += $"{itemInstance.Render()}";
                     var baseProb = itemInstance.GetProb(lootLevel);
                     var forceProb = itemInstance.ForceProb;
-                    var prob = CalculateEntryProb(str, group.Count.IsAll, probFactor, baseProb, forceProb, lootLevel);
+                    if (itemInstance.Count.From == 0) throw new Exception("Code does not handle Items with a count From 0");
+                    var prob = CalculateEntryProb(str, group.Count, probFactor, baseProb, forceProb, lootLevel);
                 }
 
             }
@@ -102,17 +103,17 @@ namespace ConfigParsers.Loot
         /// Calculates the probability for an entry (GroupReference (sub-group) / Item)
         /// </summary>
         /// <param name="debugStr">Just used for debugging - what to print out at start of line</param>
-        /// <param name="group">The Group which this entry is in</param>
+        /// <param name="count">The Count value for the Group which this entry is in</param>
+        /// <param name="probFactor">The multiplier for probabilities, taking into account other entries in the Group</param>
         /// <param name="baseProb">The base probability of whether this entry drops</param>
         /// <param name="forceProb">Whether force_prob is set for this entry</param>
         /// <param name="lootLevel">The current LootLevel</param>
         /// <returns></returns>
-        private decimal CalculateEntryProb(string debugStr, bool isAll, decimal probFactor, decimal baseProb, bool forceProb, int lootLevel)
+        private decimal CalculateEntryProb(string debugStr, Count count, decimal probFactor, decimal baseProb, bool forceProb, int lootLevel)
         {
-            //decimal probFactor = 1 / (decimal)(group.GroupReferences.Count + group.Items.Count);
             var probStr = $"Base: {baseProb}, Adjusted: ";
             decimal prob;
-            if (isAll)
+            if (count.IsAll)
             {
                 if (forceProb)
                 {
@@ -128,9 +129,9 @@ namespace ConfigParsers.Loot
             else
             {
                 // If the count of the group is not "all", then probability will be based upon the probability of all items in the group
-                // ToDo: If Count > 1, then we need to multiply by Count? How does this work eg for Count of 1,3 ?
-                // Also, what happens if a group's count is not set?
                 prob = baseProb * probFactor;
+                if (forceProb) throw new Exception("force_prob encountered when group's count is not 'all'. This should never happen");
+                else prob = count.AdjustProbForCount(prob);
             }
             Debug.WriteLine($"{debugStr} >>> PROBABILITY = {probStr}{prob}");
             return prob;
