@@ -50,5 +50,12 @@ namespace ConfigParsers.Loot.Data
             Prob = prob;
             ProbTemplate = probTemplate;
         }
+
+        public decimal GetProb(int lootLevel)
+        {
+            if (Prob != null) return (decimal)Prob;
+            if (ProbTemplate != null) return ProbTemplate.GetProb(lootLevel);
+            return 1;
+        }
     }
 }

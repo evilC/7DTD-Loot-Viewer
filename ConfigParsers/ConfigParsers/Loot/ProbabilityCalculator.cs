@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConfigParsers.Loot.Data;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -43,32 +44,41 @@ namespace ConfigParsers.Loot
 
         public decimal CalculatePathProbability(int nl, int lootLevel)
         {
-            var nodeList = _containerResult.Paths[nl].Nodes;
+            var itemPath = _containerResult.Paths[nl];
+            var nodeList = itemPath.Nodes;
             Debug.WriteLine($"PATH #{nl + 1}:");
             foreach (var node in nodeList)
             {
-                //var str = $"{node.Render()} / Prob = {node.GetProb(lootLevel)}";
-                //Debug.WriteLine($"{str}");
                 Debug.WriteLine($"{node.Group.Render()}");
                 var groupReferences = node.Group.GroupReferences;
                 var validPath = node.GroupReferenceIndex;
                 for (int i = 0; i < groupReferences.Count; i++)
                 {
-                    var str = string.Empty;
+                    var str = i == validPath ? "--> " : "    ";
                     var groupReference = groupReferences[i];
-                    if (i == validPath) str += "--> ";
-                    else str += "    ";
-                    var prob = groupReference.ProbTemplate == null ? 1 : groupReference.ProbTemplate.GetProb(lootLevel);
-                    str += $"(Group {groupReference.Group.Name}) {groupReference.Render()} >>> PROBABILITY = {prob}";
+                    // ToDo: Only ProbTemplate of GroupReference considered here, not Prob ?
+                    var probTemplate = groupReference.ProbTemplate == null ? 1 : groupReference.ProbTemplate.GetProb(lootLevel);
+                    str += $"(Group {groupReference.Group.Name}) {groupReference.Render()} >>> PROBABILITY = {probTemplate}";
                     Debug.WriteLine($"{str}");
-                    if (i == validPath && prob == 0) 
+                    if (i == validPath && probTemplate == 0) 
                     {
                         Debug.WriteLine($"PATH ABORTED, NOT POSSIBLE AT LOOT LEVEL {lootLevel}");
                         return 0;
                     }
                 }
             }
-            Debug.WriteLine($"Probability for path = ???");
+            var lastGroup = nodeList.Last().Group;
+            foreach (var itemInstance in lastGroup.Items.Values)
+            {
+                var itemName = itemInstance.Item.Name;
+                var str = itemName == itemPath.ItemInstance.Item.Name ? "--> " : "    ";
+                
+                var probTemplate = itemInstance.ProbTemplate == null ? 1 : itemInstance.ProbTemplate.GetProb(lootLevel);
+                str += $"{itemInstance.Item.Name} >>>  PROBABILITY = {itemInstance.GetProb(lootLevel)}";
+                Debug.WriteLine($"{str}");
+            }
+
+            Debug.WriteLine($"\nProbability for path = ???");
             return 1;
         }
     }
