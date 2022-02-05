@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LootViewer.Models
 {
-    public class TodoItem
+    public class Item
     {
         public string Description { get; set; }
     }

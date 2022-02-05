@@ -10,11 +10,11 @@ namespace LootViewer.ViewModels
 {
     public class ItemListViewModel : ViewModelBase
     {
-        public ItemListViewModel(IEnumerable<TodoItem> items)
+        public ItemListViewModel(IEnumerable<Item> items)
         {
-            Items = new ObservableCollection<TodoItem>(items);
+            Items = new ObservableCollection<Item>(items);
         }
 
-        public ObservableCollection<TodoItem> Items { get; }
+        public ObservableCollection<Item> Items { get; }
     }
 }
