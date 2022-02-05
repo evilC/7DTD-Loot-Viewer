@@ -53,6 +53,20 @@ namespace ConfigParsers.Loot
                 var group = node.Group;
                 var groupReferences = group.GroupReferences;
                 var validPath = node.GroupReferenceIndex;
+                // First we need to filter out things with a prob of 0
+                decimal probFactor = 0;
+                for (int i = 0; i < groupReferences.Count; i++)
+                {
+                    var baseProb = groupReferences[i].GetProb(lootLevel);
+                    if (baseProb > 0) probFactor += baseProb;
+                }
+                foreach (var itemInstance in group.Items.Values)
+                {
+                    var baseProb = itemInstance.GetProb(lootLevel);
+                    if (baseProb > 0) probFactor += baseProb;
+                }
+                probFactor = 1 / probFactor;
+
                 // Process GroupReferences (Sub-Groups)
                 for (int i = 0; i < groupReferences.Count; i++)
                 {
@@ -60,7 +74,8 @@ namespace ConfigParsers.Loot
                     var baseProb = groupReference.GetProb(lootLevel);
                     var forceProb = groupReference.ForceProb;
                     var str = i == validPath ? "--> " : "    ";
-                    var prob = CalculateEntryProb($"{str}(Group {groupReference.Group.Name}) {groupReference.Render()}", group, baseProb, forceProb, lootLevel);
+                    var prob = CalculateEntryProb($"{str}(Group {groupReference.Group.Name}) {groupReference.Render()}",
+                        group.Count.IsAll, probFactor, baseProb, forceProb, lootLevel);
                     if (i == validPath && prob == 0) 
                     {
                         Debug.WriteLine($"PATH ABORTED, NOT POSSIBLE AT LOOT LEVEL {lootLevel}");
@@ -75,7 +90,7 @@ namespace ConfigParsers.Loot
                     str += $"{itemInstance.Render()}";
                     var baseProb = itemInstance.GetProb(lootLevel);
                     var forceProb = itemInstance.ForceProb;
-                    var prob = CalculateEntryProb(str, group, baseProb, forceProb, lootLevel);
+                    var prob = CalculateEntryProb(str, group.Count.IsAll, probFactor, baseProb, forceProb, lootLevel);
                 }
 
             }
@@ -92,12 +107,12 @@ namespace ConfigParsers.Loot
         /// <param name="forceProb">Whether force_prob is set for this entry</param>
         /// <param name="lootLevel">The current LootLevel</param>
         /// <returns></returns>
-        private decimal CalculateEntryProb(string debugStr, Group group, decimal baseProb, bool forceProb, int lootLevel)
+        private decimal CalculateEntryProb(string debugStr, bool isAll, decimal probFactor, decimal baseProb, bool forceProb, int lootLevel)
         {
-            decimal probFactor = 1 / (decimal)(group.GroupReferences.Count + group.Items.Count);
+            //decimal probFactor = 1 / (decimal)(group.GroupReferences.Count + group.Items.Count);
             var probStr = $"Base: {baseProb}, Adjusted: ";
             decimal prob;
-            if (group.Count.IsAll)
+            if (isAll)
             {
                 if (forceProb)
                 {
