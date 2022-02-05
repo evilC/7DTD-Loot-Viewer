@@ -60,7 +60,6 @@ namespace ConfigParsers.Loot
                     var baseProb = groupReference.GetProb(lootLevel);
                     var str = i == validPath ? "--> " : "    ";
                     var probStr = $"Base: {baseProb}, Adjusted: ";
-                    // ToDo: Only ProbTemplate of GroupReference considered here, not Prob ?
                     decimal prob;
                     if (group.Count.IsAll)
                     {
