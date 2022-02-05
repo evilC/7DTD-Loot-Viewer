@@ -39,11 +39,17 @@ var container = results.ContainerResults.FirstOrDefault();
 Debug.WriteLine($"Showing probabilities for container {container.Key}");
 var cr = container.Value;
 var probCalc = new ProbabilityCalculator(cr);
-probCalc.CalculateProbability(1);
-Debug.WriteLine($"\n==============================\n");
-probCalc.CalculateProbability(102);
-Debug.WriteLine($"\n==============================\n");
-probCalc.CalculateProbability(134);
-Debug.WriteLine($"\n==============================\n");
+probCalc.DebugMode = true;
+
+//var prob1 = probCalc.CalculateProbability(1);
+//Debug.WriteLine($"TOTAL PROBABILITY: {prob1}");
+//Debug.WriteLine($"==============================\n");
+
+var prob102 = probCalc.CalculateProbability(102);
+Debug.WriteLine($"TOTAL PROBABILITY: {prob102}");
+Debug.WriteLine($"==============================\n");
+
+//var prob134 = probCalc.CalculateProbability(134);
+//Debug.WriteLine($"TOTAL PROBABILITY: {prob134}");
 
 Console.WriteLine("Done!");

@@ -3,51 +3,58 @@ using System.Diagnostics;
 
 namespace ConfigParsers.Loot
 {
+    /// <summary>
+    /// Calculates the probability of an item dropping from a specific container
+    /// </summary>
+    
+    // ToDo: Way more calculated than needs to be at the moment...
+    // ...we do not need to calculate probabilities for entries not in the path
+    // This was just done to make sure everything worked
     public class ProbabilityCalculator
     {
         private ItemContainer _containerResult;
+
+        public bool DebugMode { get; set; } = false;
 
         public ProbabilityCalculator(ItemContainer containerResult)
         {
             _containerResult = containerResult;
         }
 
-        public void CalculateProbability(int lootLevel)
+        public decimal CalculateProbability(int lootLevel)
         {
-            var foundNonZeroProb = false;
-            Debug.WriteLine($"Finding probability for loot level {lootLevel}...");
-            Debug.WriteLine($"( --> indicates a valid path through to the item )\n");
-
             var pathCount = _containerResult.Paths.Count;
-            Debug.WriteLine($"{pathCount} paths were found\n");
+            decimal probTotal = 0;
+            if (DebugMode)
+            {
+                Debug.WriteLine($"Finding probability for loot level {lootLevel}...");
+                Debug.WriteLine($"( --> indicates a valid path through to the item )\n");
+                Debug.WriteLine($"{pathCount} paths were found\n");
+            }
 
             for (int nl = 0; nl < pathCount; nl++)
             {
                 var prob = CalculatePathProbability(nl, lootLevel);
-                if (prob > 0) foundNonZeroProb = true;
-                Debug.WriteLine($"");
+                if (DebugMode) Debug.WriteLine($"Path probability: {prob}");
+                probTotal += prob;
+                if (DebugMode) Debug.WriteLine($"");
             }
-            if (foundNonZeroProb)
-            {
-                Debug.WriteLine($"Is possible");
-            }
-            else
-            {
-                Debug.WriteLine($"ALL PATHS HAVE ZERO PROBABILITY");
-            }
+
+            return probTotal;
         }
 
         public decimal CalculatePathProbability(int nl, int lootLevel)
         {
+            decimal pathProbability = 1;
             var itemPath = _containerResult.Paths[nl];
             var nodeList = itemPath.Nodes;
-            Debug.WriteLine($"PATH #{nl + 1}:");
+            if (DebugMode) Debug.WriteLine($"PATH #{nl + 1}:");
             foreach (var node in nodeList)
             {
-                Debug.WriteLine($"{node.Group.Render()}");
+                if (DebugMode) Debug.WriteLine($"{node.Group.Render()}");
                 var group = node.Group;
                 var groupReferences = group.GroupReferences;
-                var validPath = node.GroupReferenceIndex;
+                var validPathIndex = node.GroupReferenceIndex;
                 // First we need to filter out things with a prob of 0
                 decimal probFactor = 0;
                 for (int i = 0; i < groupReferences.Count; i++)
@@ -73,43 +80,66 @@ namespace ConfigParsers.Loot
                     var groupReference = groupReferences[i];
                     var baseProb = groupReference.GetProb(lootLevel);
                     var forceProb = groupReference.ForceProb;
-                    var str = i == validPath ? "--> " : "    ";
-                    var prob = CalculateEntryProb($"{str}(Group {groupReference.Group.Name}) {groupReference.Render()}",
-                        group.Count, probFactor, baseProb, forceProb, lootLevel);
-                    if (i == validPath && prob == 0) 
+                    var str = i == validPathIndex ? "--> " : "    ";
+                    if (i == validPathIndex /* || DebugMode */)
                     {
-                        Debug.WriteLine($"PATH ABORTED, NOT POSSIBLE AT LOOT LEVEL {lootLevel}");
-                        return 0;
+                        if (DebugMode) Debug.Write($"{str}(Group {groupReference.Group.Name})");
+                        var prob = CalculateEntryProb(group.Count, probFactor, baseProb, forceProb, lootLevel);
+                        if (i == validPathIndex)
+                        {
+                            if (prob == 0)
+                            {
+                                if (DebugMode) Debug.WriteLine($"PATH ABORTED, NOT POSSIBLE AT LOOT LEVEL {lootLevel}");
+                                return 0;
+                            }
+                            pathProbability *= prob;
+                        }
                     }
                 }
+
                 // Process Items in Group
+                var itemProcessed = false;
                 foreach (var itemInstance in group.Items.Values)
                 {
                     var itemName = itemInstance.Item.Name;
-                    var str = itemName == itemPath.ItemInstance.Item.Name ? "--> " : "    ";
-                    str += $"{itemInstance.Render()}";
-                    var baseProb = itemInstance.GetProb(lootLevel);
-                    var forceProb = itemInstance.ForceProb;
-                    if (itemInstance.Count.From == 0) throw new Exception("Code does not handle Items with a count From 0");
-                    var prob = CalculateEntryProb(str, group.Count, probFactor, baseProb, forceProb, lootLevel);
+                    var isItemPath = (itemName == itemPath.ItemInstance.Item.Name);
+                    if (isItemPath /* || DebugMode */)
+                    {
+                        var str = isItemPath ? "--> " : "    ";
+                        str += $"{itemInstance.Render()}";
+                        if (DebugMode) Debug.Write(str);
+                        var baseProb = itemInstance.GetProb(lootLevel);
+                        var forceProb = itemInstance.ForceProb;
+                        if (itemInstance.Count.From == 0) throw new Exception("Code does not handle Items with a count From 0");
+                        var prob = CalculateEntryProb(group.Count, probFactor, baseProb, forceProb, lootLevel);
+                        if (validPathIndex != null)
+                        {
+                            throw new Exception("Not expecting both a GroupReference leading to the Item and the Item itself in the same Group");
+                        }
+                        if (itemProcessed)
+                        {
+                            throw new Exception("Code does not handle scenarios where eg the same item appears twice in a Group's Items list (eg with two different counts)");
+                        }
+                        itemProcessed = true;
+
+                        pathProbability *= prob;
+                    }
                 }
 
             }
-            Debug.WriteLine($"\nProbability for path = ???");
-            return 1;
+            return pathProbability;
         }
 
         /// <summary>
         /// Calculates the probability for an entry (GroupReference (sub-group) / Item)
         /// </summary>
-        /// <param name="debugStr">Just used for debugging - what to print out at start of line</param>
         /// <param name="count">The Count value for the Group which this entry is in</param>
         /// <param name="probFactor">The multiplier for probabilities, taking into account other entries in the Group</param>
         /// <param name="baseProb">The base probability of whether this entry drops</param>
         /// <param name="forceProb">Whether force_prob is set for this entry</param>
         /// <param name="lootLevel">The current LootLevel</param>
         /// <returns></returns>
-        private decimal CalculateEntryProb(string debugStr, Count count, decimal probFactor, decimal baseProb, bool forceProb, int lootLevel)
+        private decimal CalculateEntryProb(Count count, decimal probFactor, decimal baseProb, bool forceProb, int lootLevel)
         {
             var probStr = $"Base: {baseProb}, Adjusted: ";
             decimal prob;
@@ -133,7 +163,7 @@ namespace ConfigParsers.Loot
                 if (forceProb) throw new Exception("force_prob encountered when group's count is not 'all'. This should never happen");
                 else prob = count.AdjustProbForCount(prob);
             }
-            Debug.WriteLine($"{debugStr} >>> PROBABILITY = {probStr}{prob}");
+            if (DebugMode) Debug.Write($" >>> PROBABILITY = {probStr}{prob}\n");
             return prob;
         }
     }
