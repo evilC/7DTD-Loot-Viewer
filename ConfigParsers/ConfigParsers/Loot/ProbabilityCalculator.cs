@@ -89,18 +89,17 @@ namespace ConfigParsers.Loot
                         return 0;
                     }
                 }
-            }
-            // Calculate probabilities for items in final group
-            // ToDo: Adjusted values not calculated
-            Debug.WriteLine($"ToDo: Adjusted values not calculated yet");
-            var lastGroup = nodeList.Last().Group;
-            foreach (var itemInstance in lastGroup.Items.Values)
-            {
-                var itemName = itemInstance.Item.Name;
-                var str = itemName == itemPath.ItemInstance.Item.Name ? "--> " : "    ";
-                
-                str += $"{itemInstance.Item.Name} >>>  PROBABILITY = {itemInstance.GetProb(lootLevel)}";
-                Debug.WriteLine($"{str}");
+                // ToDo: Adjusted values not calculated
+                Debug.WriteLine($"ToDo: Adjusted values not calculated yet");
+                foreach (var itemInstance in group.Items.Values)
+                {
+                    var itemName = itemInstance.Item.Name;
+                    var str = itemName == itemPath.ItemInstance.Item.Name ? "--> " : "    ";
+
+                    str += $"{itemInstance.Item.Name} >>>  PROBABILITY = {itemInstance.GetProb(lootLevel)}";
+                    Debug.WriteLine($"{str}");
+                }
+
             }
 
             Debug.WriteLine($"\nProbability for path = ???");
