@@ -6,7 +6,7 @@
              x:Class="LootViewer.Views.ItemListView">
 	<DockPanel>
 		<!--https://docs.avaloniaui.net/docs/controls/listbox-->
-		<ListBox Items="{Binding Items}">
+		<ListBox Items="{Binding Items}" Selection="{Binding Selection}">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 						<TextBlock Text="{Binding Description}"/>
