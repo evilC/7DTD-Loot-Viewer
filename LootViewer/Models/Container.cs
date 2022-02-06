@@ -10,5 +10,11 @@ namespace LootViewer.Models
     {
         public string Name { get; set; }
         public decimal Prob { get; set; }
+
+        public Container(string name, decimal prob)
+        {
+            Name = name;
+            Prob = prob;
+        }
     }
 }

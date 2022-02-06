@@ -52,7 +52,7 @@ namespace LootViewer.ViewModels
                 var cr = container.Value;
                 var probCalc = new ProbabilityCalculator(cr);
                 var prob = probCalc.CalculateProbability(102);
-                Containers.Add(new Container() { Name = container.Key, Prob = prob });
+                Containers.Add(new Container(container.Key, prob));
             }
 
         }
