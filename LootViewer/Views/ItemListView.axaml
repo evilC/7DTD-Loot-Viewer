@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LootViewer.Views.ItemListView">
-	<DockPanel>
+	<StackPanel>
+		<TextBlock Margin="10">Items</TextBlock>
 		<!--https://docs.avaloniaui.net/docs/controls/listbox-->
 		<ListBox Items="{Binding Items}" Selection="{Binding Selection}">
 			<ListBox.ItemTemplate>
@@ -13,5 +14,5 @@
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
-	</DockPanel>
+	</StackPanel>
 </UserControl>
