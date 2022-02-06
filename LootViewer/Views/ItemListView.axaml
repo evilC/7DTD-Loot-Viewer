@@ -16,7 +16,7 @@
 			<ListBox Grid.Row="1" Items="{Binding Items}" Selection="{Binding ItemSelection}">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
-						<TextBlock Text="{Binding Description}"/>
+						<TextBlock Text="{Binding Name}"/>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
 			</ListBox>

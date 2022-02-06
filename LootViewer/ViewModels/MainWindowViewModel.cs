@@ -46,7 +46,7 @@ namespace LootViewer.ViewModels
             var rw = new ItemContainerFinder(db.loot.Data);
 
             Containers.Clear();
-            var results = rw.GetItemContainers(selectedItem.Description);
+            var results = rw.GetItemContainers(selectedItem.Name);
             foreach (var container in results.ContainerResults)
             {
                 var cr = container.Value;

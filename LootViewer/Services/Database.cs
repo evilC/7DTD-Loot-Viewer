@@ -23,7 +23,7 @@ namespace LootViewer.Services
             loot = new LootParser(lootXmlPath);
             foreach (var item in loot.Data.Items)
             {
-                _items.Add(new Models.Item { Description = item.Key });
+                _items.Add(new Models.Item { Name = item.Key });
             }
         }
 
