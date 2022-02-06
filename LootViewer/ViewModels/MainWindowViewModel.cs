@@ -13,7 +13,7 @@ namespace LootViewer.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private Database db;
+        private Database _db;
 
         public ItemListView ItemListView { get; set; }
         public ObservableCollection<Item> Items { get; }
@@ -25,9 +25,9 @@ namespace LootViewer.ViewModels
 
         public MainWindowViewModel()
         {
-            db = new Database(@"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml");
+            _db = new Database(@"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml");
             ItemListView = new ItemListView();
-            Items = new ObservableCollection<Item>(db.GetItems());
+            Items = new ObservableCollection<Item>(_db.GetItems());
             ItemSelection = new SelectionModel<Item>();
             ItemSelection.SelectionChanged += SelectionChanged;
 
@@ -43,14 +43,14 @@ namespace LootViewer.ViewModels
                 Debug.WriteLine($"Nothing selected");
                 return;
             }
-            var rw = new ItemContainerFinder(db.loot.Data);
+            var finder = new ItemContainerFinder(_db.loot.Data);
 
             Containers.Clear();
-            var results = rw.GetItemContainers(selectedItem.Name);
+            var results = finder.GetItemContainers(selectedItem.Name);
             foreach (var container in results.ContainerResults)
             {
-                var cr = container.Value;
-                var probCalc = new ProbabilityCalculator(cr);
+                var itemContainer = container.Value;
+                var probCalc = new ProbabilityCalculator(itemContainer);
                 var prob = probCalc.CalculateProbability(102);
                 Containers.Add(new Container(container.Key, prob));
             }
