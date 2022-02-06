@@ -29,15 +29,14 @@
 		</Border>
 		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="2*"/>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-			<UserControl Grid.Column="0" Content="{Binding ItemList}" Width="400"/>
-			<UserControl Grid.Column="1" Content="{Binding ContainerList}" Width="400"/>
+			<UserControl Grid.Column="0" Content="{Binding ItemList}"/>
+			<UserControl Grid.Column="1" Content="{Binding ContainerList}"/>
 		</Grid>
 	</Grid>
 </Window>
