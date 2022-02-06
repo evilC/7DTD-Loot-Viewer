@@ -36,9 +36,7 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-			<Border Grid.Column="0" BorderBrush="Gainsboro" BorderThickness="1" Margin="10,10,10,10">
-				<UserControl Content="{Binding ItemList}" Width="400"/>
-			</Border>
+			<UserControl Grid.Column="0" Content="{Binding ItemList}" Width="400"/>
 		</Grid>
 	</Grid>
 </Window>

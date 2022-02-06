@@ -4,19 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LootViewer.Views.ItemListView">
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition/>
-		</Grid.RowDefinitions>
-		<TextBlock Grid.Row="0" Margin="10">Items</TextBlock>
-		<!--https://docs.avaloniaui.net/docs/controls/listbox-->
-		<ListBox Grid.Row="1" Items="{Binding Items}" Selection="{Binding Selection}">
-			<ListBox.ItemTemplate>
-				<DataTemplate>
+	<Border BorderBrush="Gainsboro" BorderThickness="1" Margin="10,10,10,10">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			<TextBlock Grid.Row="0" Margin="10">Items</TextBlock>
+		
+			<!--https://docs.avaloniaui.net/docs/controls/listbox-->
+			<ListBox Grid.Row="1" Items="{Binding Items}" Selection="{Binding Selection}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
 						<TextBlock Text="{Binding Description}"/>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
-	</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</Grid>
+	</Border>
 </UserControl>
