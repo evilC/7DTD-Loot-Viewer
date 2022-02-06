@@ -1,4 +1,5 @@
 using Avalonia.Controls.Selection;
+using ConfigParsers.Loot;
 using LootViewer.Models;
 using LootViewer.Services;
 using LootViewer.Views;
@@ -31,19 +32,29 @@ namespace LootViewer.ViewModels
             Selection.SelectionChanged += SelectionChanged;
 
             ContainerList = new ContainerListView();
-            Containers = new ObservableCollection<Container>(db.GetContainers());
+            Containers = new ObservableCollection<Container>();
         }
 
         private void SelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<Item> e)
         {
-            var foo = Selection.SelectedItem;
-            if (foo == null)
+            var selectedItem = Selection.SelectedItem;
+            if (selectedItem == null)
             {
                 Debug.WriteLine($"Nothing selected");
                 return;
             }
-            Debug.WriteLine($"Selected {foo.Description}");
-            Containers.Add(new Container() { Name = "NEW", Prob = 9.99M });
+            var rw = new ItemContainerFinder(db.loot.Data);
+
+            Containers.Clear();
+            var results = rw.GetItemContainers(selectedItem.Description);
+            foreach (var container in results.ContainerResults)
+            {
+                var cr = container.Value;
+                var probCalc = new ProbabilityCalculator(cr);
+                var prob = probCalc.CalculateProbability(102);
+                Containers.Add(new Container() { Name = container.Key, Prob = prob });
+            }
+
         }
     }
 }
