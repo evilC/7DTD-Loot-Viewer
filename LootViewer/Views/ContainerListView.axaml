@@ -14,7 +14,7 @@
 			<!--https://docs.avaloniaui.net/docs/controls/datagrid-->
 			<DataGrid Grid.Row="1" Items="{Binding Containers}">
 				<DataGrid.Columns>
-					<DataGridTextColumn Header="Name"  Binding="{Binding Name}"/>
+					<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
 					<DataGridTextColumn Header="Probability" Binding="{Binding Prob}" />
 				</DataGrid.Columns>
 			</DataGrid>

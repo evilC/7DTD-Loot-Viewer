@@ -12,18 +12,10 @@ namespace LootViewer.ViewModels
     public class ContainerListViewModel : ViewModelBase
     {
         public ObservableCollection<Container> Containers { get; }
-        public SelectionModel<Container> Selection { get; }
 
         public ContainerListViewModel(IEnumerable<Container> containers)
         {
             Containers = new ObservableCollection<Container>(containers);
-            Selection = new SelectionModel<Container>();
-            Selection.SelectionChanged += SelectionChanged;
-        }
-
-        private void SelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<Container> e)
-        {
-            throw new NotImplementedException();
         }
     }
 }
