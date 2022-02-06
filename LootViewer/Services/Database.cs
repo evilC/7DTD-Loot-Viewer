@@ -36,8 +36,8 @@ namespace LootViewer.Services
         public IEnumerable<Models.Item> GetItems() => _items;
 
         public IEnumerable<Container> GetContainers() => new List<Container>() {
-            new Container() { Name = "C1"},
-            new Container() { Name = "C2"}
+            new Container() { Name = "C1", Prob = 1.23M },
+            new Container() { Name = "C2", Prob = 2.34M }
         };
     }
 }

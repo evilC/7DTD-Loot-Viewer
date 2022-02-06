@@ -11,14 +11,13 @@
 				<RowDefinition/>
 			</Grid.RowDefinitions>
 			<TextBlock Grid.Row="0" Margin="10">Containers</TextBlock>
-			<!--https://docs.avaloniaui.net/docs/controls/listbox-->
-			<ListBox Grid.Row="1" Items="{Binding Containers}" Selection="{Binding Selection}">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding Name}"/>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-			</ListBox>
+			<!--https://docs.avaloniaui.net/docs/controls/datagrid-->
+			<DataGrid Grid.Row="1" Items="{Binding Containers}">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Name"  Binding="{Binding Name}"/>
+					<DataGridTextColumn Header="Probability" Binding="{Binding Prob}" />
+				</DataGrid.Columns>
+			</DataGrid>
 		</Grid>
 	</Border>
 </UserControl>
