@@ -1,6 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Selection;
 using Avalonia.Markup.Xaml;
+using LootViewer.Models;
+using LootViewer.Services;
+using LootViewer.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace LootViewer.Views
 {
@@ -12,6 +17,7 @@ namespace LootViewer.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
+            DataContext = new MainWindowViewModel();
         }
 
         private void InitializeComponent()
