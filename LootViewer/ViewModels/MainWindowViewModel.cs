@@ -15,6 +15,9 @@ namespace LootViewer.ViewModels
     {
         private Database _db;
 
+        public LootLevelView LootLevelView { get; set; }
+        public int LootLevel { get; set; }
+
         public ItemListView ItemListView { get; set; }
         public ObservableCollection<Item> Items { get; }
         public SelectionModel<Item> ItemSelection { get; }
@@ -26,6 +29,10 @@ namespace LootViewer.ViewModels
         public MainWindowViewModel()
         {
             _db = new Database(@"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml");
+
+            LootLevelView = new LootLevelView();
+            LootLevel = 1;
+
             ItemListView = new ItemListView();
             Items = new ObservableCollection<Item>(_db.GetItems());
             ItemSelection = new SelectionModel<Item>();
