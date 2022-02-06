@@ -10,8 +10,10 @@ namespace LootViewer.ViewModels
         public MainWindowViewModel(Database db)
         {
             ItemList = new ItemListViewModel(db.GetItems());
+            ContainerList = new ContainerListViewModel(db.GetContainers());
         }
 
         public ItemListViewModel ItemList { get; }
+        public ContainerListViewModel ContainerList { get; }
     }
 }

@@ -12,7 +12,8 @@ namespace LootViewer.Services
     public class Database
     {
         //private SortedDictionary<string, Item> _items;
-        private List<Models.Item> _todo = new List<Models.Item>();
+        private List<Models.Item> _items = new List<Models.Item>();
+        private List<Container> _containers = new List<Container>();
 
         public Database(string lootXmlPath)
         {
@@ -20,8 +21,9 @@ namespace LootViewer.Services
             //_items = loot.Data.Items;
             foreach (var item in loot.Data.Items)
             {
-                _todo.Add(new Models.Item { Description = item.Key });
+                _items.Add(new Models.Item { Description = item.Key });
             }
+
         }
 
         //public IEnumerable<TodoItem> GetItems() => new List<TodoItem>()
@@ -31,7 +33,11 @@ namespace LootViewer.Services
         //    new TodoItem { Description = "Learn Avalonia", IsChecked = true },
         //};
 
-        public IEnumerable<Models.Item> GetItems() => _todo;
+        public IEnumerable<Models.Item> GetItems() => _items;
 
+        public IEnumerable<Container> GetContainers() => new List<Container>() {
+            new Container() { Name = "C1"},
+            new Container() { Name = "C2"}
+        };
     }
 }

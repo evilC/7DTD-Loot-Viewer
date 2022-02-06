@@ -37,6 +37,7 @@
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 			<UserControl Grid.Column="0" Content="{Binding ItemList}" Width="400"/>
+			<UserControl Grid.Column="1" Content="{Binding ContainerList}" Width="400"/>
 		</Grid>
 	</Grid>
 </Window>
