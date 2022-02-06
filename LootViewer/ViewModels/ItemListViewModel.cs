@@ -24,13 +24,13 @@ namespace LootViewer.ViewModels
 
         private void SelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<Item> e)
         {
-            var foo = Selection.SelectedItem;
-            if (foo == null)
+            var selectedItem = Selection.SelectedItem;
+            if (selectedItem == null)
             {
                 Debug.WriteLine($"Nothing selected");
                 return;
             }
-            Debug.WriteLine($"Selected {foo.Description}");
+            Debug.WriteLine($"Selected {selectedItem.Description}");
         }
     }
 }

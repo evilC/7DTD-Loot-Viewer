@@ -9,9 +9,9 @@ namespace LootViewer.ViewModels
     {
         public MainWindowViewModel(Database db)
         {
-            List = new ItemListViewModel(db.GetItems());
+            ItemList = new ItemListViewModel(db.GetItems());
         }
 
-        public ItemListViewModel List { get; }
+        public ItemListViewModel ItemList { get; }
     }
 }
