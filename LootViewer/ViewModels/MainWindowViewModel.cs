@@ -17,7 +17,7 @@ namespace LootViewer.ViewModels
 
         public ItemListView ItemListView { get; set; }
         public ObservableCollection<Item> Items { get; }
-        public SelectionModel<Item> Selection { get; }
+        public SelectionModel<Item> ItemSelection { get; }
 
 
         public ContainerListView ContainerListView { get; set; }
@@ -28,8 +28,8 @@ namespace LootViewer.ViewModels
             db = new Database(@"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml");
             ItemListView = new ItemListView();
             Items = new ObservableCollection<Item>(db.GetItems());
-            Selection = new SelectionModel<Item>();
-            Selection.SelectionChanged += SelectionChanged;
+            ItemSelection = new SelectionModel<Item>();
+            ItemSelection.SelectionChanged += SelectionChanged;
 
             ContainerListView = new ContainerListView();
             Containers = new ObservableCollection<Container>();
@@ -37,7 +37,7 @@ namespace LootViewer.ViewModels
 
         private void SelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<Item> e)
         {
-            var selectedItem = Selection.SelectedItem;
+            var selectedItem = ItemSelection.SelectedItem;
             if (selectedItem == null)
             {
                 Debug.WriteLine($"Nothing selected");
