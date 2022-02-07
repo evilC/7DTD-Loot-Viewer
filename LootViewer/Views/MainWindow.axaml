@@ -24,10 +24,7 @@
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>			
 			<UserControl Grid.Column="0" Content="{Binding LootLevelView}"/>
-			<StackPanel Grid.Column="1" Orientation="Horizontal">
-				<TextBlock>Item Filter</TextBlock>
-				<TextBox Text="{Binding ItemFilterText}" Width="300"></TextBox>
-			</StackPanel>
+			<UserControl Grid.Column="1" Content="{Binding ItemFilterView}"/>
 		</Grid>
 		
 		

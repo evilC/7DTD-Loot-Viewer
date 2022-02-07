@@ -41,6 +41,8 @@ namespace LootViewer.ViewModels
             }
         }
 
+        public ItemFilterView ItemFilterView { get; set; }
+
         public string? ItemFilterText
         {
             get => _itemFilterText;
@@ -77,6 +79,8 @@ namespace LootViewer.ViewModels
 
             LootLevelView = new LootLevelView();
             LootLevel = "1";
+
+            ItemFilterView = new ItemFilterView();
 
             ItemListView = new ItemListView();
             Items = new DataGridCollectionView(ItemsRaw);
