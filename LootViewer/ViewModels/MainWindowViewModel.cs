@@ -52,7 +52,6 @@ namespace LootViewer.ViewModels
             _db = new Database();
 
             ConfigFileSelectorView = new ConfigFileSelectorView();
-            //ConfigFilePath = "loot.xml";
 
             LootLevelView = new LootLevelView();
             LootLevel = "1";
@@ -65,7 +64,8 @@ namespace LootViewer.ViewModels
             ContainerListView = new ContainerListView();
             Containers = new ObservableCollection<Container>();
 
-            ConfigFilePath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
+            //ConfigFilePath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
+            ConfigFilePath = "loot.xml";
             //LootPathChanged();
         }
 
