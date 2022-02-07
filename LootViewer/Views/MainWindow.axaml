@@ -41,7 +41,7 @@
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 			<!--Items-->
-			<UserControl Grid.Column="0" Content="{Binding ItemListView}"/>
+			<UserControl Grid.Column="0" Content="{Binding LootItemsView}"/>
 			<!--Containers-->
 			<UserControl Grid.Column="1" Content="{Binding ContainerListView}"/>
 		</Grid>

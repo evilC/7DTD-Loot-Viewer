@@ -60,15 +60,15 @@ namespace LootViewer.ViewModels
 
         private void ItemFilterChanged()
         {
-            Items.Refresh();
+            LootItems.Refresh();
         }
 
         private CultureInfo _culture = CultureInfo.InvariantCulture;
         private string? _itemFilterText;
 
-        public ItemListView ItemListView { get; set; }
-        private ObservableCollection<LootItem> _items = new ObservableCollection<LootItem>();
-        public DataGridCollectionView Items { get; set; }
+        public LootItemsView LootItemsView { get; set; }
+        private ObservableCollection<LootItem> _lootItems = new ObservableCollection<LootItem>();
+        public DataGridCollectionView LootItems { get; set; }
 
         public ContainerListView ContainerListView { get; set; }
         public ObservableCollection<LootContainer> _containers { get; }
@@ -87,9 +87,9 @@ namespace LootViewer.ViewModels
 
             ItemFilterView = new ItemFilterView();
 
-            ItemListView = new ItemListView();
-            Items = new DataGridCollectionView(_items) { Filter = IsItemVisible };
-            Items.CurrentChanged += ItemSelectionChanged;
+            LootItemsView = new LootItemsView();
+            LootItems = new DataGridCollectionView(_lootItems) { Filter = IsItemVisible };
+            LootItems.CurrentChanged += ItemSelectionChanged;
 
             ContainerListView = new ContainerListView();
             _containers = new ObservableCollection<LootContainer>();
@@ -109,13 +109,13 @@ namespace LootViewer.ViewModels
         private void LootPathChanged()
         {
             var items = _db.OpenPath(_configFilePath);
-            _items.Clear();
+            _lootItems.Clear();
             _containers.Clear();
             if (items != null)
             {
                 foreach (var item in items)
                 {
-                    _items.Add(item);
+                    _lootItems.Add(item);
                 }
             }
         }
@@ -130,12 +130,12 @@ namespace LootViewer.ViewModels
             int lootLevel;
 
             if (_db.LootData == null) return;
-            if (Items.CurrentItem == null) return;
+            if (LootItems.CurrentItem == null) return;
             if (string.IsNullOrEmpty(_lootLevel)) return;
             try { lootLevel = Convert.ToInt32(_lootLevel); }
             catch (Exception) { return; };
 
-            var selectedItem = (LootItem)Items.CurrentItem;
+            var selectedItem = (LootItem)LootItems.CurrentItem;
             var finder = new ItemContainerFinder(_db.LootData.Data);
             _containers.Clear();
             var results = finder.GetItemContainers(selectedItem.Name);
