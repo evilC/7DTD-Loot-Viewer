@@ -24,6 +24,7 @@ namespace LootViewer.ViewModels
         private string _settingsFile = "Settings.json";
         private Database _db;
         private LocalizationParser _lp;
+        private Dictionary<string, string> displayNames = new Dictionary<string, string>();
 
         // Config File selector
         public ConfigFileSelectorView ConfigFileSelectorView { get; set; }
@@ -102,6 +103,7 @@ namespace LootViewer.ViewModels
             ItemFilterView = new ItemFilterView();
             LootItemsView = new LootItemsView();
             LootItems = new DataGridCollectionView(_lootItems) { Filter = IsItemVisible };
+            LootItems.SortDescriptions.Add(DataGridSortDescription.FromPath("DisplayName", ListSortDirection.Ascending));
             LootItems.CurrentChanged += LootItemSelectionChanged;
 
             // Loot Lists
@@ -137,7 +139,7 @@ namespace LootViewer.ViewModels
         {
             if (_itemFilterText == null) return true;
             var item = (LootItem)obj;
-            return _culture.CompareInfo.IndexOf(item.Name, _itemFilterText, CompareOptions.IgnoreCase) >= 0;
+            return _culture.CompareInfo.IndexOf(item.DisplayName, _itemFilterText, CompareOptions.IgnoreCase) >= 0;
         }
 
         /// <summary>
@@ -145,16 +147,6 @@ namespace LootViewer.ViewModels
         /// </summary>
         private void ConfigFilePathChanged()
         {
-            var lootItems = _db.OpenPath(_configFilePath);
-            _lootItems.Clear();
-            _lootLists.Clear();
-            if (lootItems != null)
-            {
-                foreach (var lootItem in lootItems)
-                {
-                    _lootItems.Add(lootItem);
-                }
-            }
             if (!string.IsNullOrWhiteSpace(_configFilePath))
             {
                 // ToDo: If Config folder path was previously valid...
@@ -168,13 +160,24 @@ namespace LootViewer.ViewModels
                 {
                     // If file exists in new location, then reload the cache, else take no action...
                     // ... (ie while typing in the Config File Location box, do not continually reload the cache)
-                    var displayNames = _lp.GetDisplayNames(_configFilePath);
+                    displayNames = _lp.GetDisplayNames(_configFilePath);
                     // Pass the Display Names to the Block Parser, so it can build the list of human friendly Container Names
                     var bp = new BlocksParser(displayNames);
                     _containerNames = bp.GetLootLists(_configFilePath);
                 }
             }
-            
+            var lootItems = _db.OpenPath(_configFilePath);
+            _lootItems.Clear();
+            _lootLists.Clear();
+            if (lootItems != null)
+            {
+                foreach (var lootItem in lootItems)
+                {
+                    var displayName = displayNames.ContainsKey(lootItem.Key) ? displayNames[lootItem.Key] : lootItem.Key;
+                    //_lootItems.Add(lootItem);
+                    _lootItems.Add(new LootItem(displayName, lootItem.Key));
+                }
+            }
         }
 
         /// <summary>

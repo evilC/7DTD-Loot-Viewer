@@ -7,7 +7,7 @@
 	<Border BorderBrush="Gainsboro" BorderThickness="1" Margin="10">
 		<DataGrid Grid.Row="0" Items="{Binding LootItems}">
 			<DataGrid.Columns>
-				<DataGridTextColumn Width="*" Header="Item Name" Binding="{Binding Name}"/>
+				<DataGridTextColumn Width="*" Header="Item Name" Binding="{Binding DisplayName}"/>
 			</DataGrid.Columns>
 		</DataGrid>
 	</Border>

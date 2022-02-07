@@ -8,11 +8,13 @@ namespace LootViewer.Models
 {
     public class LootItem
     {
+        public string DisplayName { get; }
         public string Name { get; }
 
-        public LootItem(string name)
+        public LootItem(string displayName, string name)
         {
             Name = name;
+            DisplayName = displayName;
         }
     }
 }

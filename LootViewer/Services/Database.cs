@@ -21,7 +21,8 @@ namespace LootViewer.Services
         {
         }
 
-        public List<LootItem> OpenPath(string? configFilePath)
+        //public List<LootItem> OpenPath(string? configFilePath, Dictionary<string, string> displayNames)
+        public SortedDictionary<string, Item> OpenPath(string? configFilePath)
         {
             if (!string.IsNullOrWhiteSpace(configFilePath))
             {
@@ -29,16 +30,18 @@ namespace LootViewer.Services
                 if (!string.IsNullOrWhiteSpace(lootXmlPath) && File.Exists(lootXmlPath))
                 {
                     _lootData = new LootParser(lootXmlPath);
-                    var items = new List<LootItem>();
-                    foreach (var item in _lootData.Data.Items)
-                    {
-                        items.Add(new LootItem(item.Key));
-                    }
-                    return items;
+                    return _lootData.Data.Items;
+                    //var items = new List<LootItem>();
+                    //foreach (var item in _lootData.Data.Items)
+                    //{
+                    //    items.Add(new LootItem(item.Key));
+                    //}
+                    //return items;
                 };
             }
             _lootData = null;
-            return new List<LootItem>();
+            //return new List<LootItem>();
+            return new SortedDictionary<string, Item>();
         }
 
     }
