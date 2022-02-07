@@ -215,6 +215,7 @@ namespace LootViewer.ViewModels
                 var prob = probCalc.CalculateProbability(lootLevel);
                 _lootLists.Add(new LootList(container.Key, Math.Round((prob * 100), 3)));
             }
+            LootLists.MoveCurrentToFirst();
         }
 
         /// <summary>
