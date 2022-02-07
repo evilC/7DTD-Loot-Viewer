@@ -62,7 +62,7 @@ namespace LootViewer.ViewModels
         private string? _itemFilterText;
 
         public ItemListView ItemListView { get; set; }
-        public ObservableCollection<Item> ItemsRaw { get; } = new ObservableCollection<Item>();
+        private ObservableCollection<Item> _items = new ObservableCollection<Item>();
         public DataGridCollectionView Items { get; set; }
         public SelectionModel<Item> ItemSelection { get; }
 
@@ -83,7 +83,7 @@ namespace LootViewer.ViewModels
             ItemFilterView = new ItemFilterView();
 
             ItemListView = new ItemListView();
-            Items = new DataGridCollectionView(ItemsRaw);
+            Items = new DataGridCollectionView(_items);
             Items.Filter = IsItemVisible;
             //Items = new ObservableCollection<Item>(_db.GetItems());
             ItemSelection = new SelectionModel<Item>();
@@ -107,13 +107,13 @@ namespace LootViewer.ViewModels
         private void LootPathChanged()
         {
             var items = _db.OpenPath(_configFilePath);
-            ItemsRaw.Clear();
+            _items.Clear();
             Containers.Clear();
             if (items != null)
             {
                 foreach (var item in items)
                 {
-                    ItemsRaw.Add(item);
+                    _items.Add(item);
                 }
             }
         }
