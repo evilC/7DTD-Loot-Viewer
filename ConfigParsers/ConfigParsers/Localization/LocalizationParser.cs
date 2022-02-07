@@ -11,23 +11,30 @@ namespace ConfigParsers.Localization
     /// </summary>
     public class LocalizationParser
     {
+        /// <summary>
+        /// It takes a LONG TIME to parse the localization file, so only do it once and cache the results
+        /// </summary>
+        private string _cacheFile = "DisplayNames.json";
+
         public Dictionary<string, string> GetDisplayNames(string configFilePath)
         {
             //var containerNames = GetContainerNames(configFilePath);
             //Dictionary<string, string> data;
 
             // If we already have cached data, load that
-            if (File.Exists("ItemNames.json"))
+            if (File.Exists(_cacheFile))
             {
-                string jsonString = File.ReadAllText("ItemNames.json");
+                string jsonString = File.ReadAllText(_cacheFile);
                 var cachedData = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString);
                 if (cachedData == null) throw new Exception("JSON serialization failed");
+                return cachedData;
             }
 
+            var localizationFilePath = BuildLocalizationFilePath(configFilePath);
+            if (!File.Exists(localizationFilePath)) return new Dictionary<string, string>();
             // Build data
             var data = new Dictionary<string, string>();
-            
-            using (var parser = new TextFieldParser(Path.Combine(new string[] { configFilePath, "Localization.txt" })))
+            using (var parser = new TextFieldParser(localizationFilePath))
             {
                 //parser.CommentTokens = new string[] { "#" };
                 parser.SetDelimiters(new string[] { "," });
@@ -75,8 +82,23 @@ namespace ConfigParsers.Localization
 
             // Write out the localization data as JSON, so that we do not need to parse it on each run
             var opt = new JsonSerializerOptions() { WriteIndented = true };
-            File.WriteAllText("ItemNames.json", JsonSerializer.Serialize(data, opt));
+            File.WriteAllText(_cacheFile, JsonSerializer.Serialize(data, opt));
             return data;
+        }
+
+        private string BuildLocalizationFilePath(string configFilePath)
+        {
+            return Path.Combine(new string[] { configFilePath, "Localization.txt" });
+        }
+
+        public void ClearCache()
+        {
+            if (File.Exists(_cacheFile)) File.Delete(_cacheFile);
+        }
+
+        public bool LocalizationFileExists(string configFilePath)
+        {
+            return File.Exists(BuildLocalizationFilePath(configFilePath));
         }
     }
 

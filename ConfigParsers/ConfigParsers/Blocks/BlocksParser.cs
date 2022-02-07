@@ -19,9 +19,11 @@ namespace ConfigParsers.Blocks
 
         public SortedDictionary<string, HashSet<string>> GetLootLists(string configFilePath)
         {
+            var blocksFile = Path.Combine(new string[] { configFilePath, "blocks.xml" });
             var lootLists = new SortedDictionary<string, HashSet<string>>();
+            if (!File.Exists(blocksFile)) return lootLists;
             var rawBlocks = ObjectDeserializer.DeserializeToObject<XmlClasses.Root>
-                (Path.Combine(new string[] { configFilePath, "blocks.xml" }));
+                (blocksFile);
 
             foreach (var rawBlock in rawBlocks.Blocks)
             {

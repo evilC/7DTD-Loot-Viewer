@@ -1,5 +1,7 @@
 using Avalonia.Collections;
 using Avalonia.Controls.Selection;
+using ConfigParsers.Blocks;
+using ConfigParsers.Localization;
 using ConfigParsers.Loot;
 using LootViewer.Models;
 using LootViewer.Services;
@@ -19,8 +21,9 @@ namespace LootViewer.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private string _settingsFile = "settings.json";
+        private string _settingsFile = "Settings.json";
         private Database _db;
+        private LocalizationParser _lp;
 
         // Config File selector
         public ConfigFileSelectorView ConfigFileSelectorView { get; set; }
@@ -77,6 +80,8 @@ namespace LootViewer.ViewModels
         // Loot Containers
         public LootContainersView LootContainersView { get; set; }
         private ObservableCollection<LootContainer> _lootContainers;
+        private SortedDictionary<string, HashSet<string>>? _containerNames = null;
+
         public DataGridCollectionView LootContainers { get; set; }
 
         public MainWindowViewModel()
@@ -84,6 +89,7 @@ namespace LootViewer.ViewModels
             LoadSettings();
 
             _db = new Database();
+            _lp = new LocalizationParser();
 
             // Config file selector
             ConfigFileSelectorView = new ConfigFileSelectorView();
@@ -96,13 +102,14 @@ namespace LootViewer.ViewModels
             ItemFilterView = new ItemFilterView();
             LootItemsView = new LootItemsView();
             LootItems = new DataGridCollectionView(_lootItems) { Filter = IsItemVisible };
-            LootItems.CurrentChanged += ItemSelectionChanged;
+            LootItems.CurrentChanged += LootItemSelectionChanged;
 
             // Loot Lists
             LootListsView = new LootListsView();
             _lootLists = new ObservableCollection<LootList>();
             LootLists = new DataGridCollectionView(_lootLists);
             LootLists.SortDescriptions.Add(DataGridSortDescription.FromPath("Prob", ListSortDirection.Descending));
+            LootLists.CurrentChanged += LootListSelectionChanged;
 
             // Loot Containers
             LootContainersView = new LootContainersView();
@@ -138,16 +145,36 @@ namespace LootViewer.ViewModels
         /// </summary>
         private void ConfigFilePathChanged()
         {
-            var items = _db.OpenPath(_configFilePath);
+            var lootItems = _db.OpenPath(_configFilePath);
             _lootItems.Clear();
             _lootLists.Clear();
-            if (items != null)
+            if (lootItems != null)
             {
-                foreach (var item in items)
+                foreach (var lootItem in lootItems)
                 {
-                    _lootItems.Add(item);
+                    _lootItems.Add(lootItem);
                 }
             }
+            if (!string.IsNullOrWhiteSpace(_configFilePath))
+            {
+                // ToDo: If Config folder path was previously valid...
+                // ... then the Localization data will be already present and cached to JSON ...
+                // ... so it will need to be deleted and rebuilt
+                // Should maybe work out some way to see if it changed (CRC check?)
+                //_lp.ClearCache();
+                // Have the LocalizationParser parse Localization.xml and build a list of Display names
+                // NOTE: This could take a while!
+                if (_lp.LocalizationFileExists(_configFilePath))
+                {
+                    // If file exists in new location, then reload the cache, else take no action...
+                    // ... (ie while typing in the Config File Location box, do not continually reload the cache)
+                    var displayNames = _lp.GetDisplayNames(_configFilePath);
+                    // Pass the Display Names to the Block Parser, so it can build the list of human friendly Container Names
+                    var bp = new BlocksParser(displayNames);
+                    _containerNames = bp.GetLootLists(_configFilePath);
+                }
+            }
+            
         }
 
         /// <summary>
@@ -155,7 +182,7 @@ namespace LootViewer.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ItemSelectionChanged(object? sender, EventArgs e)
+        private void LootItemSelectionChanged(object? sender, EventArgs e)
         {
             GetItemLootLists();
         }
@@ -188,40 +215,61 @@ namespace LootViewer.ViewModels
         }
 
         /// <summary>
+        /// Called when a new LootList is selected in the LootListView
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void LootListSelectionChanged(object? sender, EventArgs e)
+        {
+            GetLootContainers();
+        }
+
+
+        /// <summary>
+        /// Called when a new LootList is selected in the LootListView
+        /// ? Or when LootItem changes ?
+        /// ? Or when LootLevel changes ?
+        /// </summary>
+        private void GetLootContainers()
+        {
+            _lootContainers.Clear();
+            if (LootLists.CurrentItem == null) return;
+            var selectedLootList = ((LootList)LootLists.CurrentItem).Name;
+            if (_containerNames != null && _containerNames.ContainsKey(selectedLootList))
+            {
+                var containerNames = _containerNames[selectedLootList];
+                foreach (var containerName in containerNames)
+                {
+                    _lootContainers.Add(new LootContainer(containerName));
+                }
+            }
+        }
+
+        /// <summary>
         /// Load settings from the settings file
         /// </summary>
         private void LoadSettings()
         {
             if (!File.Exists(_settingsFile)) return;
-            using (var fs = File.OpenRead(_settingsFile))
+            var jsonText = File.ReadAllText(_settingsFile);
+            var settings = JsonSerializer.Deserialize<Settings>(jsonText);
+            if (settings == null)
             {
-                Settings? s = LoadFromStream(fs);
-                if (s == null)
-                {
-                    return;
-                }
-                _configFilePath = s.ConfigFilePath;
+                return;
             }
+            _configFilePath = settings.ConfigFilePath;
         }
 
-        private Settings? LoadFromStream(FileStream stream)
-        {
-            return JsonSerializer.Deserialize<Settings>(stream);
-        }
-
+        /// <summary>
+        /// Save settings to the settings file
+        /// </summary>
         private void SaveSettings()
         {
             if (_configFilePath == null) return;
             var settings = new Settings() { ConfigFilePath = _configFilePath };
-            using (var fs = File.OpenWrite(_settingsFile))
-            {
-                SaveToStream(settings, fs);
-            }
-        }
-
-        private static void SaveToStream(Settings data, Stream stream)
-        {
-            JsonSerializer.Serialize(stream, data);
+            var j = JsonSerializer.Serialize(settings);
+            File.WriteAllText(_settingsFile, j);
         }
     }
 }

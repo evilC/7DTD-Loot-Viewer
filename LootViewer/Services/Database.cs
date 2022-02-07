@@ -37,15 +37,9 @@ namespace LootViewer.Services
                     return items;
                 };
             }
-            if (_lootData != null)
-            {
-                _lootData = null;
-                //_items.Clear();
-            }
+            _lootData = null;
             return new List<LootItem>();
-
         }
 
-        //public IEnumerable<Models.Item> GetItems() => _items;
     }
 }
