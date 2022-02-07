@@ -71,11 +71,13 @@ namespace LootViewer.ViewModels
 
         // Loot Lists
         public LootListsView LootListsView { get; set; }
-        public ObservableCollection<LootList> _lootLists { get; }
+        private ObservableCollection<LootList> _lootLists;
         public DataGridCollectionView LootLists { get; set; }
 
         // Loot Containers
         public LootContainersView LootContainersView { get; set; }
+        private ObservableCollection<LootContainer> _lootContainers;
+        public DataGridCollectionView LootContainers { get; set; }
 
         public MainWindowViewModel()
         {
@@ -83,24 +85,31 @@ namespace LootViewer.ViewModels
 
             _db = new Database();
 
+            // Config file selector
             ConfigFileSelectorView = new ConfigFileSelectorView();
 
+            // Loot Level
             LootLevelView = new LootLevelView();
             LootLevel = "1";
 
+            // Loot Items
             ItemFilterView = new ItemFilterView();
-
             LootItemsView = new LootItemsView();
             LootItems = new DataGridCollectionView(_lootItems) { Filter = IsItemVisible };
             LootItems.CurrentChanged += ItemSelectionChanged;
 
+            // Loot Lists
             LootListsView = new LootListsView();
             _lootLists = new ObservableCollection<LootList>();
             LootLists = new DataGridCollectionView(_lootLists);
             LootLists.SortDescriptions.Add(DataGridSortDescription.FromPath("Prob", ListSortDirection.Descending));
 
+            // Loot Containers
             LootContainersView = new LootContainersView();
+            _lootContainers = new ObservableCollection<LootContainer>();
+            LootContainers = new DataGridCollectionView(_lootContainers);
 
+            // Trigger loading of LootItems list
             ConfigFilePathChanged();
         }
 
