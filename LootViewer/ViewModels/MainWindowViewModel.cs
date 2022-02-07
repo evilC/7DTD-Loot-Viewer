@@ -172,6 +172,7 @@ namespace LootViewer.ViewModels
             var lootItems = _db.OpenPath(_configFilePath);
             _lootItems.Clear();
             _lootLists.Clear();
+            _lootContainers.Clear();
             if (lootItems != null)
             {
                 foreach (var lootItem in lootItems)
