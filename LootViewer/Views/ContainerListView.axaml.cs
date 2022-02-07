@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace LootViewer.Views
 {
-    public partial class ContainerListView : UserControl
+    public partial class LootListsView : UserControl
     {
-        public ContainerListView()
+        public LootListsView()
         {
             InitializeComponent();
         }

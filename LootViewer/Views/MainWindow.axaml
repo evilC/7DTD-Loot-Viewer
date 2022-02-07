@@ -43,7 +43,7 @@
 			<!--Items-->
 			<UserControl Grid.Column="0" Content="{Binding LootItemsView}"/>
 			<!--Containers-->
-			<UserControl Grid.Column="1" Content="{Binding ContainerListView}"/>
+			<UserControl Grid.Column="1" Content="{Binding LootListsView}"/>
 		</Grid>
 	</Grid>
 </Window>

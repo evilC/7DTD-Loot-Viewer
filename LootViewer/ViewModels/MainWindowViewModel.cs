@@ -70,8 +70,8 @@ namespace LootViewer.ViewModels
         private ObservableCollection<LootItem> _lootItems = new ObservableCollection<LootItem>();
         public DataGridCollectionView LootItems { get; set; }
 
-        public ContainerListView ContainerListView { get; set; }
-        public ObservableCollection<LootContainer> _containers { get; }
+        public LootListsView LootListsView { get; set; }
+        public ObservableCollection<LootList> _lootLists { get; }
         public DataGridCollectionView LootLists { get; set; }
 
         public MainWindowViewModel()
@@ -91,9 +91,9 @@ namespace LootViewer.ViewModels
             LootItems = new DataGridCollectionView(_lootItems) { Filter = IsItemVisible };
             LootItems.CurrentChanged += ItemSelectionChanged;
 
-            ContainerListView = new ContainerListView();
-            _containers = new ObservableCollection<LootContainer>();
-            LootLists = new DataGridCollectionView(_containers);
+            LootListsView = new LootListsView();
+            _lootLists = new ObservableCollection<LootList>();
+            LootLists = new DataGridCollectionView(_lootLists);
             LootLists.SortDescriptions.Add(DataGridSortDescription.FromPath("Prob", ListSortDirection.Descending));
 
             LootPathChanged();
@@ -110,7 +110,7 @@ namespace LootViewer.ViewModels
         {
             var items = _db.OpenPath(_configFilePath);
             _lootItems.Clear();
-            _containers.Clear();
+            _lootLists.Clear();
             if (items != null)
             {
                 foreach (var item in items)
@@ -137,14 +137,14 @@ namespace LootViewer.ViewModels
 
             var selectedItem = (LootItem)LootItems.CurrentItem;
             var finder = new ItemContainerFinder(_db.LootData.Data);
-            _containers.Clear();
+            _lootLists.Clear();
             var results = finder.GetItemContainers(selectedItem.Name);
             foreach (var container in results.ContainerResults)
             {
                 var itemContainer = container.Value;
                 var probCalc = new ProbabilityCalculator(itemContainer);
                 var prob = probCalc.CalculateProbability(lootLevel);
-                _containers.Add(new LootContainer(container.Key, Math.Round((prob * 100), 3)));
+                _lootLists.Add(new LootList(container.Key, Math.Round((prob * 100), 3)));
             }
         }
 
