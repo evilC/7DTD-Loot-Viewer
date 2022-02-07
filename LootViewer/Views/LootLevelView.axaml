@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LootViewer.Views.LootLevelView">
-	<Border BorderBrush="Gainsboro" BorderThickness="1" Margin="10,10,10,10" Padding="10,10,10,10">
+	<Border BorderBrush="Gainsboro" BorderThickness="1" Margin="10" Padding="10">
 		<StackPanel Orientation="Horizontal">
 			<TextBlock VerticalAlignment="Center" Margin="10">Loot Level</TextBlock>
 			<TextBox Width="50" Text="{Binding LootLevel}" ></TextBox>
