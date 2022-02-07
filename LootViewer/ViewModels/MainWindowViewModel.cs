@@ -16,6 +16,7 @@ namespace LootViewer.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private Settings _settings;
         private Database _db;
 
         public ConfigFileSelectorView ConfigFileSelectorView { get; set; }
@@ -25,7 +26,14 @@ namespace LootViewer.ViewModels
             get => _configFilePath;
             set
             {
+                // ToDo: All kinds of ewwww going on here, need to fix
                 this.RaiseAndSetIfChanged(ref _configFilePath, value);
+                if (_configFilePath != null && _configFilePath != value)
+                {
+                    _settings.ConfigFilePath = _configFilePath;
+                    _settings.Save();
+                }
+                
                 LootPathChanged();
             }
         }
@@ -74,6 +82,7 @@ namespace LootViewer.ViewModels
         public MainWindowViewModel()
         {
             _db = new Database();
+            _settings = new Settings();
 
             ConfigFileSelectorView = new ConfigFileSelectorView();
 
@@ -92,8 +101,9 @@ namespace LootViewer.ViewModels
             ContainerListView = new ContainerListView();
             Containers = new ObservableCollection<Container>();
 
+            _settings.Load();
+            ConfigFilePath = _settings.ConfigFilePath;
             //ConfigFilePath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
-            ConfigFilePath = "loot.xml";
             //LootPathChanged();
         }
 
@@ -128,12 +138,14 @@ namespace LootViewer.ViewModels
             int lootLevel;
 
             if (_db.LootData == null) return;
-            if (ItemSelection == null || ItemSelection.SelectedItem == null) return;
+            //if (ItemSelection == null || ItemSelection.SelectedItem == null) return;
+            if (ItemSelection == null) return;
             if (string.IsNullOrEmpty(_lootLevel)) return;
             try { lootLevel = Convert.ToInt32(_lootLevel); }
             catch (Exception) { return; };
 
-            var selectedItem = ItemSelection.SelectedItem;
+            //var selectedItem = ItemSelection.SelectedItem;
+            var selectedItem = _items[ ItemSelection.SelectedIndex];
             var finder = new ItemContainerFinder(_db.LootData.Data);
             Containers.Clear();
             var results = finder.GetItemContainers(selectedItem.Name);
