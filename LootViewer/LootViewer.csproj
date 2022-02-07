@@ -18,9 +18,4 @@
   <ItemGroup>
     <ProjectReference Include="..\ConfigParsers\ConfigParsers\ConfigParsers.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Update="loot.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 </Project>

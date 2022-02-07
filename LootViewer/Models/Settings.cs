@@ -12,7 +12,7 @@ namespace LootViewer.Models
     public class Settings
     {
         private string _settingsFile = "settings";
-        public string ConfigFilePath { get; set; } = "loot.xml";
+        public string ConfigFilePath { get; set; } = @"C:\Program Files (x86)\Steam\SteamApps\Common\7 Days To Die\Data\Config";
 
         public Settings()
         {

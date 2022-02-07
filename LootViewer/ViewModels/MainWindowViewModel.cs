@@ -28,10 +28,10 @@ namespace LootViewer.ViewModels
             set
             {
                 // ToDo: All kinds of ewwww going on here, need to fix
-                this.RaiseAndSetIfChanged(ref _configFilePath, value);
-                if (_configFilePath != null && _configFilePath != value)
+                if (!string.IsNullOrWhiteSpace(value) && _configFilePath != value)
                 {
-                    _settings.ConfigFilePath = _configFilePath;
+                    this.RaiseAndSetIfChanged(ref _configFilePath, value);
+                    _settings.ConfigFilePath = value;
                     _settings.Save();
                 }
                 

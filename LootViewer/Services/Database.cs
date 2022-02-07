@@ -21,24 +21,29 @@ namespace LootViewer.Services
         {
         }
 
-        public List<Models.LootItem> OpenPath(string? lootXmlPath)
+        public List<LootItem> OpenPath(string? configFilePath)
         {
-            if (string.IsNullOrEmpty(lootXmlPath) || !File.Exists(lootXmlPath))
+            if (!string.IsNullOrWhiteSpace(configFilePath))
             {
-                if (_lootData != null)
+                var lootXmlPath = Path.Combine(configFilePath, "loot.xml");
+                if (!string.IsNullOrWhiteSpace(lootXmlPath) && File.Exists(lootXmlPath))
                 {
-                    _lootData = null;
-                    //_items.Clear();
-                }
-                return new List<Models.LootItem>();
-            };
-            _lootData = new LootParser(lootXmlPath);
-            var items = new List<Models.LootItem>();
-            foreach (var item in _lootData.Data.Items)
-            {
-                items.Add(new Models.LootItem(item.Key));
+                    _lootData = new LootParser(lootXmlPath);
+                    var items = new List<LootItem>();
+                    foreach (var item in _lootData.Data.Items)
+                    {
+                        items.Add(new LootItem(item.Key));
+                    }
+                    return items;
+                };
             }
-            return items;
+            if (_lootData != null)
+            {
+                _lootData = null;
+                //_items.Clear();
+            }
+            return new List<LootItem>();
+
         }
 
         //public IEnumerable<Models.Item> GetItems() => _items;
