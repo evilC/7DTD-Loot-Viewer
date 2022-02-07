@@ -21,7 +21,7 @@ namespace LootViewer.Services
         {
         }
 
-        public List<Models.Item> OpenPath(string? lootXmlPath)
+        public List<Models.LootItem> OpenPath(string? lootXmlPath)
         {
             if (string.IsNullOrEmpty(lootXmlPath) || !File.Exists(lootXmlPath))
             {
@@ -30,13 +30,13 @@ namespace LootViewer.Services
                     _lootData = null;
                     //_items.Clear();
                 }
-                return new List<Models.Item>();
+                return new List<Models.LootItem>();
             };
             _lootData = new LootParser(lootXmlPath);
-            var items = new List<Models.Item>();
+            var items = new List<Models.LootItem>();
             foreach (var item in _lootData.Data.Items)
             {
-                items.Add(new Models.Item(item.Key));
+                items.Add(new Models.LootItem(item.Key));
             }
             return items;
         }

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace LootViewer.Models
 {
-    public class Container
+    public class LootContainer
     {
         public string Name { get; set; }
         public decimal Prob { get; set; }
 
-        public Container(string name, decimal prob)
+        public LootContainer(string name, decimal prob)
         {
             Name = name;
             Prob = prob;

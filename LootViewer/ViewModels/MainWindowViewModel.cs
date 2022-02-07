@@ -77,7 +77,7 @@ namespace LootViewer.ViewModels
 
 
         public ContainerListView ContainerListView { get; set; }
-        public ObservableCollection<Models.Container> _containers { get; }
+        public ObservableCollection<LootContainer> _containers { get; }
         public DataGridCollectionView Containers { get; set; }
 
         public MainWindowViewModel()
@@ -101,7 +101,7 @@ namespace LootViewer.ViewModels
             //Items.SortDescriptions.Add(DataGridSortDescription.FromPath(property, ListSortDirection.Ascending));
             
             ContainerListView = new ContainerListView();
-            _containers = new ObservableCollection<Models.Container>();
+            _containers = new ObservableCollection<LootContainer>();
             Containers = new DataGridCollectionView(_containers);
             Containers.SortDescriptions.Add(DataGridSortDescription.FromPath("Prob", ListSortDirection.Descending));
 
@@ -158,7 +158,7 @@ namespace LootViewer.ViewModels
                 var itemContainer = container.Value;
                 var probCalc = new ProbabilityCalculator(itemContainer);
                 var prob = probCalc.CalculateProbability(lootLevel);
-                _containers.Add(new Models.Container(container.Key, Math.Round((prob * 100), 3)));
+                _containers.Add(new LootContainer(container.Key, Math.Round((prob * 100), 3)));
             }
         }
     }
