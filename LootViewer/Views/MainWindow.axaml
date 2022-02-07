@@ -14,21 +14,24 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		
+		<!--1st Row-->
 		<!--Config File Selector-->
 		<UserControl Grid.Row="0" Content="{Binding ConfigFileSelectorView}"/>
 		
-		<!--Loot Level-->
+		<!--2nd Row-->
 		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="Auto"/>
-			</Grid.ColumnDefinitions>			
+			</Grid.ColumnDefinitions>
+			<!--Loot Level-->
 			<UserControl Grid.Column="0" Content="{Binding LootLevelView}"/>
+			<!--Item Filter-->
 			<UserControl Grid.Column="1" Content="{Binding ItemFilterView}"/>
 		</Grid>
 		
 		
-		<!--Items and Containers-->
+		<!--3rd Row-->
 		<Grid Grid.Row="2">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="1*"/>
