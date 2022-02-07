@@ -11,13 +11,15 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Text;
+using System.Text.Json;
 
 namespace LootViewer.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private Settings _settings;
+        private string _settingsFile = "settings.json";
         private Database _db;
 
         public ConfigFileSelectorView ConfigFileSelectorView { get; set; }
@@ -27,14 +29,8 @@ namespace LootViewer.ViewModels
             get => _configFilePath;
             set
             {
-                // ToDo: All kinds of ewwww going on here, need to fix
-                if (!string.IsNullOrWhiteSpace(value) && _configFilePath != value)
-                {
-                    this.RaiseAndSetIfChanged(ref _configFilePath, value);
-                    _settings.ConfigFilePath = value;
-                    _settings.Save();
-                }
-                
+                this.RaiseAndSetIfChanged(ref _configFilePath, value);
+                SaveSettings();
                 LootPathChanged();
             }
         }
@@ -76,12 +72,13 @@ namespace LootViewer.ViewModels
 
         public ContainerListView ContainerListView { get; set; }
         public ObservableCollection<LootContainer> _containers { get; }
-        public DataGridCollectionView Containers { get; set; }
+        public DataGridCollectionView LootLists { get; set; }
 
         public MainWindowViewModel()
         {
+            LoadSettings();
+
             _db = new Database();
-            _settings = new Settings();
 
             ConfigFileSelectorView = new ConfigFileSelectorView();
 
@@ -96,13 +93,10 @@ namespace LootViewer.ViewModels
 
             ContainerListView = new ContainerListView();
             _containers = new ObservableCollection<LootContainer>();
-            Containers = new DataGridCollectionView(_containers);
-            Containers.SortDescriptions.Add(DataGridSortDescription.FromPath("Prob", ListSortDirection.Descending));
+            LootLists = new DataGridCollectionView(_containers);
+            LootLists.SortDescriptions.Add(DataGridSortDescription.FromPath("Prob", ListSortDirection.Descending));
 
-            _settings.Load();
-            ConfigFilePath = _settings.ConfigFilePath;
-            //ConfigFilePath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
-            //LootPathChanged();
+            LootPathChanged();
         }
 
         public bool IsItemVisible(object obj)
@@ -152,6 +146,40 @@ namespace LootViewer.ViewModels
                 var prob = probCalc.CalculateProbability(lootLevel);
                 _containers.Add(new LootContainer(container.Key, Math.Round((prob * 100), 3)));
             }
+        }
+
+        private void LoadSettings()
+        {
+            if (!File.Exists(_settingsFile)) return;
+            using (var fs = File.OpenRead(_settingsFile))
+            {
+                Settings? s = LoadFromStream(fs);
+                if (s == null)
+                {
+                    return;
+                }
+                _configFilePath = s.ConfigFilePath;
+            }
+        }
+
+        private Settings? LoadFromStream(FileStream stream)
+        {
+            return JsonSerializer.Deserialize<Settings>(stream);
+        }
+
+        private void SaveSettings()
+        {
+            if (_configFilePath == null) return;
+            var settings = new Settings() { ConfigFilePath = _configFilePath };
+            using (var fs = File.OpenWrite(_settingsFile))
+            {
+                SaveToStream(settings, fs);
+            }
+        }
+
+        private static void SaveToStream(Settings data, Stream stream)
+        {
+            JsonSerializer.Serialize(stream, data);
         }
     }
 }
