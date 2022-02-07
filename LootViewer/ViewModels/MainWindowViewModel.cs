@@ -17,7 +17,16 @@ namespace LootViewer.ViewModels
         private Database _db;
 
         public ConfigFileSelectorView ConfigFileSelectorView { get; set; }
-        public string? ConfigFilePath { get; set; }
+        private string? _configFilePath;
+        public string? ConfigFilePath
+        {
+            get => _configFilePath;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _configFilePath, value);
+                LootPathChanged();
+            }
+        }
 
         public LootLevelView LootLevelView { get; set; }
         private string? _lootLevel;
@@ -31,7 +40,7 @@ namespace LootViewer.ViewModels
         }
 
         public ItemListView ItemListView { get; set; }
-        public ObservableCollection<Item> Items { get; }
+        public ObservableCollection<Item> Items { get; } = new ObservableCollection<Item>();
         public SelectionModel<Item> ItemSelection { get; }
 
 
@@ -40,24 +49,41 @@ namespace LootViewer.ViewModels
 
         public MainWindowViewModel()
         {
-            ConfigFileSelectorView = new ConfigFileSelectorView();
-            ConfigFilePath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
             _db = new Database();
-            _db.OpenPath(@"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml");
+
+            ConfigFileSelectorView = new ConfigFileSelectorView();
+            //ConfigFilePath = "loot.xml";
 
             LootLevelView = new LootLevelView();
             LootLevel = "1";
 
             ItemListView = new ItemListView();
-            Items = new ObservableCollection<Item>(_db.GetItems());
+            //Items = new ObservableCollection<Item>(_db.GetItems());
             ItemSelection = new SelectionModel<Item>();
-            ItemSelection.SelectionChanged += SelectionChanged;
+            ItemSelection.SelectionChanged += ItemSelectionChanged;
 
             ContainerListView = new ContainerListView();
             Containers = new ObservableCollection<Container>();
+
+            ConfigFilePath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
+            //LootPathChanged();
         }
 
-        private void SelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<Item> e)
+        private void LootPathChanged()
+        {
+            var items = _db.OpenPath(_configFilePath);
+            Items.Clear();
+            Containers.Clear();
+            if (items != null)
+            {
+                foreach (var item in items)
+                {
+                    Items.Add(item);
+                }
+            }
+        }
+
+        private void ItemSelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<Item> e)
         {
             GetItemContainers();
         }

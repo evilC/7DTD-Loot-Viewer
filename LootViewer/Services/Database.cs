@@ -15,22 +15,32 @@ namespace LootViewer.Services
         public LootParser? LootData { get => _lootData; }
         private LootParser? _lootData;
 
-        private List<Models.Item> _items = new();
+        //private List<Models.Item> _items = new();
 
         public Database()
         {
         }
 
-        public void OpenPath(string lootXmlPath)
+        public List<Models.Item> OpenPath(string? lootXmlPath)
         {
-            if (!File.Exists(lootXmlPath)) return;
+            if (string.IsNullOrEmpty(lootXmlPath) || !File.Exists(lootXmlPath))
+            {
+                if (_lootData != null)
+                {
+                    _lootData = null;
+                    //_items.Clear();
+                }
+                return new List<Models.Item>();
+            };
             _lootData = new LootParser(lootXmlPath);
+            var items = new List<Models.Item>();
             foreach (var item in _lootData.Data.Items)
             {
-                _items.Add(new Models.Item(item.Key));
+                items.Add(new Models.Item(item.Key));
             }
+            return items;
         }
 
-        public IEnumerable<Models.Item> GetItems() => _items;
+        //public IEnumerable<Models.Item> GetItems() => _items;
     }
 }

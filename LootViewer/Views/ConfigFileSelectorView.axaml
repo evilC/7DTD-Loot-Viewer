@@ -16,7 +16,8 @@
 			</Grid.RowDefinitions>
 			<TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="10">Config file location</TextBlock>
 			<TextBox Grid.Column="1" Text="{Binding ConfigFilePath}"></TextBox>
-			<Button  Grid.Column="2" VerticalAlignment="Center" Margin="10,0,10,0">Browse...</Button>
+			<!--<Button  Grid.Column="2" VerticalAlignment="Center" Margin="10,0,10,0">Browse...</Button>-->
+			<!--<Button  Grid.Column="2" VerticalAlignment="Center" Margin="10,0,10,0">Load</Button>-->
 		</Grid>
 	</Border>
 </UserControl>
