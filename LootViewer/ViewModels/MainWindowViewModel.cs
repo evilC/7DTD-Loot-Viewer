@@ -73,8 +73,6 @@ namespace LootViewer.ViewModels
         public ItemListView ItemListView { get; set; }
         private ObservableCollection<LootItem> _items = new ObservableCollection<LootItem>();
         public DataGridCollectionView Items { get; set; }
-        public SelectionModel<LootItem> ItemSelection { get; }
-
 
         public ContainerListView ContainerListView { get; set; }
         public ObservableCollection<LootContainer> _containers { get; }
@@ -93,13 +91,9 @@ namespace LootViewer.ViewModels
             ItemFilterView = new ItemFilterView();
 
             ItemListView = new ItemListView();
-            Items = new DataGridCollectionView(_items);
-            Items.Filter = IsItemVisible;
-            //Items = new ObservableCollection<Item>(_db.GetItems());
-            ItemSelection = new SelectionModel<LootItem>();
-            ItemSelection.SelectionChanged += ItemSelectionChanged;
-            //Items.SortDescriptions.Add(DataGridSortDescription.FromPath(property, ListSortDirection.Ascending));
-            
+            Items = new DataGridCollectionView(_items) { Filter = IsItemVisible };
+            Items.CurrentChanged += ItemSelectionChanged;
+
             ContainerListView = new ContainerListView();
             _containers = new ObservableCollection<LootContainer>();
             Containers = new DataGridCollectionView(_containers);
@@ -132,7 +126,7 @@ namespace LootViewer.ViewModels
             }
         }
 
-        private void ItemSelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<LootItem> e)
+        private void ItemSelectionChanged(object? sender, EventArgs e)
         {
             GetItemContainers();
         }
@@ -142,14 +136,12 @@ namespace LootViewer.ViewModels
             int lootLevel;
 
             if (_db.LootData == null) return;
-            //if (ItemSelection == null || ItemSelection.SelectedItem == null) return;
-            if (ItemSelection == null) return;
+            if (Items.CurrentItem == null) return;
             if (string.IsNullOrEmpty(_lootLevel)) return;
             try { lootLevel = Convert.ToInt32(_lootLevel); }
             catch (Exception) { return; };
 
-            //var selectedItem = ItemSelection.SelectedItem;
-            var selectedItem = _items[ ItemSelection.SelectedIndex];
+            var selectedItem = (LootItem)Items.CurrentItem;
             var finder = new ItemContainerFinder(_db.LootData.Data);
             _containers.Clear();
             var results = finder.GetItemContainers(selectedItem.Name);

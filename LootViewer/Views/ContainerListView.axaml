@@ -5,19 +5,12 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LootViewer.Views.ContainerListView">
 	<Border BorderBrush="Gainsboro" BorderThickness="1" Margin="10">
-		<Grid>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition/>
-			</Grid.RowDefinitions>
-			<TextBlock Grid.Row="0" Margin="10">Containers</TextBlock>
-			<!--https://docs.avaloniaui.net/docs/controls/datagrid-->
-			<DataGrid Grid.Row="1" Items="{Binding Containers}">
-				<DataGrid.Columns>
-					<DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-					<DataGridTextColumn Header="Probability" Binding="{Binding Prob}" />
-				</DataGrid.Columns>
-			</DataGrid>
-		</Grid>
+		<!--https://docs.avaloniaui.net/docs/controls/datagrid-->
+		<DataGrid Grid.Row="1" Items="{Binding Containers}">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Container Name" Binding="{Binding Name}" Width="*"/>
+				<DataGridTextColumn Header="Probability" Binding="{Binding Prob}" Width="Auto"/>
+			</DataGrid.Columns>
+		</DataGrid>
 	</Border>
 </UserControl>

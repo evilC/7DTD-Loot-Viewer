@@ -8,7 +8,7 @@ namespace LootViewer.Models
 {
     public class LootItem
     {
-        public string Name { get; set; }
+        public string Name { get; }
 
         public LootItem(string name)
         {
