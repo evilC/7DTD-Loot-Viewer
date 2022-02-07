@@ -128,6 +128,8 @@ namespace LootViewer.ViewModels
         /// </summary>
         private void ItemFilterChanged()
         {
+            _lootLists.Clear();
+            _lootContainers.Clear();
             LootItems.Refresh();
         }
 
