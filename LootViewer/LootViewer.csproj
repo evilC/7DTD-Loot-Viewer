@@ -18,4 +18,12 @@
   <ItemGroup>
     <ProjectReference Include="..\ConfigParsers\ConfigParsers\ConfigParsers.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\LootListsView.axaml.cs">
+      <DependentUpon>LootListsView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\LootItemsView.axaml.cs">
+      <DependentUpon>LootItemsView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>
