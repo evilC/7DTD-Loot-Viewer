@@ -1,3 +1,4 @@
+using Avalonia.Collections;
 using Avalonia.Controls.Selection;
 using ConfigParsers.Loot;
 using LootViewer.Models;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 
 namespace LootViewer.ViewModels
@@ -39,14 +41,34 @@ namespace LootViewer.ViewModels
             }
         }
 
+        public string? ItemFilterText
+        {
+            get => _itemFilterText;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _itemFilterText, value);
+                ItemFilterChanged();
+            }
+        }
+
+        private void ItemFilterChanged()
+        {
+            Items.Refresh();
+        }
+
+        private CultureInfo _culture = CultureInfo.InvariantCulture;
+        private string? _itemFilterText;
+
         public ItemListView ItemListView { get; set; }
-        public ObservableCollection<Item> Items { get; } = new ObservableCollection<Item>();
+        public ObservableCollection<Item> ItemsRaw { get; } = new ObservableCollection<Item>();
+        public DataGridCollectionView Items { get; set; }
         public SelectionModel<Item> ItemSelection { get; }
 
 
         public ContainerListView ContainerListView { get; set; }
         public ObservableCollection<Container> Containers { get; }
 
+        bool _f = true;
         public MainWindowViewModel()
         {
             _db = new Database();
@@ -57,6 +79,8 @@ namespace LootViewer.ViewModels
             LootLevel = "1";
 
             ItemListView = new ItemListView();
+            Items = new DataGridCollectionView(ItemsRaw);
+            Items.Filter = IsItemVisible;
             //Items = new ObservableCollection<Item>(_db.GetItems());
             ItemSelection = new SelectionModel<Item>();
             ItemSelection.SelectionChanged += ItemSelectionChanged;
@@ -69,16 +93,23 @@ namespace LootViewer.ViewModels
             //LootPathChanged();
         }
 
+        public bool IsItemVisible(object obj)
+        {
+            if (_itemFilterText == null) return true;
+            var item = (Item)obj;
+            return _culture.CompareInfo.IndexOf(item.Name, _itemFilterText, CompareOptions.IgnoreCase) >= 0;
+        }
+
         private void LootPathChanged()
         {
             var items = _db.OpenPath(_configFilePath);
-            Items.Clear();
+            ItemsRaw.Clear();
             Containers.Clear();
             if (items != null)
             {
                 foreach (var item in items)
                 {
-                    Items.Add(item);
+                    ItemsRaw.Add(item);
                 }
             }
         }

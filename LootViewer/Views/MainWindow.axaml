@@ -18,7 +18,18 @@
 		<UserControl Grid.Row="0" Content="{Binding ConfigFileSelectorView}"/>
 		
 		<!--Loot Level-->
-		<UserControl Grid.Row="1" Content="{Binding LootLevelView}"/>
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>			
+			<UserControl Grid.Column="0" Content="{Binding LootLevelView}"/>
+			<StackPanel Grid.Column="1" Orientation="Horizontal">
+				<TextBlock>Item Filter</TextBlock>
+				<TextBox Text="{Binding ItemFilterText}" Width="300"></TextBox>
+			</StackPanel>
+		</Grid>
+		
 		
 		<!--Items and Containers-->
 		<Grid Grid.Row="2">
