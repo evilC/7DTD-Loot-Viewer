@@ -10,6 +10,13 @@ namespace ConfigParsers.Blocks
 {
     public class BlocksParser
     {
+        private Dictionary<string, string>? _displayNames;
+
+        public BlocksParser(Dictionary<string, string>? displayNames)
+        {
+            _displayNames = displayNames;
+        }
+
         public SortedDictionary<string, HashSet<string>> GetLootLists(string configFilePath)
         {
             var lootLists = new SortedDictionary<string, HashSet<string>>();
@@ -27,7 +34,16 @@ namespace ConfigParsers.Blocks
                         {
                             lootLists[property.Value] = new HashSet<string>();
                         }
-                        lootLists[lootList].Add(rawBlock.Name);
+                        string name;
+                        if (_displayNames != null && _displayNames.ContainsKey(rawBlock.Name))
+                        {
+                            name = _displayNames[rawBlock.Name];
+                        }
+                        else
+                        {
+                            name = rawBlock.Name;
+                        }
+                        lootLists[lootList].Add(name);
                         break;
                     }
                 }
