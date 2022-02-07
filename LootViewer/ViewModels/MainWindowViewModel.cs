@@ -117,6 +117,7 @@ namespace LootViewer.ViewModels
             LootContainersView = new LootContainersView();
             _lootContainers = new ObservableCollection<LootContainer>();
             LootContainers = new DataGridCollectionView(_lootContainers);
+            LootContainers.SortDescriptions.Add(DataGridSortDescription.FromPath("Name", ListSortDirection.Ascending));
 
             // Trigger loading of LootItems list
             ConfigFilePathChanged();
