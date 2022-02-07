@@ -107,7 +107,7 @@ namespace LootViewer.ViewModels
                 var itemContainer = container.Value;
                 var probCalc = new ProbabilityCalculator(itemContainer);
                 var prob = probCalc.CalculateProbability(lootLevel);
-                Containers.Add(new Container(container.Key, prob));
+                Containers.Add(new Container(container.Key, Math.Round((prob * 100), 3)));
             }
         }
     }
