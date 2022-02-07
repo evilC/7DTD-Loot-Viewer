@@ -8,6 +8,7 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
@@ -76,9 +77,9 @@ namespace LootViewer.ViewModels
 
 
         public ContainerListView ContainerListView { get; set; }
-        public ObservableCollection<Container> Containers { get; }
+        public ObservableCollection<Models.Container> _containers { get; }
+        public DataGridCollectionView Containers { get; set; }
 
-        bool _f = true;
         public MainWindowViewModel()
         {
             _db = new Database();
@@ -97,9 +98,12 @@ namespace LootViewer.ViewModels
             //Items = new ObservableCollection<Item>(_db.GetItems());
             ItemSelection = new SelectionModel<Item>();
             ItemSelection.SelectionChanged += ItemSelectionChanged;
-
+            //Items.SortDescriptions.Add(DataGridSortDescription.FromPath(property, ListSortDirection.Ascending));
+            
             ContainerListView = new ContainerListView();
-            Containers = new ObservableCollection<Container>();
+            _containers = new ObservableCollection<Models.Container>();
+            Containers = new DataGridCollectionView(_containers);
+            Containers.SortDescriptions.Add(DataGridSortDescription.FromPath("Prob", ListSortDirection.Descending));
 
             _settings.Load();
             ConfigFilePath = _settings.ConfigFilePath;
@@ -118,7 +122,7 @@ namespace LootViewer.ViewModels
         {
             var items = _db.OpenPath(_configFilePath);
             _items.Clear();
-            Containers.Clear();
+            _containers.Clear();
             if (items != null)
             {
                 foreach (var item in items)
@@ -147,14 +151,14 @@ namespace LootViewer.ViewModels
             //var selectedItem = ItemSelection.SelectedItem;
             var selectedItem = _items[ ItemSelection.SelectedIndex];
             var finder = new ItemContainerFinder(_db.LootData.Data);
-            Containers.Clear();
+            _containers.Clear();
             var results = finder.GetItemContainers(selectedItem.Name);
             foreach (var container in results.ContainerResults)
             {
                 var itemContainer = container.Value;
                 var probCalc = new ProbabilityCalculator(itemContainer);
                 var prob = probCalc.CalculateProbability(lootLevel);
-                Containers.Add(new Container(container.Key, Math.Round((prob * 100), 3)));
+                _containers.Add(new Models.Container(container.Key, Math.Round((prob * 100), 3)));
             }
         }
     }
