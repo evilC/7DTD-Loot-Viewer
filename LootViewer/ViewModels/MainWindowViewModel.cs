@@ -71,9 +71,9 @@ namespace LootViewer.ViewModels
         private string? _itemFilterText;
 
         public ItemListView ItemListView { get; set; }
-        private ObservableCollection<Item> _items = new ObservableCollection<Item>();
+        private ObservableCollection<LootItem> _items = new ObservableCollection<LootItem>();
         public DataGridCollectionView Items { get; set; }
-        public SelectionModel<Item> ItemSelection { get; }
+        public SelectionModel<LootItem> ItemSelection { get; }
 
 
         public ContainerListView ContainerListView { get; set; }
@@ -96,7 +96,7 @@ namespace LootViewer.ViewModels
             Items = new DataGridCollectionView(_items);
             Items.Filter = IsItemVisible;
             //Items = new ObservableCollection<Item>(_db.GetItems());
-            ItemSelection = new SelectionModel<Item>();
+            ItemSelection = new SelectionModel<LootItem>();
             ItemSelection.SelectionChanged += ItemSelectionChanged;
             //Items.SortDescriptions.Add(DataGridSortDescription.FromPath(property, ListSortDirection.Ascending));
             
@@ -114,7 +114,7 @@ namespace LootViewer.ViewModels
         public bool IsItemVisible(object obj)
         {
             if (_itemFilterText == null) return true;
-            var item = (Item)obj;
+            var item = (LootItem)obj;
             return _culture.CompareInfo.IndexOf(item.Name, _itemFilterText, CompareOptions.IgnoreCase) >= 0;
         }
 
@@ -132,7 +132,7 @@ namespace LootViewer.ViewModels
             }
         }
 
-        private void ItemSelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<Item> e)
+        private void ItemSelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<LootItem> e)
         {
             GetItemContainers();
         }

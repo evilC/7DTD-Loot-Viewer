@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace LootViewer.Models
 {
-    public class Item
+    public class LootItem
     {
         public string Name { get; set; }
 
-        public Item(string name)
+        public LootItem(string name)
         {
             Name = name;
         }
