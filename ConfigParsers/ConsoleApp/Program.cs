@@ -1,8 +1,13 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using ConfigParsers.Blocks;
 using ConfigParsers.Loot;
 using System.Diagnostics;
 
+var ConfigFilePath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config";
+var bp = new BlocksParser();
+var lootList = bp.GetLootLists(ConfigFilePath);
+return;
 var lootXmlPath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
 //var lootXmlPath = Path.Combine(new string[] { Directory.GetCurrentDirectory(), "Ratchet.xml" });
 var loot = new LootParser(lootXmlPath);
