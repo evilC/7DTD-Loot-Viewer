@@ -37,7 +37,8 @@ namespace LootViewer.ViewModels
 
         public MainWindowViewModel()
         {
-            _db = new Database(@"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml");
+            _db = new Database();
+            _db.OpenPath(@"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml");
 
             LootLevelView = new LootLevelView();
             LootLevel = "1";
@@ -60,13 +61,14 @@ namespace LootViewer.ViewModels
         {
             int lootLevel;
 
+            if (_db.LootData == null) return;
             if (ItemSelection == null || ItemSelection.SelectedItem == null) return;
             if (string.IsNullOrEmpty(_lootLevel)) return;
             try { lootLevel = Convert.ToInt32(_lootLevel); }
             catch (Exception) { return; };
 
             var selectedItem = ItemSelection.SelectedItem;
-            var finder = new ItemContainerFinder(_db.loot.Data);
+            var finder = new ItemContainerFinder(_db.LootData.Data);
             Containers.Clear();
             var results = finder.GetItemContainers(selectedItem.Name);
             foreach (var container in results.ContainerResults)

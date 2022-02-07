@@ -6,29 +6,31 @@ using System.Text;
 using System.Threading.Tasks;
 using ConfigParsers.Loot;
 using ConfigParsers.Loot.Data;
+using System.IO;
 
 namespace LootViewer.Services
 {
     public class Database
     {
-        public LootParser loot { get; }
+        public LootParser? LootData { get => _lootData; }
+        private LootParser? _lootData;
 
-        private List<Models.Item> _items = new List<Models.Item>();
-        //private List<Container> _containers = new List<Container>();
-        //private ItemContainerFinder rw;
+        private List<Models.Item> _items = new();
 
-
-        public Database(string lootXmlPath)
+        public Database()
         {
-            loot = new LootParser(lootXmlPath);
-            foreach (var item in loot.Data.Items)
+        }
+
+        public void OpenPath(string lootXmlPath)
+        {
+            if (!File.Exists(lootXmlPath)) return;
+            _lootData = new LootParser(lootXmlPath);
+            foreach (var item in _lootData.Data.Items)
             {
                 _items.Add(new Models.Item(item.Key));
             }
         }
 
         public IEnumerable<Models.Item> GetItems() => _items;
-
-        //public IEnumerable<Container> GetContainers() => _containers;
     }
 }
