@@ -16,6 +16,9 @@ namespace LootViewer.ViewModels
     {
         private Database _db;
 
+        public ConfigFileSelectorView ConfigFileSelectorView { get; set; }
+        public string? ConfigFilePath { get; set; }
+
         public LootLevelView LootLevelView { get; set; }
         private string? _lootLevel;
         public string? LootLevel { 
@@ -37,6 +40,8 @@ namespace LootViewer.ViewModels
 
         public MainWindowViewModel()
         {
+            ConfigFileSelectorView = new ConfigFileSelectorView();
+            ConfigFilePath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
             _db = new Database();
             _db.OpenPath(@"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml");
 

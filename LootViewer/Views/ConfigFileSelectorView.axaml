@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LootViewer.Views.ConfigFileSelectorView">
+	<Border Grid.Row="0" BorderBrush="Gainsboro" BorderThickness="1" Margin="10,10,10,10" Padding="10,10,10,10">
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="10">Config file location</TextBlock>
+			<TextBox Grid.Column="1" Text="{Binding ConfigFilePath}"></TextBox>
+			<Button  Grid.Column="2" VerticalAlignment="Center" Margin="10,0,10,0">Browse...</Button>
+		</Grid>
+	</Border>
+</UserControl>
