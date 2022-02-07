@@ -34,16 +34,19 @@
 		<!--3rd Row-->
 		<Grid Grid.Row="2">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="1*"/>
-				<ColumnDefinition Width="2*"/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 			<!--Items-->
 			<UserControl Grid.Column="0" Content="{Binding LootItemsView}"/>
-			<!--Containers-->
+			<!--LootLists-->
 			<UserControl Grid.Column="1" Content="{Binding LootListsView}"/>
+			<!--Containers-->
+			<UserControl Grid.Column="2" Content="{Binding LootContainersView}"/>
 		</Grid>
 	</Grid>
 </Window>

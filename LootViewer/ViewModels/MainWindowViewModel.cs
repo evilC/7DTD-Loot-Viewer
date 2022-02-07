@@ -22,6 +22,7 @@ namespace LootViewer.ViewModels
         private string _settingsFile = "settings.json";
         private Database _db;
 
+        // Config File selector
         public ConfigFileSelectorView ConfigFileSelectorView { get; set; }
         private string? _configFilePath;
         public string? ConfigFilePath
@@ -31,10 +32,11 @@ namespace LootViewer.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _configFilePath, value);
                 SaveSettings();
-                LootPathChanged();
+                ConfigFilePathChanged();
             }
         }
 
+        // Loot Level
         public LootLevelView LootLevelView { get; set; }
         private string? _lootLevel;
         public string? LootLevel { 
@@ -42,10 +44,11 @@ namespace LootViewer.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _lootLevel, value);
-                GetItemContainers();
+                GetItemLootLists();
             }
         }
 
+        // Item Filter
         public ItemFilterView ItemFilterView { get; set; }
 
         public string? ItemFilterText
@@ -58,21 +61,21 @@ namespace LootViewer.ViewModels
             }
         }
 
-        private void ItemFilterChanged()
-        {
-            LootItems.Refresh();
-        }
-
         private CultureInfo _culture = CultureInfo.InvariantCulture;
         private string? _itemFilterText;
 
+        // Loot Items
         public LootItemsView LootItemsView { get; set; }
         private ObservableCollection<LootItem> _lootItems = new ObservableCollection<LootItem>();
         public DataGridCollectionView LootItems { get; set; }
 
+        // Loot Lists
         public LootListsView LootListsView { get; set; }
         public ObservableCollection<LootList> _lootLists { get; }
         public DataGridCollectionView LootLists { get; set; }
+
+        // Loot Containers
+        public LootContainersView LootContainersView { get; set; }
 
         public MainWindowViewModel()
         {
@@ -96,9 +99,24 @@ namespace LootViewer.ViewModels
             LootLists = new DataGridCollectionView(_lootLists);
             LootLists.SortDescriptions.Add(DataGridSortDescription.FromPath("Prob", ListSortDirection.Descending));
 
-            LootPathChanged();
+            LootContainersView = new LootContainersView();
+
+            ConfigFilePathChanged();
         }
 
+        /// <summary>
+        /// Called when the Item Filter changes
+        /// </summary>
+        private void ItemFilterChanged()
+        {
+            LootItems.Refresh();
+        }
+
+        /// <summary>
+        /// Called for each LootItem to check whether it is filtered or not
+        /// </summary>
+        /// <param name="obj">The LootItem to check</param>
+        /// <returns>True = show, False = filtered out</returns>
         public bool IsItemVisible(object obj)
         {
             if (_itemFilterText == null) return true;
@@ -106,7 +124,10 @@ namespace LootViewer.ViewModels
             return _culture.CompareInfo.IndexOf(item.Name, _itemFilterText, CompareOptions.IgnoreCase) >= 0;
         }
 
-        private void LootPathChanged()
+        /// <summary>
+        /// Called when the Config File path changes
+        /// </summary>
+        private void ConfigFilePathChanged()
         {
             var items = _db.OpenPath(_configFilePath);
             _lootItems.Clear();
@@ -120,12 +141,21 @@ namespace LootViewer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Called when a new LootItem is selected in the LootItemsView
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ItemSelectionChanged(object? sender, EventArgs e)
         {
-            GetItemContainers();
+            GetItemLootLists();
         }
 
-        private void GetItemContainers()
+        /// <summary>
+        /// Update the LootList
+        /// Called when a new LootItem is slected in the LootItemsView, or the LootLevel changes in the LootLevelView
+        /// </summary>
+        private void GetItemLootLists()
         {
             int lootLevel;
 
@@ -148,6 +178,9 @@ namespace LootViewer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Load settings from the settings file
+        /// </summary>
         private void LoadSettings()
         {
             if (!File.Exists(_settingsFile)) return;
