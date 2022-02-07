@@ -3,6 +3,7 @@ using ConfigParsers.Loot;
 using LootViewer.Models;
 using LootViewer.Services;
 using LootViewer.Views;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +17,15 @@ namespace LootViewer.ViewModels
         private Database _db;
 
         public LootLevelView LootLevelView { get; set; }
-        public int LootLevel { get; set; }
+        private string? _lootLevel;
+        public string? LootLevel { 
+            get => _lootLevel;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _lootLevel, value);
+                GetItemContainers();
+            }
+        }
 
         public ItemListView ItemListView { get; set; }
         public ObservableCollection<Item> Items { get; }
@@ -31,7 +40,7 @@ namespace LootViewer.ViewModels
             _db = new Database(@"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml");
 
             LootLevelView = new LootLevelView();
-            LootLevel = 1;
+            LootLevel = "1";
 
             ItemListView = new ItemListView();
             Items = new ObservableCollection<Item>(_db.GetItems());
@@ -44,24 +53,29 @@ namespace LootViewer.ViewModels
 
         private void SelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<Item> e)
         {
-            var selectedItem = ItemSelection.SelectedItem;
-            if (selectedItem == null)
-            {
-                Debug.WriteLine($"Nothing selected");
-                return;
-            }
-            var finder = new ItemContainerFinder(_db.loot.Data);
+            GetItemContainers();
+        }
 
+        private void GetItemContainers()
+        {
+            int lootLevel;
+
+            if (ItemSelection == null || ItemSelection.SelectedItem == null) return;
+            if (string.IsNullOrEmpty(_lootLevel)) return;
+            try { lootLevel = Convert.ToInt32(_lootLevel); }
+            catch (Exception) { return; };
+
+            var selectedItem = ItemSelection.SelectedItem;
+            var finder = new ItemContainerFinder(_db.loot.Data);
             Containers.Clear();
             var results = finder.GetItemContainers(selectedItem.Name);
             foreach (var container in results.ContainerResults)
             {
                 var itemContainer = container.Value;
                 var probCalc = new ProbabilityCalculator(itemContainer);
-                var prob = probCalc.CalculateProbability(102);
+                var prob = probCalc.CalculateProbability(lootLevel);
                 Containers.Add(new Container(container.Key, prob));
             }
-
         }
     }
 }
