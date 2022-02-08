@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace LootViewer.Models
 {
+    /*
     public class LootContainer
     {
         public string Name { get; set; }
@@ -15,4 +16,5 @@ namespace LootViewer.Models
             Name = name;
         }
     }
+    */
 }

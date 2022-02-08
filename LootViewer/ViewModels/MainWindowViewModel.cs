@@ -24,7 +24,9 @@ namespace LootViewer.ViewModels
         private string _settingsFile = "Settings.json";
         private Database _db;
         private LocalizationParser _lp;
-        private Dictionary<string, string> displayNames = new Dictionary<string, string>();
+        private Dictionary<string, string> _displayNames = new();
+        private BlocksParser _blockParser = new();
+        private Dictionary<string, HashSet<string>> _lootListContainerNames = new();
 
         // Config File selector
         public ConfigFileSelectorView ConfigFileSelectorView { get; set; }
@@ -80,8 +82,8 @@ namespace LootViewer.ViewModels
 
         // Loot Containers
         public LootContainersView LootContainersView { get; set; }
-        private ObservableCollection<LootContainer> _lootContainers;
-        private SortedDictionary<string, HashSet<string>>? _containerNames = null;
+        private ObservableCollection<string> _lootContainers;
+        private SortedDictionary<string, List<string>>? _containerNames = null;
 
         public DataGridCollectionView LootContainers { get; set; }
 
@@ -115,7 +117,8 @@ namespace LootViewer.ViewModels
 
             // Loot Containers
             LootContainersView = new LootContainersView();
-            _lootContainers = new ObservableCollection<LootContainer>();
+            //_lootContainers = new ObservableCollection<LootContainer>();
+            _lootContainers = new ObservableCollection<string>();
             LootContainers = new DataGridCollectionView(_lootContainers);
             LootContainers.SortDescriptions.Add(DataGridSortDescription.FromPath("Name", ListSortDirection.Ascending));
 
@@ -163,23 +166,35 @@ namespace LootViewer.ViewModels
                 {
                     // If file exists in new location, then reload the cache, else take no action...
                     // ... (ie while typing in the Config File Location box, do not continually reload the cache)
-                    displayNames = _lp.GetDisplayNames(_configFilePath);
-                    // Pass the Display Names to the Block Parser, so it can build the list of human friendly Container Names
-                    var bp = new BlocksParser(displayNames);
-                    _containerNames = bp.GetLootLists(_configFilePath);
+                    _displayNames = _lp.GetDisplayNames(_configFilePath);
+                    // Get the list of container names for each LootList from the BlocksParser
+                    //_blockParser = new BlocksParser();
+                    _containerNames = _blockParser.GetLootLists(_configFilePath);
                 }
             }
             var lootItems = _db.OpenPath(_configFilePath);
             _lootItems.Clear();
             _lootLists.Clear();
             _lootContainers.Clear();
+            _lootListContainerNames = new Dictionary<string, HashSet<string>>();
             if (lootItems != null)
             {
                 foreach (var lootItem in lootItems)
                 {
-                    var displayName = displayNames.ContainsKey(lootItem.Key) ? displayNames[lootItem.Key] : lootItem.Key;
-                    //_lootItems.Add(lootItem);
+                    var displayName = _displayNames.ContainsKey(lootItem.Key) ? _displayNames[lootItem.Key] : lootItem.Key;
                     _lootItems.Add(new LootItem(displayName, lootItem.Key));
+                }
+            }
+            if (_containerNames != null)
+            {
+                foreach (var lootList in _containerNames)
+                {
+                    _lootListContainerNames.Add(lootList.Key, new HashSet<string>());
+                    foreach (var containerName in lootList.Value)
+                    {
+                        var name = _displayNames.ContainsKey(containerName) ? _displayNames[containerName] : containerName;
+                        _lootListContainerNames[lootList.Key].Add(name);
+                    }
                 }
             }
         }
@@ -244,13 +259,13 @@ namespace LootViewer.ViewModels
             _lootContainers.Clear();
             if (LootLists.CurrentItem == null) return;
             var selectedLootList = ((LootList)LootLists.CurrentItem).Name;
-            if (_containerNames != null && _containerNames.ContainsKey(selectedLootList))
+            if (_lootListContainerNames.ContainsKey(selectedLootList))
             {
-                var containerNames = _containerNames[selectedLootList];
-                foreach (var containerName in containerNames)
+                foreach (var containerName in _lootListContainerNames[selectedLootList])
                 {
-                    _lootContainers.Add(new LootContainer(containerName));
+                    _lootContainers.Add(containerName);
                 }
+                
             }
         }
 

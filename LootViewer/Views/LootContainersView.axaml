@@ -8,7 +8,8 @@
 		<!--https://docs.avaloniaui.net/docs/controls/datagrid-->
 		<DataGrid Grid.Row="1" Items="{Binding LootContainers}">
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="Container Name" Binding="{Binding Name}" Width="*"/>
+				<!--<DataGridTextColumn Header="Container Name" Binding="{Binding Name}" Width="*"/>-->
+				<DataGridTextColumn Header="Container Name" Binding="{Binding}" Width="*"/>
 			</DataGrid.Columns>
 		</DataGrid>
 	</Border>
