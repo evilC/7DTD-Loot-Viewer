@@ -166,8 +166,7 @@ namespace LootViewer.ViewModels
                     // If file exists in new location, then reload the cache, else take no action...
                     // ... (ie while typing in the Config File Location box, do not continually reload the cache)
                     _displayNames = _lp.GetDisplayNames(_configFilePath);
-                    // Get the list of container names for each LootList from the BlocksParser
-                    //_blockParser = new BlocksParser();
+                    // Re-parse the BlockList
                     _blockParser.LoadConfigFile(_configFilePath);
                 }
             }
