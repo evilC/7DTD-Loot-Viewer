@@ -83,7 +83,6 @@ namespace LootViewer.ViewModels
         // Loot Containers
         public LootContainersView LootContainersView { get; set; }
         private ObservableCollection<string> _lootContainers;
-        private SortedDictionary<string, List<string>>? _containerNames = null;
 
         public DataGridCollectionView LootContainers { get; set; }
 
@@ -169,7 +168,7 @@ namespace LootViewer.ViewModels
                     _displayNames = _lp.GetDisplayNames(_configFilePath);
                     // Get the list of container names for each LootList from the BlocksParser
                     //_blockParser = new BlocksParser();
-                    _containerNames = _blockParser.GetLootLists(_configFilePath);
+                    _blockParser.LoadConfigFile(_configFilePath);
                 }
             }
             var lootItems = _db.OpenPath(_configFilePath);
@@ -185,16 +184,13 @@ namespace LootViewer.ViewModels
                     _lootItems.Add(new LootItem(displayName, lootItem.Key));
                 }
             }
-            if (_containerNames != null)
+            foreach (var lootList in _blockParser.BlockList)
             {
-                foreach (var lootList in _containerNames)
+                _lootListContainerNames.Add(lootList.Key, new HashSet<string>());
+                foreach (var containerName in lootList.Value)
                 {
-                    _lootListContainerNames.Add(lootList.Key, new HashSet<string>());
-                    foreach (var containerName in lootList.Value)
-                    {
-                        var name = _displayNames.ContainsKey(containerName) ? _displayNames[containerName] : containerName;
-                        _lootListContainerNames[lootList.Key].Add(name);
-                    }
+                    var name = _displayNames.ContainsKey(containerName) ? _displayNames[containerName] : containerName;
+                    _lootListContainerNames[lootList.Key].Add(name);
                 }
             }
         }

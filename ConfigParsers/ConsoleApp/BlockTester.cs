@@ -13,7 +13,7 @@ namespace ConsoleApp
         {
             var configFilePath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config";
             var bp = new BlocksParser();
-            var lootList = bp.GetLootLists(configFilePath);
+            bp.LoadConfigFile(configFilePath);
         }
     }
 }

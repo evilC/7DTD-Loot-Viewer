@@ -10,18 +10,17 @@ namespace ConfigParsers.Blocks
 {
     public class BlocksParser
     {
-        public BlocksParser()
-        {
-        }
+        // Key is Container (effectively a LootGroup) name (eg "playerStorage")
+        // Value is list of names for that Container Group.
+        // Value is game identifier name (eg "cntStorageChest")...
+        public SortedDictionary<string, List<string>> BlockList { get; private set; } = new SortedDictionary<string, List<string>>();
 
-        public SortedDictionary<string, List<string>> GetLootLists(string configFilePath)
+
+        public void LoadConfigFile(string configFilePath)
         {
             var blocksFile = Path.Combine(new string[] { configFilePath, "blocks.xml" });
-            // Key is Container (effectively a LootGroup) name (eg "playerStorage")
-            // Value is list of names for that Container Group.
-            // Value is game identifier name (eg "cntStorageChest")...
-            var lootLists = new SortedDictionary<string, List<string>>();
-            if (!File.Exists(blocksFile)) return lootLists;
+            if (!File.Exists(blocksFile)) return;
+            BlockList = new SortedDictionary<string, List<string>>();
             var rawBlocks = ObjectDeserializer.DeserializeToObject<XmlClasses.Root>
                 (blocksFile);
 
@@ -33,16 +32,21 @@ namespace ConfigParsers.Blocks
                     {
                         case "LootList":
                             var lootList = property.Value;
-                            if (!lootLists.ContainsKey(property.Value))
+                            if (!BlockList.ContainsKey(property.Value))
                             {
-                                lootLists[property.Value] = new List<string>();
+                                BlockList[property.Value] = new List<string>();
                             }
-                            lootLists[lootList].Add(rawBlock.Name);
+                            BlockList[lootList].Add(rawBlock.Name);
                             break;
                     }
                 }
             }
-            return lootLists;
         }
+
+        //public SortedDictionary<string, List<string>> GetLootLists(string configFilePath)
+        //{
+
+        //    return lootLists;
+        //}
     }
 }

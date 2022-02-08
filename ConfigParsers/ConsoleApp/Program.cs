@@ -5,7 +5,7 @@ using ConsoleApp;
 using System.Diagnostics;
 
 //new LocalizationTester();
-//new BlockTester();
-new LootTester();
+new BlockTester();
+//new LootTester();
 
 Console.WriteLine("Done!");
