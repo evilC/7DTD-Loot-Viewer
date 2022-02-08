@@ -10,6 +10,8 @@ namespace ConfigParsers.Blocks
 {
     public class BlocksParser
     {
+        // If Localization.xml was parsed, and Display Names obtained for the various blocks...
+        // .. then this dictionary will hold a lookup table of container name (eg "cntStorageChest") to Display Names (eg "Wooden Chest")
         private Dictionary<string, string>? _displayNames;
 
         public BlocksParser(Dictionary<string, string>? displayNames)
@@ -20,6 +22,10 @@ namespace ConfigParsers.Blocks
         public SortedDictionary<string, HashSet<string>> GetLootLists(string configFilePath)
         {
             var blocksFile = Path.Combine(new string[] { configFilePath, "blocks.xml" });
+            // Key is Container (effectively a LootGroup) name (eg "playerStorage")
+            // Value is list of names for that Container Group.
+            // Values Can be EITHER game identifier name (eg "cntStorageChest")...
+            // OR Display Name from Localization.txt (eg "Wooden Chest"), if available
             var lootLists = new SortedDictionary<string, HashSet<string>>();
             if (!File.Exists(blocksFile)) return lootLists;
             var rawBlocks = ObjectDeserializer.DeserializeToObject<XmlClasses.Root>
@@ -29,24 +35,26 @@ namespace ConfigParsers.Blocks
             {
                 foreach (var property in rawBlock.Properties)
                 {
-                    if (property.Name == "LootList")
+                    switch (property.Name)
                     {
-                        var lootList = property.Value;
-                        if (!lootLists.ContainsKey(property.Value))
-                        {
-                            lootLists[property.Value] = new HashSet<string>();
-                        }
-                        string name;
-                        if (_displayNames != null && _displayNames.ContainsKey(rawBlock.Name))
-                        {
-                            name = _displayNames[rawBlock.Name];
-                        }
-                        else
-                        {
-                            name = rawBlock.Name;
-                        }
-                        lootLists[lootList].Add(name);
-                        break;
+                        case "LootList":
+                            var lootList = property.Value;
+                            if (!lootLists.ContainsKey(property.Value))
+                            {
+                                lootLists[property.Value] = new HashSet<string>();
+                            }
+                            string name;
+                            if (_displayNames != null && _displayNames.ContainsKey(rawBlock.Name))
+                            {
+                                name = _displayNames[rawBlock.Name];
+                            }
+                            else
+                            {
+                                name = rawBlock.Name;
+                            }
+                            lootLists[lootList].Add(name);
+                            //continue; // Do not process any other properties
+                            break;
                     }
                 }
             }

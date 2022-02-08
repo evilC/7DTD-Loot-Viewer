@@ -13,12 +13,12 @@ var displayNames = lp.GetDisplayNames(configFilePath);
 var bp = new BlocksParser(displayNames);
 var lootList = bp.GetLootLists(configFilePath);
 
-//var containers = lootList["cupboard"];
-var containers = lootList["smallSafes"];
+var gameName = "cupboard";
+Debug.WriteLine($"Game Name : {gameName}");
+var containers = lootList[gameName];
 foreach (var container in containers)
 {
-    var displayName = displayNames[container];
-    Debug.WriteLine($"{displayName}");
+    Debug.WriteLine($"Display Name: {container}");
 }
 return;
 var lootXmlPath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\loot.xml";
