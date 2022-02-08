@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Blocks\Data\" />
     <Folder Include="Localization\" />
   </ItemGroup>
 

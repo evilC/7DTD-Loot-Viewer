@@ -1,4 +1,5 @@
-﻿using ConfigParsers.Common;
+﻿using ConfigParsers.Blocks.Data;
+using ConfigParsers.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,9 +15,19 @@ namespace ConfigParsers.Blocks
         // Value is list of names for that Container Group.
         // Value is game identifier name (eg "cntStorageChest")...
         public SortedDictionary<string, List<string>> BlockList { get; private set; } = new SortedDictionary<string, List<string>>();
-
+        
+        /// <summary>
+        /// Holds a representation of what is in the XML
+        /// </summary>
+        public SortedDictionary<string, Block> Blocks { get; private set; } = new SortedDictionary<string, Block>();
 
         public void LoadConfigFile(string configFilePath)
+        {
+            ParseXml(configFilePath);
+            Build();
+        }
+
+        private void ParseXml(string configFilePath)
         {
             var blocksFile = Path.Combine(new string[] { configFilePath, "blocks.xml" });
             if (!File.Exists(blocksFile)) return;
@@ -26,27 +37,66 @@ namespace ConfigParsers.Blocks
 
             foreach (var rawBlock in rawBlocks.Blocks)
             {
+                string? extends = null;
+                string? lootList = null;
+                var drops = new List<BlockDrop>();
+
                 foreach (var property in rawBlock.Properties)
                 {
                     switch (property.Name)
                     {
                         case "LootList":
-                            var lootList = property.Value;
-                            if (!BlockList.ContainsKey(property.Value))
-                            {
-                                BlockList[property.Value] = new List<string>();
-                            }
-                            BlockList[lootList].Add(rawBlock.Name);
+                            lootList = property.Value;
+                            break;
+                        case "Extends":
+                            extends = property.Value;
                             break;
                     }
                 }
+
+                foreach (var drop in rawBlock.Drops)
+                {
+                    switch (drop.Event)
+                    {
+                        case "Harvest":
+                            var prob = string.IsNullOrWhiteSpace(drop.Prob) ? 1 : Convert.ToDecimal(drop.Prob);
+                            DropType dropType;
+                            if (drop.Tag == "salvageHarvest")
+                            {
+                                dropType = DropType.Salvage;
+                            }
+                            else if (drop.Tag == "allHarvest")
+                            {
+                                dropType = DropType.Harvest;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                            drops.Add(new BlockDrop(drop.ResourceName, prob, dropType));
+                            break;
+                    }
+                }
+
+                Blocks.Add(rawBlock.Name, new Block(rawBlock.Name, extends, lootList, drops));
             }
+
         }
 
-        //public SortedDictionary<string, List<string>> GetLootLists(string configFilePath)
-        //{
-
-        //    return lootLists;
-        //}
+        private void Build()
+        {
+            BlockList = new();
+            foreach (var block in Blocks.Values)
+            {
+                if (block.LootList != null)
+                {
+                    if (!BlockList.ContainsKey(block.LootList))
+                    {
+                        BlockList.Add(block.LootList, new());
+                    }
+                    BlockList[block.LootList].Add(block.Name);
+                }
+            }
+        }
     }
 }

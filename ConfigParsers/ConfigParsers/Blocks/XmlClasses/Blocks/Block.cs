@@ -9,5 +9,8 @@ namespace ConfigParsers.Blocks.XmlClasses
 
         [XmlElement(ElementName = "property")]
         public List<BlockProperty> Properties { get; set; } = new List<BlockProperty>();
+
+        [XmlElement(ElementName = "drop")]
+        public List<BlockDrop> Drops { get; set; } = new List<BlockDrop>();
     }
 }
