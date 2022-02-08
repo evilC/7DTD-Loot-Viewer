@@ -11,22 +11,27 @@ namespace ConfigParsers.Blocks
 {
     public class BlocksParser
     {
-        // Key is Container (effectively a LootGroup) name (eg "playerStorage")
-        // Value is list of names for that Container Group.
-        // Value is game identifier name (eg "cntStorageChest")...
-        public SortedDictionary<string, List<string>> BlockList { get; private set; } = new SortedDictionary<string, List<string>>();
-        
         /// <summary>
         /// Holds a representation of what is in the XML
         /// </summary>
         public SortedDictionary<string, Block> Blocks { get; private set; } = new SortedDictionary<string, Block>();
 
+        // Used by the UI to translate LootList names (What appears in loot.xml) into Container Names (Using Localization.txt)
+        // Key is Container (effectively a LootGroup) name (eg "playerStorage")
+        // Value is list of names for that Container Group.
+        // Value is game identifier name (eg "cntStorageChest")...
+        public SortedDictionary<string, List<string>> BlockList { get; private set; } = new SortedDictionary<string, List<string>>();
+        
         public void LoadConfigFile(string configFilePath)
         {
             ParseXml(configFilePath);
             Build();
         }
 
+        /// <summary>
+        /// Parse the XML and build a Dictionary of objects that it contains
+        /// </summary>
+        /// <param name="configFilePath">The path to blocks.xml</param>
         private void ParseXml(string configFilePath)
         {
             var blocksFile = Path.Combine(new string[] { configFilePath, "blocks.xml" });
@@ -80,9 +85,11 @@ namespace ConfigParsers.Blocks
 
                 Blocks.Add(rawBlock.Name, new Block(rawBlock.Name, extends, lootList, drops));
             }
-
         }
 
+        /// <summary>
+        /// Build lookup tables which will be used by the UI
+        /// </summary>
         private void Build()
         {
             BlockList = new();
