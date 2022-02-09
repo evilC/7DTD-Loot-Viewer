@@ -45,9 +45,17 @@ namespace ConfigParsers.Blocks
                     switch (property.Name)
                     {
                         case "LootList":
+                            if (lootList != null)
+                            {
+                                throw new Exception($"Block {rawBlock.Name} has multiple LootLists");
+                            }
                             lootList = property.Value;
                             break;
                         case "Extends":
+                            if (extends != null)
+                            {
+                                throw new Exception($"Block {rawBlock.Name} extends multiple blocks");
+                            }
                             extends = property.Value;
                             break;
                     }
