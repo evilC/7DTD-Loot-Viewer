@@ -33,16 +33,34 @@ namespace ConsoleApp
                                 var searchStr = $"{baseStr}v0{i}";
                                 if (displayNames.ContainsKey(searchStr))
                                 {
-                                    Debug.WriteLine($"Found {searchStr}");
+                                    //Debug.WriteLine($"Found {searchStr}");
                                     found = true;
                                 }
                             }
                         }
-                        if (!found) Debug.WriteLine($"Could not find {container}");
+                        //if (!found) Debug.WriteLine($"Could not find {container}");
                     }
                 }
             }
 
+            foreach (var block in bp.Blocks.Values)
+            {
+                if (!string.IsNullOrWhiteSpace(block.Extends))
+                {
+                    var extendBlock = bp.Blocks[block.Extends];
+                    if (!string.IsNullOrWhiteSpace(extendBlock.Extends))
+                    {
+                        Debug.WriteLine($"Double extend found - {block.Name} extends {block.Extends}, which in turn extends {extendBlock.Extends}");
+                    }
+                }
+                //if (block.Drops.Count > 0)
+                //{
+                //    if (!displayNames.ContainsKey(block.Name))
+                //    {
+                //        Debug.WriteLine($"Block {block.Name} has a LootList but was not found in Display Names");
+                //    }
+                //}
+            }
         }
     }
 }
