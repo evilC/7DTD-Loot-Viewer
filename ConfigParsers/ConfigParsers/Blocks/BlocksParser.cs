@@ -121,16 +121,21 @@ namespace ConfigParsers.Blocks
                 // A BlockDrop can have a count of 0...
                 // ... This seems to be used when the Block that it extends has a non-zero Count...
                 // ... so the extending Block can REMOVE drops from the Block(s) it extends
+                //Debug.WriteLine($"Processing block: {block.Name}");
                 var extendedBlock = GetExtendedDrops(originalBlocks, block, null);
+                //Debug.WriteLine($"");
                 extendedBlocks.Add(extendedBlock.Name, extendedBlock);
                 dropCount += extendedBlock.Drops.Count;
             }
-            Debug.WriteLine($"Extended drop count: {dropCount}");
+            //Debug.WriteLine($"Extended drop count: {dropCount}");
             return extendedBlocks;
         }
 
         /// <summary>
         /// For a given block, gets any drops from blocks that it extends
+        /// Recursive function!
+        /// When called on a leaf Block, burrows all the way to the root Block, and THEN begins processing
+        /// ie even though you call it on the leaf Block, starts at the root Block and ends at the leaf Block
         /// </summary>
         /// <param name="thisBlock">The block to process</param>
         /// <param name="extendedBlock">Used for recursion, pass null when calling</param>
@@ -140,66 +145,79 @@ namespace ConfigParsers.Blocks
             Block? extendedBlock    // A block containing all the drops from the original block and all blocks that it extends
         )
         {
-            if (extendedBlock == null)
+            if (string.IsNullOrWhiteSpace(thisBlock.Extends))
             {
+                // Root block
                 // First call of this method (Root of recursion)
                 // thisBlock will be the original block
                 // Duplicate original block to extendedBlock
                 extendedBlock = new Block(thisBlock.Name,
                     thisBlock.Extends,
-                    thisBlock.LootList, 
+                    thisBlock.LootList,
                     new List<BlockDrop>(thisBlock.Drops)
                 );
+                foreach (var drop in thisBlock.Drops)
+                {
+                    if (drop.Count.Equals(_zeroCount))
+                        throw new Exception("Zero drop count in root node");
+                }
+                //Debug.WriteLine($"Found Root block {thisBlock.Name}");
+                return extendedBlock;
             }
             else
             {
-                // Add drops from this block to the extendedBlock
-                foreach (var extendedDrop in thisBlock.Drops)
+                var nextBlock = originalBlocks[thisBlock.Extends];
+                //Debug.WriteLine($"Recursing in: thisBlock={thisBlock.Name}");
+                extendedBlock = GetExtendedDrops(originalBlocks, nextBlock, extendedBlock);
+                // This line should only be hit once we have recursed all the way to the root
+                //Debug.WriteLine($"Recursing out: thisBlock={thisBlock.Name}");
+                if (!string.IsNullOrWhiteSpace(thisBlock.LootList))
                 {
-                    // Do not add drops which are exact duplicates of an existing drop
-                    var dupe = false;
-                    foreach (var originalDrop in extendedBlock.Drops)
+                    if (!string.IsNullOrWhiteSpace(thisBlock.LootList))
+                        throw new Exception("LootList is already set");
+                    extendedBlock.LootList = thisBlock.LootList;
+                }
+
+                // Iterate drops in the extending Block
+                foreach (var extendingDrop in thisBlock.Drops)
+                {
+                    // Iterate drops in the extended Block
+                    var isDupe = false;
+                    for (int extendedIndex = extendedBlock.Drops.Count - 1; extendedIndex >= 0; extendedIndex--)
                     {
-                        if (originalDrop.ResourceName == extendedDrop.ResourceName
-                            && originalDrop.Prob == extendedDrop.Prob
-                            && originalDrop.DropType == extendedDrop.DropType)
+                        var extendedDrop = extendedBlock.Drops[extendedIndex];
+                        if (extendingDrop.ResourceName == extendedDrop.ResourceName)
                         {
-                            // Extending drop may be identical to base drop.
-                            // Typically, this seems to be the case when the extending drop has a count of 0...
-                            // ... and the base count has a non-zero value
-                            // Doesn't seem like we have to take any action
-                            dupe = true;
+                            isDupe = true;
+                            // Extending Block has same resource as extended Block
+                            if (extendingDrop.Count.Equals(_zeroCount))
+                            {
+                                // Extending Block has a Drop of the same resource but with zero count...
+                                // ... remove Drop from extended Block
+                                //Debug.WriteLine($"Extending Block {thisBlock.Name} has resource {extendedDrop.ResourceName} already in extended block {extendedBlock.Name} but with 0 count - removing");
+                                extendedBlock.Drops.RemoveAt(extendedIndex);
+                            }
+                            else
+                            {
+                                // Replace extended Drop with extending Drop
+                                //Debug.WriteLine($"Replacing resource {extendingDrop.ResourceName} in extended Block {extendedBlock.Name} with version from extending Block {thisBlock.Name}");
+                                extendedDrop = extendingDrop;
+
+                            }
                             break;
                         }
                     }
-                    if (!dupe)
+                    if (!isDupe)
                     {
-                        // This never seems to happen, so it seems that this function does not do anything useful.
-                        Debug.WriteLine($"Adding {extendedDrop.ResourceName} from {thisBlock.Name} to {extendedBlock.Name}");
-                        extendedBlock.Drops.Add(extendedDrop);
+                        //Debug.WriteLine($"Extending Block {thisBlock.Name} has resource {extendingDrop.ResourceName} not present in extened Block {extendedBlock.Name}, adding");
+                        if (extendingDrop.Equals(_zeroCount))
+                            throw new Exception($"Not expecting extending Block {thisBlock.Name} to feature 0 count resource ({extendingDrop.ResourceName}) that is not in extended block {extendedBlock.Name}");
+                        extendedBlock.Drops.Add(extendingDrop);
                     }
                 }
-            }
-            // If this block extends another block, then add drops from the extended block
-            if (!string.IsNullOrWhiteSpace(thisBlock.Extends))
-            {
-                if (!originalBlocks.ContainsKey(thisBlock.Extends))
-                {
-                    throw new Exception($"Block {thisBlock.Name} extends non-existant block {thisBlock.Extends}");
-                }
-                var nextBlock = originalBlocks[thisBlock.Extends];
-                GetExtendedDrops(originalBlocks, nextBlock, extendedBlock);
-            }
 
-            // Now that we have processed extended blocks, we can filter out drops with a count of 0
-            for (int i = extendedBlock.Drops.Count-1; i >= 0; i--)
-            {
-                var drop = extendedBlock.Drops[i];
-                if (drop.Count.Equals(_zeroCount))
-                {
-                    extendedBlock.Drops.RemoveAt(i);
-                }
             }
+            extendedBlock.Name = thisBlock.Name;
             return extendedBlock;
         }
     }

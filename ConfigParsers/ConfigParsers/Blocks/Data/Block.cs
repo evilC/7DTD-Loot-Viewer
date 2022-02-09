@@ -8,8 +8,8 @@ namespace ConfigParsers.Blocks.Data
 {
     public class Block
     {
-        public string Name { get;  }
-        public string? LootList { get; }
+        public string Name { get; set; }
+        public string? LootList { get; set; }
         public string? Extends { get; }
         public List<BlockDrop> Drops { get; }
 
