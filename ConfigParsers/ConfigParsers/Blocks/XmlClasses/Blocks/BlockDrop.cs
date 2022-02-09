@@ -18,6 +18,9 @@ namespace ConfigParsers.Blocks.XmlClasses
         [XmlAttribute("prob")]
         public string Prob { get; set; } = string.Empty;
 
+        [XmlAttribute("count")]
+        public string Count { get; set; } = string.Empty;
+
         [XmlAttribute("tag")]
         public string Tag { get; set; } = string.Empty;
     }

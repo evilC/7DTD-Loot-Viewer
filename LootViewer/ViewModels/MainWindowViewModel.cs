@@ -167,7 +167,7 @@ namespace LootViewer.ViewModels
                     // ... (ie while typing in the Config File Location box, do not continually reload the cache)
                     _displayNames = _lp.GetDisplayNames(_configFilePath);
                     // Re-parse the BlockList
-                    _blockParser.LoadConfigFile(_configFilePath);
+                    _blockParser.LoadConfigFile(Path.Combine(new string[] { _configFilePath, "blocks.xml" }));
                 }
             }
             var lootItems = _db.OpenPath(_configFilePath);

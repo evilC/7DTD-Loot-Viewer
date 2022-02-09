@@ -1,4 +1,6 @@
-﻿namespace ConfigParsers.Loot.Data
+﻿using ConfigParsers.Common;
+
+namespace ConfigParsers.Loot.Data
 {
     /// <summary>
     /// When one Group references another, this class holds the reference

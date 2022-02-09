@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<blocks>
+	<!--Test that A should inherit drop from B-->
+	<!--<block name="Test01-B">
+		<drop event="Harvest" name="DropOne" count="1" tag="allHarvest"/>
+	</block>
+
+	<block name="Test01-A">
+		<property name="Extends" value="Test01-B"/>
+	</block>-->
+
+	<!--Test that A should remove drop inherited from B-->
+	<!--<block name="Test02-B">
+		<drop event="Harvest" name="DropOne" count="1" tag="allHarvest"/>
+	</block>
+
+	<block name="Test02-A">
+		<property name="Extends" value="Test02-B"/>
+		<drop event="Harvest" name="DropOne" count="0" tag="allHarvest"/>
+	</block>-->
+	
+	<!--Test that A should not include drop from C that was removed by B-->
+	<block name="Test03-C">
+		<drop event="Harvest" name="DropOne" count="1" tag="allHarvest"/>
+	</block>
+
+	<block name="Test03-B">
+		<property name="Extends" value="Test03-C"/>
+		<drop event="Harvest" name="DropOne" count="0" tag="allHarvest"/>
+	</block>
+	
+	<block name="Test03-A">
+		<property name="Extends" value="Test03-B"/>
+	</block>
+	
+	
+</blocks>

@@ -1,4 +1,5 @@
 ﻿using ConfigParsers.Blocks;
+using ConfigParsers.Blocks.Data;
 using ConfigParsers.Localization;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace ConsoleApp
 {
     public class BlockTester
     {
+        private BlocksParser bp;
+
         public BlockTester()
         {
-            var configFilePath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config";
-            var bp = new BlocksParser();
+            var configFilePath = @"E:\Games\steamapps\common\7 Days To Die\Data\Config\blocks.xml";
+            bp = new BlocksParser();
             bp.LoadConfigFile(configFilePath);
             var lp = new LocalizationParser();
             var displayNames = lp.GetDisplayNames(configFilePath);
@@ -42,25 +45,18 @@ namespace ConsoleApp
                     }
                 }
             }
+        }
 
-            foreach (var block in bp.Blocks.Values)
+        public List<BlockDrop> GetExtends(Block block, List<BlockDrop> drops, string level = "")
+        {
+            Debug.WriteLine($"{level}{block.Name}");
+            if (block.Extends == null) return drops;
+            foreach (var drop in block.Drops)
             {
-                if (!string.IsNullOrWhiteSpace(block.Extends))
-                {
-                    var extendBlock = bp.Blocks[block.Extends];
-                    if (!string.IsNullOrWhiteSpace(extendBlock.Extends))
-                    {
-                        Debug.WriteLine($"Double extend found - {block.Name} extends {block.Extends}, which in turn extends {extendBlock.Extends}");
-                    }
-                }
-                //if (block.Drops.Count > 0)
-                //{
-                //    if (!displayNames.ContainsKey(block.Name))
-                //    {
-                //        Debug.WriteLine($"Block {block.Name} has a LootList but was not found in Display Names");
-                //    }
-                //}
+                drops.Add(drop);
             }
+            level += " ";
+            return GetExtends(bp.Blocks[block.Extends], drops, level);
         }
     }
 }

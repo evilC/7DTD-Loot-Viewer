@@ -11,7 +11,7 @@ namespace ConfigParsers.Blocks.Data
         public string Name { get;  }
         public string? LootList { get; }
         public string? Extends { get; }
-        public List<BlockDrop> Drops { get;  }
+        public List<BlockDrop> Drops { get; }
 
         public Block(string name, string? extends, string? lootList, List<BlockDrop> drops)
         {

@@ -1,9 +1,9 @@
-﻿namespace ConfigParsers.Loot.Data
+﻿namespace ConfigParsers.Common
 {
     /// <summary>
     /// Xml Count attributes are converted to this class, for easy processing
     /// </summary>
-    public class Count
+    public class Count : IEquatable<Count>
     {
         /// <summary>
         /// True if a count attribute was specified, otherwise false.
@@ -92,6 +92,12 @@
             if (IsAll) return "all";
             if (From == To) return From.ToString();
             return $"{From},{To}";
+        }
+
+        public bool Equals(Count? other)
+        {
+            if (other == null) return false;
+            return other.From == From && other.To == To && other.IsAll == IsAll;
         }
     }
 }

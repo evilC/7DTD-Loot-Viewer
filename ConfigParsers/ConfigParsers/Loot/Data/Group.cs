@@ -1,4 +1,6 @@
 ﻿
+using ConfigParsers.Common;
+
 namespace ConfigParsers.Loot.Data
 {
     /// <summary>

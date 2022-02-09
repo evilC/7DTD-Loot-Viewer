@@ -1,4 +1,5 @@
-﻿using ConfigParsers.Loot.Data;
+﻿using ConfigParsers.Common;
+using ConfigParsers.Loot.Data;
 using System.Diagnostics;
 
 namespace ConfigParsers.Loot
