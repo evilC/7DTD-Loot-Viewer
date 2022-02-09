@@ -24,7 +24,21 @@ namespace ConsoleApp
                 {
                     if (!displayNames.ContainsKey(container))
                     {
-                        Debug.WriteLine($"Could not find {container}");
+                        bool found = false;
+                        if (container.EndsWith("Master"))
+                        {
+                            var baseStr = container.Substring(0, container.Length - 6);
+                            for (int i = 0; i < 10; i++)
+                            {
+                                var searchStr = $"{baseStr}v0{i}";
+                                if (displayNames.ContainsKey(searchStr))
+                                {
+                                    Debug.WriteLine($"Found {searchStr}");
+                                    found = true;
+                                }
+                            }
+                        }
+                        if (!found) Debug.WriteLine($"Could not find {container}");
                     }
                 }
             }
