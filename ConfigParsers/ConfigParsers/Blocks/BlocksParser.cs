@@ -15,7 +15,13 @@ namespace ConfigParsers.Blocks
         // Key is Container (effectively a LootGroup) name (eg "playerStorage")
         // Value is list of names for that Container Group.
         // Value is game identifier name (eg "cntStorageChest")...
-        public SortedDictionary<string, List<string>> LootList { get; private set; } = new SortedDictionary<string, List<string>>();
+        public SortedDictionary<string, List<string>> LootList { get; private set; } = new();
+
+        /// <summary>
+        /// List of Items which can be harvested from Blocks
+        /// Key is name of item, Value is the Item
+        /// </summary>
+        public SortedDictionary<string, HarvestItem> HarvestItems { get; } = new();
 
         private Count _zeroCount = new Count("0,0");
 
@@ -24,6 +30,7 @@ namespace ConfigParsers.Blocks
             var blocks = ParseXml(configFilePath);
             var extendedBlocks = Build(blocks);
             Blocks = extendedBlocks;
+            BuildItemHarvestList();
         }
 
         /// <summary>
@@ -219,6 +226,31 @@ namespace ConfigParsers.Blocks
             }
             extendedBlock.Name = thisBlock.Name;
             return extendedBlock;
+        }
+
+        private void BuildItemHarvestList()
+        {
+            foreach (var block in Blocks.Values)
+            {
+                if (block.Drops.Count > 0)
+                {
+                    foreach (var blockDrop in block.Drops)
+                    {
+                        HarvestItem item;
+                        if (!HarvestItems.ContainsKey(blockDrop.ResourceName))
+                        {
+                            item = new HarvestItem(blockDrop.ResourceName);
+                        }
+                        else
+                        {
+                            item = HarvestItems[blockDrop.ResourceName];
+                        }
+                        var itemInstance = new HarvestItemInstance(blockDrop.Prob, blockDrop.DropType, block.Name);
+                        item.Instances.Add(block.Name, itemInstance);
+                    }
+
+                }
+            }
         }
     }
 }
