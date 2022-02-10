@@ -46,6 +46,15 @@
 	<block name="SecondLevelRemove-A">
 		<property name="Extends" value="SecondLevelRemove-B"/>
 	</block>
-	
+
+	<!--LootList inheritance-->
+	<block name="LootListInheritance-B">
+		<property name="LootList" value="LootList-B"/>
+	</block>
+
+	<block name="LootListInheritance-A">
+		<property name="Extends" value="LootListInheritance-B"/>
+		<property name="LootList" value="LootList-A"/>
+	</block>	
 	
 </blocks>

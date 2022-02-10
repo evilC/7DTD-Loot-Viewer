@@ -60,5 +60,12 @@ namespace UnitTests
             var block = _bp.Blocks["SecondLevelRemove-A"];
             block.Drops.Count.Should().Be(0);
         }
+
+        [Fact]
+        public void LootList_of_A_replaces_LootList_of_B()
+        {
+            var block = _bp.Blocks["LootListInheritance-A"];
+            block.LootList.Should().Be("LootList-A");
+        }
     }
 }
