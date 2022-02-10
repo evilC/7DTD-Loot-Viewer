@@ -238,13 +238,15 @@ namespace ConfigParsers.Blocks
                         if (!HarvestItems.ContainsKey(blockDrop.ResourceName))
                         {
                             item = new HarvestItem(blockDrop.ResourceName);
+                            HarvestItems.Add(blockDrop.ResourceName, item);
                         }
                         else
                         {
                             item = HarvestItems[blockDrop.ResourceName];
                         }
-                        var itemInstance = new HarvestItemInstance(blockDrop.Prob, blockDrop.DropType, block.Name);
-                        item.Instances.Add(block.Name, itemInstance);
+                        //var itemInstance = new HarvestItemInstanceTypes(blockDrop.Prob, blockDrop.DropType, block.Name);
+                        //item.DropTypes.Add(block.Name, itemInstance);
+                        item.AddInstance(block.Name, blockDrop);
                     }
 
                 }
