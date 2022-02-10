@@ -183,7 +183,7 @@ namespace LootViewer.ViewModels
                     _lootItems.Add(new LootItem(displayName, lootItem.Key));
                 }
             }
-            foreach (var lootList in _blockParser.BlockList)
+            foreach (var lootList in _blockParser.LootList)
             {
                 _lootListContainerNames.Add(lootList.Key, new HashSet<string>());
                 foreach (var containerName in lootList.Value)

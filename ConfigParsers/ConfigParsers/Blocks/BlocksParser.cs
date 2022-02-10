@@ -15,7 +15,7 @@ namespace ConfigParsers.Blocks
         // Key is Container (effectively a LootGroup) name (eg "playerStorage")
         // Value is list of names for that Container Group.
         // Value is game identifier name (eg "cntStorageChest")...
-        public SortedDictionary<string, List<string>> BlockList { get; private set; } = new SortedDictionary<string, List<string>>();
+        public SortedDictionary<string, List<string>> LootList { get; private set; } = new SortedDictionary<string, List<string>>();
 
         private Count _zeroCount = new Count("0,0");
 
@@ -34,7 +34,7 @@ namespace ConfigParsers.Blocks
         {
             var blocks = new SortedDictionary<string, Block>();
             if (!File.Exists(blocksFile)) return blocks;
-            BlockList = new SortedDictionary<string, List<string>>();
+            LootList = new SortedDictionary<string, List<string>>();
             var rawBlocks = ObjectDeserializer.DeserializeToObject<XmlClasses.Root>
                 (blocksFile);
 
@@ -103,17 +103,17 @@ namespace ConfigParsers.Blocks
         private SortedDictionary<string, Block> Build(SortedDictionary<string, Block> originalBlocks)
         {
             var dropCount = 0;
-            BlockList = new();
+            LootList = new();
             var extendedBlocks = new SortedDictionary<string, Block>();
             foreach (var block in originalBlocks.Values)
             {
                 if (block.LootList != null)
                 {
-                    if (!BlockList.ContainsKey(block.LootList))
+                    if (!LootList.ContainsKey(block.LootList))
                     {
-                        BlockList.Add(block.LootList, new());
+                        LootList.Add(block.LootList, new());
                     }
-                    BlockList[block.LootList].Add(block.Name);
+                    LootList[block.LootList].Add(block.Name);
                 }
                 // ToDo: It seems like getting extended drops is will not add in any drops...
                 // ... see comments in dupe checking for GetExtendedDrops - it seems that nothing is ever added

@@ -21,7 +21,7 @@ namespace ConsoleApp
             bp.LoadConfigFile(configFilePath);
             var lp = new LocalizationParser();
             var displayNames = lp.GetDisplayNames(configFilePath);
-            foreach (var list in bp.BlockList)
+            foreach (var list in bp.LootList)
             {
                 foreach (var container in list.Value)
                 {
