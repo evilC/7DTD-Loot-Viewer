@@ -1,6 +1,7 @@
 using Avalonia.Collections;
 using Avalonia.Controls.Selection;
 using ConfigParsers.Blocks;
+using ConfigParsers.Common;
 using ConfigParsers.Localization;
 using ConfigParsers.Loot;
 using LootViewer.Models;
@@ -111,6 +112,7 @@ namespace LootViewer.ViewModels
             LootListsView = new LootListsView();
             _lootLists = new ObservableCollection<LootList>();
             LootLists = new DataGridCollectionView(_lootLists);
+            LootLists.SortDescriptions.Add(DataGridSortDescription.FromPath("DropType", ListSortDirection.Ascending));
             LootLists.SortDescriptions.Add(DataGridSortDescription.FromPath("Prob", ListSortDirection.Descending));
             LootLists.CurrentChanged += LootListSelectionChanged;
 
@@ -218,6 +220,7 @@ namespace LootViewer.ViewModels
             try { lootLevel = Convert.ToInt32(_lootLevel); }
             catch (Exception) { return; };
 
+            // Parse Containers
             var selectedItem = (LootItem)LootItems.CurrentItem;
             var finder = new ItemContainerFinder(_db.LootData.Data);
             _lootLists.Clear();
@@ -227,9 +230,29 @@ namespace LootViewer.ViewModels
                 var itemContainer = container.Value;
                 var probCalc = new ProbabilityCalculator(itemContainer);
                 var prob = probCalc.CalculateProbability(lootLevel);
-                _lootLists.Add(new LootList(container.Key, Math.Round((prob * 100), 3)));
+                _lootLists.Add(new LootList(container.Key, DropType.Loot, FactorToPercent(prob)));
+            }
+
+            // Parse Salvage / Harvest
+            if (_blockParser.HarvestItems.ContainsKey(selectedItem.Name))
+            {
+                var harvestBlocks = _blockParser.HarvestItems[selectedItem.Name];
+                foreach (var harvestBlock in harvestBlocks.Blocks)
+                {
+                    foreach (var dropInstance in harvestBlock.Value)
+                    {
+                        //var blockName = _displayNames.ContainsKey(harvestBlock.Key) ? _displayNames[harvestBlock.Key] : harvestBlock.Key;
+                        var blockName = harvestBlock.Key;
+                        _lootLists.Add(new LootList(blockName, dropInstance.Key, FactorToPercent(dropInstance.Value)));
+                    }
+                }
             }
             LootLists.MoveCurrentToFirst();
+        }
+
+        private decimal FactorToPercent(decimal prob)
+        {
+            return Math.Round((prob * 100), 3);
         }
 
         /// <summary>

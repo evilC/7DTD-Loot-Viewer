@@ -8,7 +8,8 @@
 		<!--https://docs.avaloniaui.net/docs/controls/datagrid-->
 		<DataGrid Grid.Row="1" Items="{Binding LootLists}">
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="LootList Name" Binding="{Binding Name}" Width="*"/>
+				<DataGridTextColumn Header="LootList / Block Name" Binding="{Binding Name}" Width="*"/>
+				<DataGridTextColumn Header="DropType" Binding="{Binding DropType}" Width="Auto"/>
 				<DataGridTextColumn Header="Probability" Binding="{Binding Prob}" Width="Auto"/>
 			</DataGrid.Columns>
 		</DataGrid>

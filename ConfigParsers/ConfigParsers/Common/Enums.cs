@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace ConfigParsers.Common
 {
-    public enum DropType { Harvest, Salvage }
+    public enum DropType { Loot, Harvest, Salvage }
 }
