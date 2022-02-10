@@ -25,7 +25,7 @@ namespace LootViewer.ViewModels
         private string _settingsFile = "Settings.json";
         private Database _db;
         private LocalizationParser _lp;
-        private Dictionary<string, string> _displayNames = new();
+        private SortedDictionary<string, string> _displayNames = new();
         private BlocksParser _blockParser = new();
         private Dictionary<string, HashSet<string>> _lootListContainerNames = new();
 
@@ -284,6 +284,10 @@ namespace LootViewer.ViewModels
                     _lootContainers.Add(containerName);
                 }
                 
+            }
+            else if (_displayNames.ContainsKey(selectedLootList))
+            {
+                _lootContainers.Add(_displayNames[selectedLootList]);
             }
         }
 

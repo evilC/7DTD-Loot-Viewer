@@ -10,7 +10,7 @@ namespace ConfigParsers.Loot
     {
         private XmlClasses.Root _rawContainers;
         private Dictionary<string, XmlClasses.Group> _rawGroups;
-        private Dictionary<string, string> _itemNames;
+        private SortedDictionary<string, string> _itemNames;
 
         /// <summary>
         /// Parses the 7DTD loot.xml file, and build two lists...

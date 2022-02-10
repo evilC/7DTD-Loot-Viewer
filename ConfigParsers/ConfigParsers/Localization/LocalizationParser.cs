@@ -16,7 +16,7 @@ namespace ConfigParsers.Localization
         /// </summary>
         private string _cacheFile = "DisplayNames.json";
 
-        public Dictionary<string, string> GetDisplayNames(string configFilePath)
+        public SortedDictionary<string, string> GetDisplayNames(string configFilePath)
         {
             //var containerNames = GetContainerNames(configFilePath);
             //Dictionary<string, string> data;
@@ -25,15 +25,15 @@ namespace ConfigParsers.Localization
             if (File.Exists(_cacheFile))
             {
                 string jsonString = File.ReadAllText(_cacheFile);
-                var cachedData = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString);
+                var cachedData = JsonSerializer.Deserialize<SortedDictionary<string, string>>(jsonString);
                 if (cachedData == null) throw new Exception("JSON serialization failed");
                 return cachedData;
             }
 
             var localizationFilePath = BuildLocalizationFilePath(configFilePath);
-            if (!File.Exists(localizationFilePath)) return new Dictionary<string, string>();
+            if (!File.Exists(localizationFilePath)) return new SortedDictionary<string, string>();
             // Build data
-            var data = new Dictionary<string, string>();
+            var data = new SortedDictionary<string, string>();
             using (var parser = new TextFieldParser(localizationFilePath))
             {
                 //parser.CommentTokens = new string[] { "#" };
