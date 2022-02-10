@@ -1,11 +1,6 @@
 ﻿using ConfigParsers.Blocks;
 using ConfigParsers.Common;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace UnitTests
@@ -64,8 +59,20 @@ namespace UnitTests
         [Fact]
         public void LootList_of_A_replaces_LootList_of_B()
         {
-            var block = _bp.Blocks["LootListInheritance-A"];
+            // If extending Block and extended Block both have a LootList...
+            // ... Then extending Block overwrites extended Block's LootList
+            var block = _bp.Blocks["LootListInheritReplace-A"];
             block.LootList.Should().Be("LootList-A");
         }
+
+        [Fact]
+        public void Extending_block_with_no_LootList_does_not_replace_extended_blocks_LootList()
+        {
+            // If extending Block has a LootList but extended Block does not...
+            // ... Then extending Block should not overwrite extended Block's LootList
+            var block = _bp.Blocks["LootListInheritNoReplace-A"];
+            block.LootList.Should().Be("LootList-B");
+        }
+
     }
 }

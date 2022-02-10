@@ -47,14 +47,23 @@
 		<property name="Extends" value="SecondLevelRemove-B"/>
 	</block>
 
-	<!--LootList inheritance-->
-	<block name="LootListInheritance-B">
+	<!--Extending block overwrites LootList from extended block-->
+	<block name="LootListInheritReplace-B">
 		<property name="LootList" value="LootList-B"/>
 	</block>
 
-	<block name="LootListInheritance-A">
-		<property name="Extends" value="LootListInheritance-B"/>
+	<block name="LootListInheritReplace-A">
+		<property name="Extends" value="LootListInheritReplace-B"/>
 		<property name="LootList" value="LootList-A"/>
+	</block>	
+	
+	<!--Extending block with no LootList does not overwrite LootList from extended block-->
+	<block name="LootListInheritNoReplace-B">
+		<property name="LootList" value="LootList-B"/>
+	</block>
+
+	<block name="LootListInheritNoReplace-A">
+		<property name="Extends" value="LootListInheritNoReplace-B"/>
 	</block>	
 	
 </blocks>

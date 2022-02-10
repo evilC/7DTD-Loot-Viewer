@@ -180,8 +180,6 @@ namespace ConfigParsers.Blocks
                 //Debug.WriteLine($"Recursing out: thisBlock={thisBlock.Name}");
                 if (!string.IsNullOrWhiteSpace(thisBlock.LootList))
                 {
-                    if (!string.IsNullOrWhiteSpace(thisBlock.LootList))
-                        throw new Exception("LootList is already set");
                     extendedBlock.LootList = thisBlock.LootList;
                 }
 
